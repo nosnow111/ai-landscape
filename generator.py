@@ -93,8 +93,15 @@ SECTIONS = {
 CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
 
 
-def generate_section(key: str, section: dict) -> dict:
+def generate_section(key: str, section: dict, research_context: str = "") -> dict:
     print(f"  Generating: {section['title']}")
+    context_block = ""
+    if research_context:
+        context_block = (
+            f"## Live research data (fetched today)\n{research_context}\n\n"
+            "Use the above as your primary source for current rankings, pricing, and adoption data. "
+            "Supplement with your own knowledge where the research is incomplete.\n\n"
+        )
     message = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=8192,
@@ -102,7 +109,7 @@ def generate_section(key: str, section: dict) -> dict:
             {
                 "role": "user",
                 "content": (
-                    f"{section['prompt']}\n\n"
+                    f"{context_block}{section['prompt']}\n\n"
                     "Respond with ONLY valid JSON, no markdown fences, no explanation."
                 ),
             }
@@ -121,9 +128,18 @@ def run_generation(sections: list = None):
     os.makedirs(CONTENT_DIR, exist_ok=True)
     targets = sections or list(SECTIONS.keys())
     print(f"[{datetime.now(timezone.utc).isoformat()}] Starting content generation...")
+
+    research_data = {}
+    if os.environ.get("TAVILY_API_KEY"):
+        print("  Running web research...")
+        from research import research_all
+        research_data = research_all()
+    else:
+        print("  No TAVILY_API_KEY found — skipping web research.")
+
     for key in targets:
         try:
-            data = generate_section(key, SECTIONS[key])
+            data = generate_section(key, SECTIONS[key], research_data.get(key, ""))
             path = os.path.join(CONTENT_DIR, f"{key}.json")
             with open(path, "w") as f:
                 json.dump(data, f, indent=2)
