@@ -34,6 +34,7 @@ Each section maps to a JSON file in content/ and a tab in the UI:
 - `image_gen` — Top 10 AI image generation tools ranked by adoption
 - `video_gen` — Top 10 AI video generation tools ranked by adoption
 - `web_scrapers` — Top 10 AI web scraping and browser automation tools
+- `workspace` — Top 10 AI productivity and workspace tools ranked by adoption
 
 ## Adding a new section
 1. Add an entry to `SECTIONS` dict in `generator.py` with a prompt and title

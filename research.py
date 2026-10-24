@@ -40,6 +40,12 @@ QUERIES = {
         "top AI web scraping browser automation tools developers 2026",
         "Firecrawl Apify AgentQL Browserbase adoption 2026",
     ],
+    "workspace": [
+        "most popular AI productivity workspace tools 2026 adoption",
+        "NotebookLM Gemini Notebook Microsoft Copilot M365 Notion AI usage 2026",
+        "Devin Cognition AI Windsurf coding agent 2026",
+        "OpenAI Codex agentic coding agent 2026 adoption",
+    ],
 }
 
 

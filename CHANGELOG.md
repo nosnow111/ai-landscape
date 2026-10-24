@@ -1,6 +1,11 @@
 # Changelog
 
-## [Unreleased]
+## [0.6.0] - 2026-10-24
+### Added
+- AI Productivity & Workspace Tools section (NotebookLM, M365 Copilot, Notion AI, Perplexity, etc.)
+- Workspace tab, overview column, and detail panel
+- OpenAI Codex (agentic) and Devin/Devin Desktop added explicitly to code tools prompt
+- Tavily research queries for workspace section
 
 ## [0.5.0] - 2026-10-24
 ### Added

@@ -12,10 +12,12 @@ SECTIONS = {
     "code_tools": {
         "title": "Code Generation Tools",
         "prompt": (
-            "List the TOP 10 AI code generation tools ranked by actual developer adoption and usage "
-            "as of your knowledge cutoff. Be completely objective — base rankings on developer surveys "
-            "(Stack Overflow, JetBrains), download stats, and public adoption data. Include whichever "
-            "tools actually belong in the top 10; do not force any specific tool into the list. "
+            "List the TOP 10 AI code generation and agentic coding tools ranked by actual developer adoption. "
+            "Be completely objective — base rankings on developer surveys (Stack Overflow, JetBrains), "
+            "download stats, and public adoption data. Consider all major tools including: "
+            "GitHub Copilot, Cursor, Claude Code, OpenAI Codex (the agentic coding agent, not the old model), "
+            "Devin/Devin Desktop (by Cognition AI, formerly Windsurf), Codeium, Amazon CodeWhisperer, "
+            "Tabnine, and others — include only what truly belongs in the top 10 by usage. "
             "For each tool cover: vendor, pricing (free tier + paid), key strengths, IDE support, "
             "best use case, and vendor website URL. "
             "Return a JSON object with two keys: "
@@ -116,6 +118,24 @@ SECTIONS = {
             "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
             "max_length (string), max_resolution (string), "
             "strengths (list of strings), best_for (string), url (string))."
+        ),
+    },
+    "workspace": {
+        "title": "AI Productivity & Workspace Tools",
+        "prompt": (
+            "List the TOP 10 AI productivity and workspace tools ranked by actual user adoption. "
+            "These are tools that enhance knowledge work, research, writing, and business workflows — "
+            "NOT coding tools. Include tools like: Google NotebookLM/Gemini Notebook, "
+            "Microsoft Copilot for M365, Notion AI, Perplexity AI, Google Workspace AI (Gemini in Docs/Gmail), "
+            "Grammarly AI, Otter.ai, Mem.ai, Glean, and others that qualify by actual usage. "
+            "Be objective — rank by real adoption, user counts, and enterprise deployments. "
+            "For each tool cover: vendor, pricing (free tier + paid), key capabilities, "
+            "which apps/platforms it integrates with, best use case, and url. "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of AI in productivity and workspace tools) and "
+            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
+            "capabilities (list of strings), integrations (list of strings), best_for (string), url (string))."
         ),
     },
     "web_scrapers": {

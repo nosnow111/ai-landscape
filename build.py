@@ -30,6 +30,7 @@ def build():
         "image_gen": load_content("image_gen"),
         "video_gen": load_content("video_gen"),
         "web_scrapers": load_content("web_scrapers"),
+        "workspace": load_content("workspace"),
     }
 
     html = template.render(sections=sections, refresh_hours=REFRESH_HOURS)
