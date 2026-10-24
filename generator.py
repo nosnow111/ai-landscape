@@ -167,6 +167,8 @@ def generate_section(key: str, section: dict, research_context: str = "") -> dic
         context_block = (
             f"## Live research data (fetched today)\n{research_context}\n\n"
             "Use the above as your primary source for current rankings, pricing, and adoption data. "
+            "If the research mentions tools NOT listed in the prompt below that have significant adoption, "
+            "include them — do not limit yourself only to the tools named in the prompt. "
             "Supplement with your own knowledge where the research is incomplete.\n\n"
         )
     message = client.messages.create(

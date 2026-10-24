@@ -10,40 +10,52 @@ QUERIES = {
     "code_tools": [
         "most popular AI code generation tools developer adoption 2026",
         "GitHub Copilot vs Cursor vs Claude Code usage statistics 2026",
+        "AI coding tools complete list 2026 alternatives lesser known",
+        "best AI IDE plugins extensions developer tools 2026",
     ],
     "models": [
         "most used large language models developers 2026 survey rankings",
         "GPT-4 Claude Gemini Llama DeepSeek usage statistics market share 2026",
         "top LLM API adoption leaderboard 2026",
+        "emerging new LLM models 2026 rising adoption alternatives GPT",
+        "open source large language models top adoption 2026",
     ],
     "repositories": [
         "Hugging Face model downloads statistics 2026",
         "top AI model repositories platforms adoption 2026",
+        "AI model hosting platforms alternatives Hugging Face complete list 2026",
     ],
     "databases": [
         "AI features databases Snowflake BigQuery PostgreSQL pgvector 2026",
         "vector database adoption enterprise AI 2026",
+        "vector databases complete list alternatives pgvector Pinecone Weaviate 2026",
     ],
     "observability": [
         "LLM observability monitoring tools adoption 2026",
         "AI cost monitoring LangSmith Helicone usage 2026",
+        "LLM monitoring tools complete list alternatives 2026",
     ],
     "image_gen": [
         "most popular AI image generation tools users 2026 rankings",
         "Midjourney vs DALL-E vs Stable Diffusion vs Flux adoption 2026",
+        "AI image generation tools complete directory list 2026 lesser known",
     ],
     "video_gen": [
         "most popular AI video generation tools 2026 adoption",
         "Sora Runway Pika Kling Luma video AI comparison 2026",
+        "AI video generation tools emerging new 2026 complete list",
     ],
     "web_scrapers": [
         "top AI web scraping browser automation tools developers 2026",
         "Firecrawl Apify AgentQL Browserbase adoption 2026",
+        "AI web scraping tools complete directory alternatives 2026",
     ],
     "workspace": [
         "most popular AI productivity workspace tools 2026 adoption",
         "NotebookLM Gemini Notebook Microsoft Copilot M365 Notion AI usage 2026",
         "AI meeting recorder note taker Otter Fireflies Wave Fathom adoption 2026",
+        "AI productivity tools complete directory list 2026 lesser known",
+        "AI meeting tools alternatives complete list 2026",
         "Devin Cognition AI Windsurf coding agent 2026",
         "OpenAI Codex agentic coding agent 2026 adoption",
     ],
