@@ -4,42 +4,32 @@
 
 ## [0.5.0] - 2026-10-24
 ### Added
-- Image Generation section (Midjourney, DALL-E, Flux, etc. — top 10 by usage)
-- Video Generation section (Sora, Runway, Pika, Kling, etc. — top 10 by usage)
-- AI Web Scrapers & Browser Automation section (Firecrawl, Apify, AgentQL, etc.)
-- Tavily web research queries for all three new sections
-- New tab buttons and detail panels for each new section
-- New overview columns with colored headers for each new section
+- Image Generation section (top 10 by usage with Tavily research)
+- Video Generation section (top 10 by usage with Tavily research)
+- AI Web Scrapers & Browser Automation section (top 10 by usage)
+- New tab buttons, detail panels, and overview columns for each new section
+
+## [0.4.0] - 2026-10-24
+### Added
+- Tavily web search step in `research.py` — fetches live data before each Claude call
+- Source citations displayed at the bottom of each detail tab
+- Usage rankings (rank + popularity_notes) for models and code tools
+- Gemini and DeepSeek added to models section
+- Overview redesigned as colored column layout (one column per section)
+- Fixed tab button and tag styling (replaced @apply with real CSS for CDN compatibility)
 
 ## [0.3.0] - 2026-10-24
 ### Changed
 - Switched to static site architecture (GitHub Pages + GitHub Actions)
-- Removed Flask, Gunicorn, APScheduler server dependencies
+- Removed Flask server dependencies
 - Added `build.py` to render static HTML from generated JSON
-- Added GitHub Actions workflow for daily content refresh
-- Added placeholder `docs/index.html` shown while content generates
-
-### Removed
-- `app.py` (Flask server)
-- `Procfile`, `start.sh`, `Dockerfile` (server deployment files)
-- `railway.json`, `render.yaml`, `fly.toml` (unused hosting configs)
-
-## [0.2.0] - 2026-10-24
-### Added
-- `render.yaml` for Render deployment (later removed)
-- `fly.toml` and `Dockerfile` for Fly.io deployment (later removed)
-
-### Notes
-- Render removed free tier
-- Koyeb acquired by Mistral AI and shut down
-- Fly.io requires credit card (free trial only)
-- Railway not accepting new signups
+- Added GitHub Actions workflow for daily content refresh at midnight UTC
 
 ## [0.1.0] - 2026-10-24
 ### Added
 - Initial project scaffold
-- `generator.py` — calls Claude API to generate 5 content sections as JSON
-- `app.py` — Flask web server with APScheduler for periodic refresh
-- `templates/index.html` — Tailwind CSS dashboard
+- `generator.py` — calls Claude API to generate content sections as JSON
+- `templates/index.html` — Tailwind CSS dashboard with tab navigation
+- `build.py` — Jinja2 static site builder
 - `requirements.txt`, `.env.example`
-- `Procfile` for Railway/Render deployment
+- GitHub Pages hosting from `docs/` folder
