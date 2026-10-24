@@ -14,22 +14,26 @@ SECTIONS = {
         "prompt": (
             "Compare the top AI code generation tools in 2024-2025: Claude Code, GitHub Copilot, "
             "Cursor, Codeium, Amazon CodeWhisperer, and Tabnine. For each tool cover: vendor, "
-            "pricing (free tier + paid), key strengths, IDE support, and best use case. "
-            "Return a JSON object with key 'tools', an array where each item has: "
+            "pricing (free tier + paid), key strengths, IDE support, best use case, and vendor website URL. "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of the AI code generation landscape) and "
+            "'tools' (array where each item has: "
             "name, vendor, pricing_free (bool), pricing_paid (string), strengths (list of strings), "
-            "ide_support (list), best_for (string), and url (string)."
+            "ide_support (list), best_for (string), url (string))."
         ),
     },
     "models": {
         "title": "Major AI Models",
         "prompt": (
             "List the most important large language models available today: GPT-4o, Claude 3.5 Sonnet, "
-            "Gemini 1.5 Pro, Llama 3.1, Mistral Large, Command R+, and Grok-2. "
+            "Gemini 1.5 Pro, Llama 3.1, Mistral Large, Command R+, Grok-2, and DeepSeek V3. "
             "For each model cover: vendor, context window, input/output cost per 1M tokens, "
-            "open source flag, key strengths, and best use case. "
-            "Return a JSON object with key 'models', an array where each item has: "
+            "open source flag, key strengths, best use case, and vendor website URL. "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of the LLM landscape today) and "
+            "'models' (array where each item has: "
             "name, vendor, context_window (string), cost_input (string), cost_output (string), "
-            "open_source (bool), strengths (list of strings), best_for (string)."
+            "open_source (bool), strengths (list of strings), best_for (string), url (string))."
         ),
     },
     "repositories": {
@@ -39,9 +43,11 @@ SECTIONS = {
             "Ollama, Replicate, Together AI, Fireworks AI, and AWS Bedrock. "
             "For each cover: purpose, number of models (approx), pricing model, "
             "key features, and who it is best suited for. "
-            "Return a JSON object with key 'platforms', an array where each item has: "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of the model repository ecosystem) and "
+            "'platforms' (array where each item has: "
             "name, purpose (string), model_count (string), pricing (string), "
-            "features (list of strings), best_for (string), url (string)."
+            "features (list of strings), best_for (string), url (string))."
         ),
     },
     "databases": {
@@ -53,9 +59,11 @@ SECTIONS = {
             "Databricks (MLflow + DBRX), and MongoDB Atlas Vector Search. "
             "For each cover: AI feature name, what it does, vector search support, "
             "LLM integration, and pricing notes. "
-            "Return a JSON object with key 'databases', an array where each item has: "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of AI capabilities in modern databases) and "
+            "'databases' (array where each item has: "
             "name, ai_feature (string), description (string), vector_search (bool), "
-            "llm_integration (string), pricing_notes (string), url (string)."
+            "llm_integration (string), pricing_notes (string), url (string))."
         ),
     },
     "observability": {
@@ -65,8 +73,9 @@ SECTIONS = {
             "Weights & Biases (W&B), Arize AI, LangFuse, and OpenLLMetry. "
             "For each cover: what it monitors, key features, pricing, and best use case. "
             "Also include 3-4 general tips for reducing LLM API costs. "
-            "Return a JSON object with two keys: "
-            "'tools' (array with: name, monitors (string), features (list), pricing (string), best_for (string), url (string)) "
+            "Return a JSON object with three keys: "
+            "'summary' (2-3 sentence overview of why AI observability matters), "
+            "'tools' (array with: name, monitors (string), features (list), pricing (string), best_for (string), url (string)), "
             "and 'cost_tips' (array of strings)."
         ),
     },

@@ -6,10 +6,16 @@
   <title>AI Landscape Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .card { @apply bg-white rounded-xl shadow-md p-5 border border-gray-100; }
-    .tag  { @apply inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full mr-1 mb-1; }
-    .tag-green { @apply bg-green-100 text-green-800; }
+    .card  { @apply bg-white rounded-xl shadow-md p-5 border border-gray-100 hover:shadow-lg transition-shadow; }
+    .tag   { @apply inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full mr-1 mb-1; }
+    .tag-green  { @apply bg-green-100 text-green-800; }
     .tag-purple { @apply bg-purple-100 text-purple-800; }
+    .tab-btn { @apply px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap; }
+    .tab-btn.active { @apply bg-indigo-600 text-white; }
+    .tab-btn:not(.active) { @apply text-indigo-700 hover:bg-indigo-50; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    html { scroll-behavior: smooth; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -24,22 +30,118 @@
   {% endif %}
 </header>
 
-<!-- Nav -->
+<!-- Tab Navigation -->
 <nav class="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto py-2 text-sm font-medium">
-    <a href="#code-tools"    class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Code Tools</a>
-    <a href="#models"        class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Models</a>
-    <a href="#repositories"  class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Repositories</a>
-    <a href="#databases"     class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Databases</a>
-    <a href="#observability" class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Observability</a>
+  <div class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto py-2">
+    <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="showTab('code-tools')">Code Tools</button>
+    <button class="tab-btn" onclick="showTab('models')">Models</button>
+    <button class="tab-btn" onclick="showTab('repositories')">Repositories</button>
+    <button class="tab-btn" onclick="showTab('databases')">Databases</button>
+    <button class="tab-btn" onclick="showTab('observability')">Observability</button>
   </div>
 </nav>
 
-<main class="max-w-7xl mx-auto px-4 py-10 space-y-16">
+<main class="max-w-7xl mx-auto px-4 py-10">
 
-  <!-- Code Tools -->
-  <section id="code-tools">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-700">Code Generation Tools</h2>
+  <!-- OVERVIEW TAB -->
+  <div id="tab-overview" class="tab-panel active">
+    <h2 class="text-2xl font-bold mb-2 text-indigo-700">AI Landscape at a Glance</h2>
+    <p class="text-gray-500 mb-8">Click any section to explore details.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <div class="card cursor-pointer" onclick="showTab('code-tools')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-indigo-100 text-indigo-700 rounded-lg p-2 text-xl">⌨️</div>
+          <h3 class="font-bold text-lg">Code Generation Tools</h3>
+        </div>
+        {% if sections.code_tools.get('summary') %}
+        <p class="text-sm text-gray-600 mb-3">{{ sections.code_tools.summary }}</p>
+        {% endif %}
+        {% if sections.code_tools.get('tools') %}
+        <div class="flex flex-wrap gap-1">
+          {% for t in sections.code_tools.tools[:4] %}<span class="tag">{{ t.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+      <div class="card cursor-pointer" onclick="showTab('models')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-purple-100 text-purple-700 rounded-lg p-2 text-xl">🧠</div>
+          <h3 class="font-bold text-lg">Major AI Models</h3>
+        </div>
+        {% if sections.models.get('summary') %}
+        <p class="text-sm text-gray-600 mb-3">{{ sections.models.summary }}</p>
+        {% endif %}
+        {% if sections.models.get('models') %}
+        <div class="flex flex-wrap gap-1">
+          {% for m in sections.models.models[:4] %}<span class="tag tag-purple">{{ m.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+      <div class="card cursor-pointer" onclick="showTab('repositories')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-green-100 text-green-700 rounded-lg p-2 text-xl">🗄️</div>
+          <h3 class="font-bold text-lg">Model Repositories</h3>
+        </div>
+        {% if sections.repositories.get('summary') %}
+        <p class="text-sm text-gray-600 mb-3">{{ sections.repositories.summary }}</p>
+        {% endif %}
+        {% if sections.repositories.get('platforms') %}
+        <div class="flex flex-wrap gap-1">
+          {% for p in sections.repositories.platforms[:4] %}<span class="tag tag-green">{{ p.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+      <div class="card cursor-pointer" onclick="showTab('databases')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-amber-100 text-amber-700 rounded-lg p-2 text-xl">🗃️</div>
+          <h3 class="font-bold text-lg">AI in Databases</h3>
+        </div>
+        {% if sections.databases.get('summary') %}
+        <p class="text-sm text-gray-600 mb-3">{{ sections.databases.summary }}</p>
+        {% endif %}
+        {% if sections.databases.get('databases') %}
+        <div class="flex flex-wrap gap-1">
+          {% for db in sections.databases.databases[:4] %}<span class="tag" style="background:#fef3c7;color:#92400e;">{{ db.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+      <div class="card cursor-pointer" onclick="showTab('observability')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-rose-100 text-rose-700 rounded-lg p-2 text-xl">📊</div>
+          <h3 class="font-bold text-lg">Observability & Cost</h3>
+        </div>
+        {% if sections.observability.get('summary') %}
+        <p class="text-sm text-gray-600 mb-3">{{ sections.observability.summary }}</p>
+        {% endif %}
+        {% if sections.observability.get('tools') %}
+        <div class="flex flex-wrap gap-1">
+          {% for t in sections.observability.tools[:4] %}<span class="tag" style="background:#ffe4e6;color:#9f1239;">{{ t.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CODE TOOLS TAB -->
+  <div id="tab-code-tools" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">Code Generation Tools</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.code_tools.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.code_tools.summary }}</p>
+    {% endif %}
     {% if sections.code_tools.get('tools') %}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {% for t in sections.code_tools.tools %}
@@ -48,36 +150,42 @@
           <h3 class="font-bold text-lg">{{ t.name }}</h3>
           {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
         </div>
-        <p class="text-xs text-gray-400 mb-2">{{ t.vendor }}</p>
-        <p class="text-sm text-gray-600 mb-3"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
-        <div class="mb-3">
-          {% for s in t.strengths %}<span class="tag">{{ s }}</span>{% endfor %}
-        </div>
+        <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
+        {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
+        {% if t.ide_support %}<p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> {{ t.ide_support | join(', ') }}</p>{% endif %}
+        <div class="mb-3">{% for s in t.strengths %}<span class="tag">{{ s }}</span>{% endfor %}</div>
         <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> {{ t.best_for }}</p>
-        {% if t.url %}<a href="{{ t.url }}" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">{{ t.url }}</a>{% endif %}
       </div>
       {% endfor %}
     </div>
     {% else %}
-    <p class="text-gray-400 italic">Content not yet generated. Set ANTHROPIC_API_KEY and restart.</p>
+    <p class="text-gray-400 italic">Content not yet generated.</p>
     {% endif %}
-  </section>
+  </div>
 
-  <!-- Models -->
-  <section id="models">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-700">Major AI Models</h2>
+  <!-- MODELS TAB -->
+  <div id="tab-models" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">Major AI Models</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.models.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.models.summary }}</p>
+    {% endif %}
     {% if sections.models.get('models') %}
-    <div class="overflow-x-auto rounded-xl shadow">
+    <div class="overflow-x-auto rounded-xl shadow mb-8">
       <table class="min-w-full bg-white text-sm">
         <thead class="bg-indigo-50 text-indigo-800 text-xs uppercase tracking-wide">
           <tr>
             <th class="px-4 py-3 text-left">Model</th>
             <th class="px-4 py-3 text-left">Vendor</th>
             <th class="px-4 py-3 text-left">Context</th>
-            <th class="px-4 py-3 text-left">Cost In</th>
-            <th class="px-4 py-3 text-left">Cost Out</th>
+            <th class="px-4 py-3 text-left">Cost In /1M</th>
+            <th class="px-4 py-3 text-left">Cost Out /1M</th>
             <th class="px-4 py-3 text-left">Open</th>
             <th class="px-4 py-3 text-left">Best For</th>
+            <th class="px-4 py-3 text-left">Link</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -89,41 +197,67 @@
             <td class="px-4 py-3">{{ m.cost_input }}</td>
             <td class="px-4 py-3">{{ m.cost_output }}</td>
             <td class="px-4 py-3">{% if m.open_source %}<span class="tag tag-green">Yes</span>{% else %}<span class="text-gray-400">No</span>{% endif %}</td>
-            <td class="px-4 py-3 text-gray-600">{{ m.best_for }}</td>
+            <td class="px-4 py-3 text-gray-600 max-w-xs">{{ m.best_for }}</td>
+            <td class="px-4 py-3">{% if m.get('url') %}<a href="{{ m.url }}" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a>{% endif %}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-    {% else %}
-    <p class="text-gray-400 italic">Content not yet generated.</p>
-    {% endif %}
-  </section>
-
-  <!-- Repositories -->
-  <section id="repositories">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-700">Model Repositories & Platforms</h2>
-    {% if sections.repositories.get('platforms') %}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {% for p in sections.repositories.platforms %}
+      {% for m in sections.models.models %}
       <div class="card">
-        <h3 class="font-bold text-lg mb-1">{{ p.name }}</h3>
-        <p class="text-sm text-gray-500 mb-1">{{ p.model_count }} models · {{ p.pricing }}</p>
-        <p class="text-sm text-gray-700 mb-3">{{ p.purpose }}</p>
-        <div class="mb-3">{% for f in p.features %}<span class="tag tag-purple">{{ f }}</span>{% endfor %}</div>
-        <p class="text-sm"><span class="font-medium">Best for:</span> {{ p.best_for }}</p>
-        {% if p.url %}<a href="{{ p.url }}" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">{{ p.url }}</a>{% endif %}
+        <div class="flex justify-between items-start mb-1">
+          <h3 class="font-bold">{{ m.name }}</h3>
+          {% if m.open_source %}<span class="tag tag-green">Open Source</span>{% endif %}
+        </div>
+        <p class="text-xs text-gray-400 mb-1">{{ m.vendor }}</p>
+        {% if m.get('url') %}<a href="{{ m.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ m.url }}</a>{% endif %}
+        <div>{% for s in m.strengths %}<span class="tag tag-purple">{{ s }}</span>{% endfor %}</div>
       </div>
       {% endfor %}
     </div>
     {% else %}
     <p class="text-gray-400 italic">Content not yet generated.</p>
     {% endif %}
-  </section>
+  </div>
 
-  <!-- Databases -->
-  <section id="databases">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-700">AI in Major Databases</h2>
+  <!-- REPOSITORIES TAB -->
+  <div id="tab-repositories" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">Model Repositories & Platforms</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.repositories.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.repositories.summary }}</p>
+    {% endif %}
+    {% if sections.repositories.get('platforms') %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for p in sections.repositories.platforms %}
+      <div class="card">
+        <h3 class="font-bold text-lg mb-1">{{ p.name }}</h3>
+        <p class="text-sm text-gray-500 mb-1">{{ p.model_count }} models · {{ p.pricing }}</p>
+        {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ p.url }}</a>{% endif %}
+        <p class="text-sm text-gray-700 mb-3">{{ p.purpose }}</p>
+        <div class="mb-3">{% for f in p.features %}<span class="tag tag-purple">{{ f }}</span>{% endfor %}</div>
+        <p class="text-sm"><span class="font-medium">Best for:</span> {{ p.best_for }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- DATABASES TAB -->
+  <div id="tab-databases" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">AI in Major Databases</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.databases.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.databases.summary }}</p>
+    {% endif %}
     {% if sections.databases.get('databases') %}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       {% for db in sections.databases.databases %}
@@ -132,25 +266,31 @@
           <h3 class="font-bold text-lg">{{ db.name }}</h3>
           {% if db.vector_search %}<span class="tag tag-green">Vector Search</span>{% endif %}
         </div>
-        <p class="text-xs text-indigo-600 font-medium mb-2">{{ db.ai_feature }}</p>
+        <p class="text-xs text-indigo-600 font-medium mb-1">{{ db.ai_feature }}</p>
+        {% if db.url %}<a href="{{ db.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ db.url }}</a>{% endif %}
         <p class="text-sm text-gray-700 mb-2">{{ db.description }}</p>
-        <p class="text-sm mb-1"><span class="font-medium">LLM:</span> {{ db.llm_integration }}</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> {{ db.llm_integration }}</p>
         <p class="text-sm text-gray-500">{{ db.pricing_notes }}</p>
-        {% if db.url %}<a href="{{ db.url }}" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">{{ db.url }}</a>{% endif %}
       </div>
       {% endfor %}
     </div>
     {% else %}
     <p class="text-gray-400 italic">Content not yet generated.</p>
     {% endif %}
-  </section>
+  </div>
 
-  <!-- Observability -->
-  <section id="observability">
-    <h2 class="text-2xl font-bold mb-4 text-indigo-700">AI Observability & Cost Monitoring</h2>
+  <!-- OBSERVABILITY TAB -->
+  <div id="tab-observability" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">AI Observability & Cost Monitoring</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.observability.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.observability.summary }}</p>
+    {% endif %}
     {% if sections.observability.get('cost_tips') %}
     <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8">
-      <h3 class="font-bold text-amber-800 mb-3">Cost Reduction Tips</h3>
+      <h3 class="font-bold text-amber-800 mb-3">💡 Cost Reduction Tips</h3>
       <ul class="space-y-1">
         {% for tip in sections.observability.cost_tips %}
         <li class="text-sm text-amber-900 flex gap-2"><span>•</span>{{ tip }}</li>
@@ -163,16 +303,18 @@
       {% for t in sections.observability.tools %}
       <div class="card">
         <h3 class="font-bold text-lg mb-1">{{ t.name }}</h3>
-        <p class="text-sm text-gray-500 mb-2">{{ t.monitors }}</p>
+        <p class="text-sm text-gray-500 mb-1">{{ t.monitors }}</p>
+        {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
         <div class="mb-3">{% for f in t.features %}<span class="tag">{{ f }}</span>{% endfor %}</div>
         <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> {{ t.pricing }}</p>
         <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> {{ t.best_for }}</p>
-        {% if t.url %}<a href="{{ t.url }}" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">{{ t.url }}</a>{% endif %}
       </div>
       {% endfor %}
     </div>
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
     {% endif %}
-  </section>
+  </div>
 
 </main>
 
@@ -180,5 +322,15 @@
   AI Landscape Dashboard · Content generated by Claude · Auto-refreshes every {{ refresh_hours }}h
 </footer>
 
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    const labels = ['overview','code-tools','models','repositories','databases','observability'];
+    document.querySelectorAll('.tab-btn')[labels.indexOf(id)].classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
 </body>
 </html>
