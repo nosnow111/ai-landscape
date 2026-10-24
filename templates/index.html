@@ -178,26 +178,28 @@
       <table class="min-w-full bg-white text-sm">
         <thead class="bg-indigo-50 text-indigo-800 text-xs uppercase tracking-wide">
           <tr>
+            <th class="px-4 py-3 text-left">Rank</th>
             <th class="px-4 py-3 text-left">Model</th>
             <th class="px-4 py-3 text-left">Vendor</th>
             <th class="px-4 py-3 text-left">Context</th>
             <th class="px-4 py-3 text-left">Cost In /1M</th>
             <th class="px-4 py-3 text-left">Cost Out /1M</th>
             <th class="px-4 py-3 text-left">Open</th>
-            <th class="px-4 py-3 text-left">Best For</th>
+            <th class="px-4 py-3 text-left">Why This Rank</th>
             <th class="px-4 py-3 text-left">Link</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
           {% for m in sections.models.models %}
           <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">{{ m.get('rank', '—') }}</td>
             <td class="px-4 py-3 font-medium">{{ m.name }}</td>
             <td class="px-4 py-3 text-gray-500">{{ m.vendor }}</td>
             <td class="px-4 py-3">{{ m.context_window }}</td>
             <td class="px-4 py-3">{{ m.cost_input }}</td>
             <td class="px-4 py-3">{{ m.cost_output }}</td>
             <td class="px-4 py-3">{% if m.open_source %}<span class="tag tag-green">Yes</span>{% else %}<span class="text-gray-400">No</span>{% endif %}</td>
-            <td class="px-4 py-3 text-gray-600 max-w-xs">{{ m.best_for }}</td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">{{ m.get('popularity_notes', '') }}</td>
             <td class="px-4 py-3">{% if m.get('url') %}<a href="{{ m.url }}" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a>{% endif %}</td>
           </tr>
           {% endfor %}
@@ -208,10 +210,14 @@
       {% for m in sections.models.models %}
       <div class="card">
         <div class="flex justify-between items-start mb-1">
-          <h3 class="font-bold">{{ m.name }}</h3>
+          <div class="flex items-center gap-2">
+            {% if m.get('rank') %}<span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#{{ m.rank }}</span>{% endif %}
+            <h3 class="font-bold">{{ m.name }}</h3>
+          </div>
           {% if m.open_source %}<span class="tag tag-green">Open Source</span>{% endif %}
         </div>
         <p class="text-xs text-gray-400 mb-1">{{ m.vendor }}</p>
+        {% if m.get('popularity_notes') %}<p class="text-xs text-indigo-600 mb-2 italic">{{ m.popularity_notes }}</p>{% endif %}
         {% if m.get('url') %}<a href="{{ m.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ m.url }}</a>{% endif %}
         <div>{% for s in m.strengths %}<span class="tag tag-purple">{{ s }}</span>{% endfor %}</div>
       </div>

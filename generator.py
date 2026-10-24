@@ -25,15 +25,20 @@ SECTIONS = {
     "models": {
         "title": "Major AI Models",
         "prompt": (
-            "List the most important large language models available today: GPT-4o, Claude 3.5 Sonnet, "
-            "Gemini 1.5 Pro, Llama 3.1, Mistral Large, Command R+, Grok-2, and DeepSeek V3. "
-            "For each model cover: vendor, context window, input/output cost per 1M tokens, "
-            "open source flag, key strengths, best use case, and vendor website URL. "
+            "List the most important large language models available today, ranked by real-world usage and adoption. "
+            "Include: GPT-4o (OpenAI), Gemini 1.5 Pro and Gemini 2.0 Flash (Google), Claude 3.5 Sonnet (Anthropic), "
+            "Llama 3.1 (Meta), Mistral Large (Mistral AI), Grok-2 (xAI), and DeepSeek V3 (DeepSeek). "
+            "Be objective and unbiased — rank strictly by actual developer usage, API adoption, and community surveys "
+            "such as the Stack Overflow Developer Survey and HuggingFace download stats, NOT by quality alone. "
+            "For each model provide: vendor, context window, input/output cost per 1M tokens, "
+            "open source flag, usage rank (integer 1=most used), popularity_notes (1 sentence explaining the rank), "
+            "key strengths, best use case, and vendor website URL. "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the LLM landscape today) and "
-            "'models' (array where each item has: "
-            "name, vendor, context_window (string), cost_input (string), cost_output (string), "
-            "open_source (bool), strengths (list of strings), best_for (string), url (string))."
+            "'models' (array SORTED by rank ascending, where each item has: "
+            "name, vendor, rank (int), popularity_notes (string), context_window (string), "
+            "cost_input (string), cost_output (string), open_source (bool), "
+            "strengths (list of strings), best_for (string), url (string))."
         ),
     },
     "repositories": {
