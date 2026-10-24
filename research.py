@@ -43,6 +43,7 @@ QUERIES = {
     "workspace": [
         "most popular AI productivity workspace tools 2026 adoption",
         "NotebookLM Gemini Notebook Microsoft Copilot M365 Notion AI usage 2026",
+        "AI meeting recorder note taker Otter Fireflies Wave Fathom adoption 2026",
         "Devin Cognition AI Windsurf coding agent 2026",
         "OpenAI Codex agentic coding agent 2026 adoption",
     ],
