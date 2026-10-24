@@ -31,6 +31,9 @@ Each section maps to a JSON file in content/ and a tab in the UI:
 - `repositories` — Model repositories and deployment platforms
 - `databases` — AI capabilities in major databases
 - `observability` — AI observability and cost monitoring tools
+- `image_gen` — Top 10 AI image generation tools ranked by adoption
+- `video_gen` — Top 10 AI video generation tools ranked by adoption
+- `web_scrapers` — Top 10 AI web scraping and browser automation tools
 
 ## Adding a new section
 1. Add an entry to `SECTIONS` dict in `generator.py` with a prompt and title
@@ -48,3 +51,15 @@ Each section maps to a JSON file in content/ and a tab in the UI:
 - Content JSON is committed to the repo so the site survives even if the API is unavailable
 - `max_tokens=8192` prevents JSON truncation on longer sections
 - Prompts explicitly request unbiased rankings based on actual usage data
+- Tavily web search runs before each Claude call to ground content in live data
+
+## Hosting platforms evaluated (and why rejected)
+| Platform | Reason rejected |
+|---|---|
+| **Railway** | Not accepting new signups at time of setup |
+| **Render** | Removed free tier; cheapest plan is $7/month |
+| **Koyeb** | Acquired by Mistral AI and shut down their hosting platform |
+| **Fly.io** | Free trial only — requires credit card, not permanently free |
+| **Hugging Face Spaces** | Docker tier (needed for Flask) is paid; free tiers are static or Gradio only |
+| **Google Sites** | UI-only drag-and-drop builder — no GitHub integration, no automation support |
+| **GitHub Pages** ✅ | 100% free, integrates directly with Actions workflow, zero ops overhead |
