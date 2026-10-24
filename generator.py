@@ -1,0 +1,119 @@
+import os
+import json
+import anthropic
+from datetime import datetime, timezone
+from dotenv import load_dotenv
+
+load_dotenv()
+
+client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+
+SECTIONS = {
+    "code_tools": {
+        "title": "Code Generation Tools",
+        "prompt": (
+            "Compare the top AI code generation tools in 2024-2025: Claude Code, GitHub Copilot, "
+            "Cursor, Codeium, Amazon CodeWhisperer, and Tabnine. For each tool cover: vendor, "
+            "pricing (free tier + paid), key strengths, IDE support, and best use case. "
+            "Return a JSON object with key 'tools', an array where each item has: "
+            "name, vendor, pricing_free (bool), pricing_paid (string), strengths (list of strings), "
+            "ide_support (list), best_for (string), and url (string)."
+        ),
+    },
+    "models": {
+        "title": "Major AI Models",
+        "prompt": (
+            "List the most important large language models available today: GPT-4o, Claude 3.5 Sonnet, "
+            "Gemini 1.5 Pro, Llama 3.1, Mistral Large, Command R+, and Grok-2. "
+            "For each model cover: vendor, context window, input/output cost per 1M tokens, "
+            "open source flag, key strengths, and best use case. "
+            "Return a JSON object with key 'models', an array where each item has: "
+            "name, vendor, context_window (string), cost_input (string), cost_output (string), "
+            "open_source (bool), strengths (list of strings), best_for (string)."
+        ),
+    },
+    "repositories": {
+        "title": "Model Repositories & Platforms",
+        "prompt": (
+            "Describe the major AI model repositories and deployment platforms: Hugging Face, "
+            "Ollama, Replicate, Together AI, Fireworks AI, and AWS Bedrock. "
+            "For each cover: purpose, number of models (approx), pricing model, "
+            "key features, and who it is best suited for. "
+            "Return a JSON object with key 'platforms', an array where each item has: "
+            "name, purpose (string), model_count (string), pricing (string), "
+            "features (list of strings), best_for (string), url (string)."
+        ),
+    },
+    "databases": {
+        "title": "AI in Major Databases",
+        "prompt": (
+            "Explain AI/ML capabilities built into these databases and data platforms: "
+            "Snowflake (Cortex AI), Google BigQuery (BigQuery ML + Vertex AI), "
+            "PostgreSQL (pgvector + pgai), Amazon (Aurora ML + Redshift ML), "
+            "Databricks (MLflow + DBRX), and MongoDB Atlas Vector Search. "
+            "For each cover: AI feature name, what it does, vector search support, "
+            "LLM integration, and pricing notes. "
+            "Return a JSON object with key 'databases', an array where each item has: "
+            "name, ai_feature (string), description (string), vector_search (bool), "
+            "llm_integration (string), pricing_notes (string), url (string)."
+        ),
+    },
+    "observability": {
+        "title": "AI Observability, Cost & Monitoring",
+        "prompt": (
+            "Compare AI observability and cost monitoring tools: LangSmith, Helicone, "
+            "Weights & Biases (W&B), Arize AI, LangFuse, and OpenLLMetry. "
+            "For each cover: what it monitors, key features, pricing, and best use case. "
+            "Also include 3-4 general tips for reducing LLM API costs. "
+            "Return a JSON object with two keys: "
+            "'tools' (array with: name, monitors (string), features (list), pricing (string), best_for (string), url (string)) "
+            "and 'cost_tips' (array of strings)."
+        ),
+    },
+}
+
+CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
+
+
+def generate_section(key: str, section: dict) -> dict:
+    print(f"  Generating: {section['title']}")
+    message = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=2048,
+        messages=[
+            {
+                "role": "user",
+                "content": (
+                    f"{section['prompt']}\n\n"
+                    "Respond with ONLY valid JSON, no markdown fences, no explanation."
+                ),
+            }
+        ],
+    )
+    raw = message.content[0].text.strip()
+    data = json.loads(raw)
+    data["_meta"] = {
+        "title": section["title"],
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    return data
+
+
+def run_generation(sections: list = None):
+    os.makedirs(CONTENT_DIR, exist_ok=True)
+    targets = sections or list(SECTIONS.keys())
+    print(f"[{datetime.now(timezone.utc).isoformat()}] Starting content generation...")
+    for key in targets:
+        try:
+            data = generate_section(key, SECTIONS[key])
+            path = os.path.join(CONTENT_DIR, f"{key}.json")
+            with open(path, "w") as f:
+                json.dump(data, f, indent=2)
+            print(f"  Saved {path}")
+        except Exception as e:
+            print(f"  ERROR generating {key}: {e}")
+    print("Done.")
+
+
+if __name__ == "__main__":
+    run_generation()
