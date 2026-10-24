@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for ai-landscape on 2026-10-24T12:32:49-05:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'ai-landscape'
+primary_region = 'iad'
+
+[build]
+[env]
+  PORT = '8080'
+  REFRESH_INTERVAL_HOURS = '24'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 512
