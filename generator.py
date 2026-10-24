@@ -8,6 +8,13 @@ load_dotenv()
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
+_RANK_RULE = (
+    "Include between 10 and 15 tools. Start with the top 10 by adoption. "
+    "Then check tools ranked #11–15: if their adoption is within ~25% of #10 (no clear gap), "
+    "include them. Stop as soon as you see a significant drop-off. "
+    "Never pad to 15 — only include beyond 10 when the numbers genuinely cluster together."
+)
+
 SECTIONS = {
     "code_tools": {
         "title": "Code Generation Tools",
@@ -17,12 +24,13 @@ SECTIONS = {
             "download stats, and public adoption data. Consider all major tools including: "
             "GitHub Copilot, Cursor, Claude Code, OpenAI Codex (the agentic coding agent, not the old model), "
             "Devin/Devin Desktop (by Cognition AI, formerly Windsurf), Codeium, Amazon CodeWhisperer, "
-            "Tabnine, and others — include only what truly belongs in the top 10 by usage. "
+            "Tabnine, and others — rank all candidates then apply the cutoff rule below. "
             "For each tool cover: vendor, pricing (free tier + paid), key strengths, IDE support, "
             "best use case, and vendor website URL. "
+            f"{_RANK_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the AI code generation landscape) and "
-            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "'tools' (array SORTED by adoption rank, where each item has: "
             "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
             "strengths (list of strings), ide_support (list), best_for (string), url (string))."
         ),
@@ -34,14 +42,14 @@ SECTIONS = {
             "as of your knowledge cutoff. Be completely objective and unbiased — do NOT assume any model belongs "
             "in the list. Base rankings on: API call volume, developer surveys (Stack Overflow, JetBrains), "
             "HuggingFace download stats, and public adoption data. Include whichever models actually belong "
-            "in the top 10 by usage — if GPT-4o, Gemini, Llama, DeepSeek, Claude, Mistral, Grok or others "
             "qualify, include them; if they do not, omit them. "
             "For each model provide: name, vendor, context window, input/output cost per 1M tokens, "
             "open source flag, usage rank (integer 1=most used), popularity_notes (1 sentence citing the "
             "specific data or reason for this rank), key strengths (list), best use case, vendor website URL. "
+            f"{_RANK_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the LLM landscape today) and "
-            "'models' (array of exactly 10 items SORTED by rank ascending, where each item has: "
+            "'models' (array SORTED by rank ascending, where each item has: "
             "name, vendor, rank (int), popularity_notes (string), context_window (string), "
             "cost_input (string), cost_output (string), open_source (bool), "
             "strengths (list of strings), best_for (string), url (string))."
@@ -96,11 +104,12 @@ SECTIONS = {
             "List the TOP 10 AI image generation tools ranked by actual user adoption and usage as of your knowledge cutoff. "
             "Be objective — base rankings on user counts, social media activity, API usage, and developer surveys. "
             "Include tools like Midjourney, DALL-E 3, Stable Diffusion, Flux, Adobe Firefly, Ideogram, "
-            "Leonardo AI, Runway, Canva AI, and others that qualify. Only include what truly belongs in the top 10. "
+            "Leonardo AI, Runway, Canva AI, and others that qualify — rank all candidates then apply the cutoff rule below. "
             "For each tool cover: vendor, pricing (free tier + paid), key strengths, output quality, best use case, url. "
+            f"{_RANK_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the AI image generation landscape) and "
-            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "'tools' (array SORTED by adoption rank, where each item has: "
             "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
             "strengths (list of strings), best_for (string), url (string))."
         ),
@@ -112,9 +121,10 @@ SECTIONS = {
             "Be objective — include tools like Sora (OpenAI), Runway ML, Pika Labs, Kling AI, Luma Dream Machine, "
             "HeyGen, Synthesia, Veo (Google), Udio, and others that qualify by actual usage. "
             "For each tool cover: vendor, pricing, key strengths, max video length/resolution, best use case, url. "
+            f"{_RANK_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the AI video generation landscape) and "
-            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "'tools' (array SORTED by adoption rank, where each item has: "
             "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
             "max_length (string), max_resolution (string), "
             "strengths (list of strings), best_for (string), url (string))."
@@ -132,9 +142,10 @@ SECTIONS = {
             "Be objective — rank by real adoption, user counts, and enterprise deployments. "
             "For each tool cover: vendor, pricing (free tier + paid), key capabilities, "
             "which apps/platforms it integrates with, best use case, and url. "
+            f"{_RANK_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of AI in productivity and workspace tools) and "
-            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "'tools' (array SORTED by adoption rank, where each item has: "
             "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
             "capabilities (list of strings), integrations (list of strings), best_for (string), url (string))."
         ),
@@ -148,9 +159,10 @@ SECTIONS = {
             "Be objective — rank by actual developer usage, GitHub stars, and community adoption. "
             "For each tool cover: vendor, pricing (free tier + paid), key strengths, "
             "AI capabilities (LLM-powered extraction, natural language queries, etc.), best use case, url. "
+            f"{_RANK_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of AI in web scraping and browser automation) and "
-            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "'tools' (array SORTED by adoption rank, where each item has: "
             "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
             "ai_features (list of strings), strengths (list of strings), best_for (string), url (string))."
         ),
