@@ -6,10 +6,16 @@
   <title>AI Landscape Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .card { @apply bg-white rounded-xl shadow-md p-5 border border-gray-100; }
-    .tag  { @apply inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full mr-1 mb-1; }
-    .tag-green { @apply bg-green-100 text-green-800; }
+    .card  { @apply bg-white rounded-xl shadow-md p-5 border border-gray-100 hover:shadow-lg transition-shadow; }
+    .tag   { @apply inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full mr-1 mb-1; }
+    .tag-green  { @apply bg-green-100 text-green-800; }
     .tag-purple { @apply bg-purple-100 text-purple-800; }
+    .tab-btn { @apply px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap; }
+    .tab-btn.active { @apply bg-indigo-600 text-white; }
+    .tab-btn:not(.active) { @apply text-indigo-700 hover:bg-indigo-50; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    html { scroll-behavior: smooth; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
@@ -20,55 +26,136 @@
   <p class="mt-2 text-indigo-200 text-lg">Auto-generated · refreshed every 24h</p>
   
   
-  <p class="mt-1 text-indigo-300 text-sm">Last updated: 2026-10-24 19:37:20 UTC</p>
+  <p class="mt-1 text-indigo-300 text-sm">Last updated: 2026-10-24 19:58:41 UTC</p>
   
 </header>
 
-<!-- Nav -->
+<!-- Tab Navigation -->
 <nav class="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto py-2 text-sm font-medium">
-    <a href="#code-tools"    class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Code Tools</a>
-    <a href="#models"        class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Models</a>
-    <a href="#repositories"  class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Repositories</a>
-    <a href="#databases"     class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Databases</a>
-    <a href="#observability" class="nav-link px-3 py-1 rounded-full hover:bg-indigo-50 text-indigo-700 whitespace-nowrap">Observability</a>
+  <div class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto py-2">
+    <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="showTab('code-tools')">Code Tools</button>
+    <button class="tab-btn" onclick="showTab('models')">Models</button>
+    <button class="tab-btn" onclick="showTab('repositories')">Repositories</button>
+    <button class="tab-btn" onclick="showTab('databases')">Databases</button>
+    <button class="tab-btn" onclick="showTab('observability')">Observability</button>
   </div>
 </nav>
 
-<main class="max-w-7xl mx-auto px-4 py-10 space-y-16">
+<main class="max-w-7xl mx-auto px-4 py-10">
 
-  <!-- Code Tools -->
-  <section id="code-tools">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-700">Code Generation Tools</h2>
+  <!-- OVERVIEW TAB -->
+  <div id="tab-overview" class="tab-panel active">
+    <h2 class="text-2xl font-bold mb-2 text-indigo-700">AI Landscape at a Glance</h2>
+    <p class="text-gray-500 mb-8">Click any section to explore details.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <div class="card cursor-pointer" onclick="showTab('code-tools')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-indigo-100 text-indigo-700 rounded-lg p-2 text-xl">⌨️</div>
+          <h3 class="font-bold text-lg">Code Generation Tools</h3>
+        </div>
+        
+        <p class="text-sm text-gray-600 mb-3">The AI code generation landscape is dominated by a handful of tools that have achieved broad developer adoption through deep IDE integration, strong language model capabilities, and freemium pricing strategies. GitHub Copilot maintains the largest market share as of early 2025, with competitors like Cursor, Tabnine, and Amazon CodeWhisperer carving out significant niches. Enterprise adoption is accelerating, and the market is rapidly consolidating around tools that offer chat-based assistance, inline completions, and agentic coding capabilities.</p>
+        
+        
+        <div class="flex flex-wrap gap-1">
+          <span class="tag">GitHub Copilot</span><span class="tag">Cursor</span><span class="tag">Tabnine</span><span class="tag">Amazon CodeWhisperer (Amazon Q Developer)</span>
+        </div>
+        
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+      <div class="card cursor-pointer" onclick="showTab('models')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-purple-100 text-purple-700 rounded-lg p-2 text-xl">🧠</div>
+          <h3 class="font-bold text-lg">Major AI Models</h3>
+        </div>
+        
+        <p class="text-sm text-gray-600 mb-3">The LLM landscape as of early 2025 is dominated by OpenAI's GPT family in commercial API usage, while Meta's Llama models lead open-source downloads and self-hosted deployments. A diverse ecosystem has emerged with strong challengers from Google, Anthropic, Mistral, and DeepSeek, reflecting both closed-API and open-weight adoption patterns across developer surveys and platform statistics.</p>
+        
+        
+        <div class="flex flex-wrap gap-1">
+          <span class="tag tag-purple">GPT-4o</span><span class="tag tag-purple">Llama 3.1 / Llama 3.2 (family)</span><span class="tag tag-purple">Claude 3.5 Sonnet</span><span class="tag tag-purple">Gemini 1.5 Pro</span>
+        </div>
+        
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+      <div class="card cursor-pointer" onclick="showTab('repositories')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-green-100 text-green-700 rounded-lg p-2 text-xl">🗄️</div>
+          <h3 class="font-bold text-lg">Model Repositories</h3>
+        </div>
+        
+        <p class="text-sm text-gray-600 mb-3">The AI model repository and deployment ecosystem has rapidly matured into a diverse landscape spanning open-source community hubs, local inference tools, and managed cloud APIs. Platforms range from massive public repositories like Hugging Face with hundreds of thousands of models to specialized inference providers like Fireworks AI and Together AI optimized for speed and cost efficiency. Enterprises and developers can choose between self-hosted solutions, pay-per-token APIs, and fully managed cloud services depending on their privacy, scalability, and budget requirements.</p>
+        
+        
+        <div class="flex flex-wrap gap-1">
+          <span class="tag tag-green">Hugging Face</span><span class="tag tag-green">Ollama</span><span class="tag tag-green">Replicate</span><span class="tag tag-green">Together AI</span>
+        </div>
+        
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+      <div class="card cursor-pointer" onclick="showTab('databases')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-amber-100 text-amber-700 rounded-lg p-2 text-xl">🗃️</div>
+          <h3 class="font-bold text-lg">AI in Databases</h3>
+        </div>
+        
+        <p class="text-sm text-gray-600 mb-3">Modern databases have evolved far beyond simple data storage, now embedding sophisticated AI and ML capabilities directly into the data platform to eliminate the need to move data to external systems. From native LLM integrations and vector search to in-database model training and inference, these platforms allow developers and data scientists to run AI workloads where the data already lives. This convergence of databases and AI dramatically reduces latency, simplifies architecture, and lowers the barrier to building intelligent applications.</p>
+        
+        
+        <div class="flex flex-wrap gap-1">
+          <span class="tag" style="background:#fef3c7;color:#92400e;">Snowflake (Cortex AI)</span><span class="tag" style="background:#fef3c7;color:#92400e;">Google BigQuery (BigQuery ML + Vertex AI)</span><span class="tag" style="background:#fef3c7;color:#92400e;">PostgreSQL (pgvector + pgai)</span><span class="tag" style="background:#fef3c7;color:#92400e;">Amazon (Aurora ML + Redshift ML)</span>
+        </div>
+        
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+      <div class="card cursor-pointer" onclick="showTab('observability')">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="bg-rose-100 text-rose-700 rounded-lg p-2 text-xl">📊</div>
+          <h3 class="font-bold text-lg">Observability & Cost</h3>
+        </div>
+        
+        <p class="text-sm text-gray-600 mb-3">AI observability is critical for understanding how large language models behave in production, helping teams debug issues, optimize performance, and control costs. As LLM applications scale, without proper monitoring it becomes nearly impossible to trace failures, measure quality, or identify expensive inefficiencies in prompts and model usage. These tools provide the visibility needed to build reliable, cost-effective AI systems.</p>
+        
+        
+        <div class="flex flex-wrap gap-1">
+          <span class="tag" style="background:#ffe4e6;color:#9f1239;">LangSmith</span><span class="tag" style="background:#ffe4e6;color:#9f1239;">Helicone</span><span class="tag" style="background:#ffe4e6;color:#9f1239;">Weights & Biases (W&B)</span><span class="tag" style="background:#ffe4e6;color:#9f1239;">Arize AI</span>
+        </div>
+        
+        <p class="text-xs text-indigo-500 mt-3 font-medium">View details →</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CODE TOOLS TAB -->
+  <div id="tab-code-tools" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">Code Generation Tools</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    
+    <p class="text-gray-600 mb-6">The AI code generation landscape is dominated by a handful of tools that have achieved broad developer adoption through deep IDE integration, strong language model capabilities, and freemium pricing strategies. GitHub Copilot maintains the largest market share as of early 2025, with competitors like Cursor, Tabnine, and Amazon CodeWhisperer carving out significant niches. Enterprise adoption is accelerating, and the market is rapidly consolidating around tools that offer chat-based assistance, inline completions, and agentic coding capabilities.</p>
+    
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      
-      <div class="card">
-        <div class="flex justify-between items-start mb-2">
-          <h3 class="font-bold text-lg">Claude Code</h3>
-          
-        </div>
-        <p class="text-xs text-gray-400 mb-2">Anthropic</p>
-        <p class="text-sm text-gray-600 mb-3"><span class="font-medium">Paid:</span> Usage-based via Anthropic API; included with Claude Pro ($20/month) and Claude Max ($100/month) subscriptions; also available via Claude.ai and API pricing starting at $3 per million input tokens (Sonnet)</p>
-        <div class="mb-3">
-          <span class="tag">Agentic coding with full terminal and file system access</span><span class="tag">Handles large, multi-file refactoring tasks end-to-end</span><span class="tag">Strong reasoning and code explanation capabilities</span><span class="tag">Deep codebase understanding via context ingestion</span><span class="tag">Runs autonomously with minimal human intervention</span><span class="tag">Supports bash commands, git operations, and test execution</span><span class="tag">Excellent at greenfield project scaffolding</span>
-        </div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Developers who want an autonomous AI agent to handle complex, multi-step coding tasks, refactoring entire codebases, or building features from scratch with minimal supervision</p>
-        <a href="https://claude.ai/code" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://claude.ai/code</a>
-      </div>
       
       <div class="card">
         <div class="flex justify-between items-start mb-2">
           <h3 class="font-bold text-lg">GitHub Copilot</h3>
           <span class="tag tag-green">Free tier</span>
         </div>
-        <p class="text-xs text-gray-400 mb-2">GitHub (Microsoft)</p>
-        <p class="text-sm text-gray-600 mb-3"><span class="font-medium">Paid:</span> Copilot Pro at $10/month or $100/year; Copilot Business at $19/user/month; Copilot Enterprise at $39/user/month; Free tier includes 2,000 completions and 50 chat messages per month</p>
-        <div class="mb-3">
-          <span class="tag">Deep GitHub and repository integration</span><span class="tag">Multi-model support (GPT-4o, Claude 3.5 Sonnet, Gemini)</span><span class="tag">Copilot Workspace for issue-to-PR automation</span><span class="tag">Pull request summaries and code review assistance</span><span class="tag">Inline code completions with high accuracy</span><span class="tag">Copilot Chat for contextual Q&A</span><span class="tag">Extensive enterprise security and compliance features</span><span class="tag">Large ecosystem and community adoption</span>
-        </div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Teams and enterprises already using GitHub who want tightly integrated AI assistance across the entire software development lifecycle from issue tracking to code review</p>
-        <a href="https://github.com/features/copilot" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://github.com/features/copilot</a>
+        <p class="text-xs text-gray-400 mb-1">GitHub (Microsoft)</p>
+        <a href="https://github.com/features/copilot" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://github.com/features/copilot</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Copilot Pro at $10/month, Copilot Business at $19/user/month, Copilot Enterprise at $39/user/month</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, Visual Studio, JetBrains IDEs, Neovim, Vim, Azure Data Studio, GitHub.com web editor</p>
+        <div class="mb-3"><span class="tag">Largest training dataset from public GitHub repositories</span><span class="tag">Deep integration with VS Code and GitHub ecosystem</span><span class="tag">Multi-line and whole-function completions</span><span class="tag">Copilot Chat for conversational coding assistance</span><span class="tag">Supports dozens of programming languages</span><span class="tag">Enterprise security and policy controls</span><span class="tag">Copilot Workspace for agentic task completion</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Individual developers and enterprises wanting the most widely adopted, ecosystem-integrated AI coding assistant with broad language and IDE support</p>
       </div>
       
       <div class="card">
@@ -76,41 +163,12 @@
           <h3 class="font-bold text-lg">Cursor</h3>
           <span class="tag tag-green">Free tier</span>
         </div>
-        <p class="text-xs text-gray-400 mb-2">Anysphere</p>
-        <p class="text-sm text-gray-600 mb-3"><span class="font-medium">Paid:</span> Pro at $20/month (500 fast premium requests, unlimited slow requests); Business at $40/user/month with SSO and privacy controls; Free tier includes 2-week Pro trial then limited usage</p>
-        <div class="mb-3">
-          <span class="tag">Purpose-built AI-first code editor (VS Code fork)</span><span class="tag">Composer agent for multi-file edits in one session</span><span class="tag">Codebase-wide context and semantic search</span><span class="tag">Supports multiple frontier models (GPT-4o, Claude 3.5, Gemini)</span><span class="tag">Natural language to code with inline diffs</span><span class="tag">.cursorrules for project-specific AI instructions</span><span class="tag">Tab completion with predictive next-action suggestions</span><span class="tag">Strong context window utilization</span>
-        </div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Individual developers and small teams who want the most deeply integrated AI coding experience and are willing to switch to a dedicated AI-native editor for maximum productivity</p>
-        <a href="https://cursor.com" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://cursor.com</a>
-      </div>
-      
-      <div class="card">
-        <div class="flex justify-between items-start mb-2">
-          <h3 class="font-bold text-lg">Codeium (Windsurf)</h3>
-          <span class="tag tag-green">Free tier</span>
-        </div>
-        <p class="text-xs text-gray-400 mb-2">Codeium (Exafunction)</p>
-        <p class="text-sm text-gray-600 mb-3"><span class="font-medium">Paid:</span> Codeium Teams at $12/user/month; Codeium Enterprise with custom pricing; Windsurf Pro at $15/month; Free tier is generous with unlimited completions for individual use</p>
-        <div class="mb-3">
-          <span class="tag">Generous free tier with unlimited completions</span><span class="tag">Windsurf editor as an AI-native IDE alternative to Cursor</span><span class="tag">Cascade agentic AI with multi-step task execution</span><span class="tag">Fast and low-latency code completions</span><span class="tag">Broad language and framework support</span><span class="tag">Context-aware completions across the codebase</span><span class="tag">Self-hosted enterprise deployment options</span><span class="tag">Strong privacy guarantees with no training on user code</span>
-        </div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Individual developers and startups looking for a powerful free alternative to Copilot with broad IDE support, or teams needing enterprise-grade on-premises deployment</p>
-        <a href="https://codeium.com" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://codeium.com</a>
-      </div>
-      
-      <div class="card">
-        <div class="flex justify-between items-start mb-2">
-          <h3 class="font-bold text-lg">Amazon CodeWhisperer</h3>
-          <span class="tag tag-green">Free tier</span>
-        </div>
-        <p class="text-xs text-gray-400 mb-2">Amazon Web Services (AWS)</p>
-        <p class="text-sm text-gray-600 mb-3"><span class="font-medium">Paid:</span> CodeWhisperer Professional at $19/user/month; Free Individual tier available with no usage limits on code suggestions; Professional adds security scanning, SSO, and admin controls</p>
-        <div class="mb-3">
-          <span class="tag">Native AWS service integration and cloud-aware suggestions</span><span class="tag">Built-in security vulnerability scanning (OWASP, CWEs)</span><span class="tag">License and reference tracking for open-source compliance</span><span class="tag">Optimized for AWS SDKs, CDK, and CloudFormation</span><span class="tag">Supports 15+ programming languages</span><span class="tag">Strong Java, Python, and TypeScript support</span><span class="tag">Enterprise compliance and audit logging via AWS</span><span class="tag">Integration with AWS Lambda, S3, DynamoDB patterns</span>
-        </div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> AWS-centric development teams and enterprises building cloud-native applications on AWS infrastructure who need compliance-friendly AI assistance with security scanning</p>
-        <a href="https://aws.amazon.com/codewhisperer" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://aws.amazon.com/codewhisperer</a>
+        <p class="text-xs text-gray-400 mb-1">Anysphere</p>
+        <a href="https://www.cursor.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.cursor.com</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Pro at $20/month, Business at $40/user/month</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> Cursor (standalone VS Code fork)</p>
+        <div class="mb-3"><span class="tag">Purpose-built AI-first code editor forked from VS Code</span><span class="tag">Codebase-aware context with @codebase references</span><span class="tag">Multi-file editing and agentic code changes</span><span class="tag">Supports multiple underlying models (GPT-4, Claude, Gemini)</span><span class="tag">Composer mode for large-scale refactoring</span><span class="tag">Privacy mode with no code retention option</span><span class="tag">Rapidly growing developer community</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Developers who want a fully AI-native editor experience with deep codebase understanding and the ability to make coordinated multi-file changes</p>
       </div>
       
       <div class="card">
@@ -118,218 +176,521 @@
           <h3 class="font-bold text-lg">Tabnine</h3>
           <span class="tag tag-green">Free tier</span>
         </div>
-        <p class="text-xs text-gray-400 mb-2">Tabnine</p>
-        <p class="text-sm text-gray-600 mb-3"><span class="font-medium">Paid:</span> Tabnine Pro at $12/user/month; Tabnine Enterprise at $39/user/month with on-premises hosting and custom model training; Free tier with basic completions</p>
-        <div class="mb-3">
-          <span class="tag">Privacy-first design with air-gapped and on-premises options</span><span class="tag">Custom model training on private codebases</span><span class="tag">Team learning that adapts to organizational coding patterns</span><span class="tag">Whole-line and full-function completions</span><span class="tag">Does not train on user code by default</span><span class="tag">Long-standing enterprise trust and adoption</span><span class="tag">Supports 80+ programming languages</span><span class="tag">Works offline with local model option</span><span class="tag">Compliance certifications (SOC 2, GDPR)</span>
+        <p class="text-xs text-gray-400 mb-1">Tabnine</p>
+        <a href="https://www.tabnine.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.tabnine.com</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Pro at $12/user/month, Enterprise with custom pricing</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Vim, Neovim, Emacs, Sublime Text, Eclipse, Visual Studio</p>
+        <div class="mb-3"><span class="tag">Strong enterprise privacy with on-premises deployment option</span><span class="tag">Trained on permissively licensed code only</span><span class="tag">Whole-line and full-function completions</span><span class="tag">Personalized model that learns from your codebase</span><span class="tag">Long track record of adoption pre-dating Copilot</span><span class="tag">SOC 2 compliance and air-gapped deployment</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Privacy-conscious enterprises and developers who need on-premises deployment, compliance guarantees, and code trained only on permissively licensed sources</p>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="font-bold text-lg">Amazon CodeWhisperer (Amazon Q Developer)</h3>
+          <span class="tag tag-green">Free tier</span>
         </div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Privacy-conscious enterprises and regulated industries (finance, healthcare, defense) that require on-premises deployment, custom model training on proprietary code, and strict data governance</p>
-        <a href="https://tabnine.com" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://tabnine.com</a>
+        <p class="text-xs text-gray-400 mb-1">Amazon Web Services</p>
+        <a href="https://aws.amazon.com/q/developer/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://aws.amazon.com/q/developer/</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Amazon Q Developer Pro at $19/user/month</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Visual Studio, AWS Cloud9, AWS Lambda console, Amazon SageMaker Studio, JupyterLab, AWS Glue Studio</p>
+        <div class="mb-3"><span class="tag">Free Individual tier with no usage limits for core completions</span><span class="tag">Deep AWS SDK and service awareness</span><span class="tag">Built-in security vulnerability scanning</span><span class="tag">Reference tracker for open-source license attribution</span><span class="tag">Rebranded and expanded as Amazon Q Developer with chat and agents</span><span class="tag">Strong adoption among AWS-centric development teams</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> AWS developers and cloud engineers building on the AWS ecosystem who need context-aware completions, security scanning, and license compliance tracking</p>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="font-bold text-lg">Codeium</h3>
+          <span class="tag tag-green">Free tier</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Codeium (Windsurf)</p>
+        <a href="https://codeium.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://codeium.com</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Pro at $15/month, Teams and Enterprise with custom pricing</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Vim, Neovim, Emacs, Visual Studio, Eclipse, Windsurf (standalone editor)</p>
+        <div class="mb-3"><span class="tag">Completely free for individual developers with no usage cap</span><span class="tag">Windsurf agentic IDE with multi-step task execution</span><span class="tag">Fast autocomplete with low latency</span><span class="tag">Broad language support across 70+ languages</span><span class="tag">Search and context across entire repositories</span><span class="tag">Chat assistant with codebase awareness</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Individual developers seeking a generous free tier with no usage limits and an optional agentic IDE experience through the Windsurf editor</p>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="font-bold text-lg">Sourcegraph Cody</h3>
+          <span class="tag tag-green">Free tier</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Sourcegraph</p>
+        <a href="https://sourcegraph.com/cody" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://sourcegraph.com/cody</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Pro at $9/month, Enterprise with custom pricing</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Neovim, Emacs</p>
+        <div class="mb-3"><span class="tag">Entire-codebase context using Sourcegraph's code intelligence graph</span><span class="tag">Supports multiple LLM backends (Claude, GPT-4, Gemini)</span><span class="tag">Inline completions and chat in one tool</span><span class="tag">Precise code navigation and reference understanding</span><span class="tag">Strong enterprise offering with large-scale codebase indexing</span><span class="tag">Open-source client</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Teams with large, complex codebases who need AI assistance grounded in accurate whole-repository context and code intelligence rather than just recent file context</p>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="font-bold text-lg">Continue</h3>
+          <span class="tag tag-green">Free tier</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Continue (open source)</p>
+        <a href="https://www.continue.dev" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.continue.dev</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Free and open source; enterprise support available via Continue Hub</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs</p>
+        <div class="mb-3"><span class="tag">Fully open-source and self-hostable</span><span class="tag">Bring-your-own-model flexibility (Ollama, OpenAI, Anthropic, etc.)</span><span class="tag">Deep customization and extensibility</span><span class="tag">Tab autocomplete and chat in one plugin</span><span class="tag">Active open-source community</span><span class="tag">No vendor lock-in</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Developers and enterprises who want full control over their AI stack, model choice, and data privacy through a self-hosted or locally-run open-source solution</p>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="font-bold text-lg">Replit AI (Ghostwriter)</h3>
+          <span class="tag tag-green">Free tier</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Replit</p>
+        <a href="https://replit.com/ai" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://replit.com/ai</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Replit Core at $20/month which includes AI features; Teams plans available</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> Replit web IDE (browser-based)</p>
+        <div class="mb-3"><span class="tag">Fully browser-based with no local setup required</span><span class="tag">AI deeply embedded in an online IDE and hosting platform</span><span class="tag">Instant deployment and collaborative coding</span><span class="tag">Strong adoption in education and prototyping</span><span class="tag">Code generation, explanation, debugging, and transformation</span><span class="tag">AI Agent can build apps from natural language prompts</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Students, educators, and rapid prototypers who want an all-in-one browser-based environment where AI assistance, coding, and deployment are seamlessly integrated</p>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="font-bold text-lg">JetBrains AI Assistant</h3>
+          
+        </div>
+        <p class="text-xs text-gray-400 mb-1">JetBrains</p>
+        <a href="https://www.jetbrains.com/ai/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.jetbrains.com/ai/</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Included with All Products Pack subscription; AI Pro add-on at $10/month for individual IDE subscribers</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> IntelliJ IDEA, PyCharm, WebStorm, GoLand, Rider, CLion, DataGrip, All JetBrains IDEs</p>
+        <div class="mb-3"><span class="tag">Native deep integration across all JetBrains IDEs</span><span class="tag">Context-aware completions using IDE's semantic understanding</span><span class="tag">AI chat with awareness of project structure, errors, and VCS history</span><span class="tag">Commit message and documentation generation</span><span class="tag">Test generation integrated into JetBrains test frameworks</span><span class="tag">Trusted vendor for enterprise JetBrains shops</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> JetBrains ecosystem users who want AI assistance that is natively and deeply integrated into their existing IDE with full access to semantic code intelligence</p>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <h3 class="font-bold text-lg">Aider</h3>
+          <span class="tag tag-green">Free tier</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Aider (open source, Paul Gauthier)</p>
+        <a href="https://aider.chat" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://aider.chat</a>
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Free and open source; users pay only for their own API keys (OpenAI, Anthropic, etc.)</p>
+        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> Terminal / CLI (works alongside any editor), VS Code (via terminal), Neovim (via terminal)</p>
+        <div class="mb-3"><span class="tag">Terminal-based AI pair programmer with strong agentic capabilities</span><span class="tag">Deep Git integration with automatic commits for each AI change</span><span class="tag">Supports GPT-4, Claude, and local models via API</span><span class="tag">Whole-repository context and multi-file editing</span><span class="tag">Highly rated on benchmarks like SWE-bench</span><span class="tag">Transparent diff-based workflow that developers can review</span></div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Power users and backend developers who prefer a terminal-driven, Git-integrated AI coding agent capable of complex multi-file refactoring with full transparency and model flexibility</p>
       </div>
       
     </div>
     
-  </section>
+  </div>
 
-  <!-- Models -->
-  <section id="models">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-700">Major AI Models</h2>
+  <!-- MODELS TAB -->
+  <div id="tab-models" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">Major AI Models</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
     
-    <div class="overflow-x-auto rounded-xl shadow">
+    <p class="text-gray-600 mb-6">The LLM landscape as of early 2025 is dominated by OpenAI's GPT family in commercial API usage, while Meta's Llama models lead open-source downloads and self-hosted deployments. A diverse ecosystem has emerged with strong challengers from Google, Anthropic, Mistral, and DeepSeek, reflecting both closed-API and open-weight adoption patterns across developer surveys and platform statistics.</p>
+    
+    
+    <div class="overflow-x-auto rounded-xl shadow mb-8">
       <table class="min-w-full bg-white text-sm">
         <thead class="bg-indigo-50 text-indigo-800 text-xs uppercase tracking-wide">
           <tr>
+            <th class="px-4 py-3 text-left">Rank</th>
             <th class="px-4 py-3 text-left">Model</th>
             <th class="px-4 py-3 text-left">Vendor</th>
             <th class="px-4 py-3 text-left">Context</th>
-            <th class="px-4 py-3 text-left">Cost In</th>
-            <th class="px-4 py-3 text-left">Cost Out</th>
+            <th class="px-4 py-3 text-left">Cost In /1M</th>
+            <th class="px-4 py-3 text-left">Cost Out /1M</th>
             <th class="px-4 py-3 text-left">Open</th>
-            <th class="px-4 py-3 text-left">Best For</th>
+            <th class="px-4 py-3 text-left">Why This Rank</th>
+            <th class="px-4 py-3 text-left">Link</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
           
           <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">1</td>
             <td class="px-4 py-3 font-medium">GPT-4o</td>
             <td class="px-4 py-3 text-gray-500">OpenAI</td>
-            <td class="px-4 py-3">128K tokens</td>
-            <td class="px-4 py-3">$5.00 per 1M tokens</td>
-            <td class="px-4 py-3">$15.00 per 1M tokens</td>
+            <td class="px-4 py-3">128,000 tokens</td>
+            <td class="px-4 py-3">$2.50</td>
+            <td class="px-4 py-3">$10.00</td>
             <td class="px-4 py-3"><span class="text-gray-400">No</span></td>
-            <td class="px-4 py-3 text-gray-600">General-purpose enterprise applications requiring multimodal inputs and high accuracy</td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Consistently ranked #1 in developer API usage; OpenAI reported over 100 million weekly active users on ChatGPT and GPT-4o dominates Stack Overflow 2024 AI tool surveys as the most-used LLM API.</td>
+            <td class="px-4 py-3"><a href="https://openai.com" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
           </tr>
           
           <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">2</td>
+            <td class="px-4 py-3 font-medium">Llama 3.1 / Llama 3.2 (family)</td>
+            <td class="px-4 py-3 text-gray-500">Meta</td>
+            <td class="px-4 py-3">128,000 tokens (Llama 3.1 8B/70B/405B)</td>
+            <td class="px-4 py-3">$0.00 (self-hosted)</td>
+            <td class="px-4 py-3">$0.00 (self-hosted)</td>
+            <td class="px-4 py-3"><span class="tag tag-green">Yes</span></td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Llama models collectively account for the highest HuggingFace download volumes of any model family, with hundreds of millions of downloads and the largest self-hosted developer base globally.</td>
+            <td class="px-4 py-3"><a href="https://ai.meta.com/llama/" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
+          </tr>
+          
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">3</td>
             <td class="px-4 py-3 font-medium">Claude 3.5 Sonnet</td>
             <td class="px-4 py-3 text-gray-500">Anthropic</td>
-            <td class="px-4 py-3">200K tokens</td>
-            <td class="px-4 py-3">$3.00 per 1M tokens</td>
-            <td class="px-4 py-3">$15.00 per 1M tokens</td>
+            <td class="px-4 py-3">200,000 tokens</td>
+            <td class="px-4 py-3">$3.00</td>
+            <td class="px-4 py-3">$15.00</td>
             <td class="px-4 py-3"><span class="text-gray-400">No</span></td>
-            <td class="px-4 py-3 text-gray-600">Long-document analysis, coding assistance, and tasks requiring nuanced understanding</td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Anthropic's Claude 3.5 Sonnet ranked as the top-preferred model for coding tasks in multiple 2024 developer surveys and saw rapid enterprise API adoption, with Anthropic reporting significant revenue growth driven by this model.</td>
+            <td class="px-4 py-3"><a href="https://www.anthropic.com" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
           </tr>
           
           <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">4</td>
             <td class="px-4 py-3 font-medium">Gemini 1.5 Pro</td>
             <td class="px-4 py-3 text-gray-500">Google DeepMind</td>
-            <td class="px-4 py-3">1M tokens (up to 2M in preview)</td>
-            <td class="px-4 py-3">$3.50 per 1M tokens</td>
-            <td class="px-4 py-3">$10.50 per 1M tokens</td>
+            <td class="px-4 py-3">1,000,000 tokens (up to 2M in preview)</td>
+            <td class="px-4 py-3">$1.25 (up to 128K), $2.50 (above 128K)</td>
+            <td class="px-4 py-3">$5.00 (up to 128K), $10.00 (above 128K)</td>
             <td class="px-4 py-3"><span class="text-gray-400">No</span></td>
-            <td class="px-4 py-3 text-gray-600">Applications requiring processing of very large documents, codebases, or long video content</td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Gemini 1.5 Pro is the most-used model in Google's AI ecosystem with over 1.5 million developers using the Gemini API per Google I/O 2024 announcements, ranking highly in JetBrains 2024 developer surveys.</td>
+            <td class="px-4 py-3"><a href="https://deepmind.google/technologies/gemini/" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
           </tr>
           
           <tr class="hover:bg-gray-50">
-            <td class="px-4 py-3 font-medium">Llama 3.1</td>
-            <td class="px-4 py-3 text-gray-500">Meta</td>
-            <td class="px-4 py-3">128K tokens</td>
-            <td class="px-4 py-3">$0.00 (self-hosted); varies by provider</td>
-            <td class="px-4 py-3">$0.00 (self-hosted); varies by provider</td>
-            <td class="px-4 py-3"><span class="tag tag-green">Yes</span></td>
-            <td class="px-4 py-3 text-gray-600">Organizations needing full data privacy, custom fine-tuning, or cost-efficient self-hosted deployments</td>
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">5</td>
+            <td class="px-4 py-3 font-medium">GPT-3.5 Turbo</td>
+            <td class="px-4 py-3 text-gray-500">OpenAI</td>
+            <td class="px-4 py-3">16,385 tokens</td>
+            <td class="px-4 py-3">$0.50</td>
+            <td class="px-4 py-3">$1.50</td>
+            <td class="px-4 py-3"><span class="text-gray-400">No</span></td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Despite newer models, GPT-3.5 Turbo retains massive legacy usage due to its low cost and remains one of the highest API call volume models per OpenAI usage data and third-party analytics platforms like usage.ai.</td>
+            <td class="px-4 py-3"><a href="https://openai.com" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
           </tr>
           
           <tr class="hover:bg-gray-50">
-            <td class="px-4 py-3 font-medium">Mistral Large</td>
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">6</td>
+            <td class="px-4 py-3 font-medium">Mistral Large / Mistral family</td>
             <td class="px-4 py-3 text-gray-500">Mistral AI</td>
-            <td class="px-4 py-3">128K tokens</td>
-            <td class="px-4 py-3">$3.00 per 1M tokens</td>
-            <td class="px-4 py-3">$9.00 per 1M tokens</td>
-            <td class="px-4 py-3"><span class="text-gray-400">No</span></td>
-            <td class="px-4 py-3 text-gray-600">Multilingual European enterprise applications and cost-efficient reasoning tasks</td>
+            <td class="px-4 py-3">128,000 tokens (Mistral Large 2)</td>
+            <td class="px-4 py-3">$2.00</td>
+            <td class="px-4 py-3">$6.00</td>
+            <td class="px-4 py-3"><span class="tag tag-green">Yes</span></td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Mistral models rank among the top downloaded open-weight models on HuggingFace and Mistral's API saw rapid European enterprise adoption, with Mistral 7B being one of the most-downloaded models of 2024 on HuggingFace.</td>
+            <td class="px-4 py-3"><a href="https://mistral.ai" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
           </tr>
           
           <tr class="hover:bg-gray-50">
-            <td class="px-4 py-3 font-medium">Command R+</td>
-            <td class="px-4 py-3 text-gray-500">Cohere</td>
-            <td class="px-4 py-3">128K tokens</td>
-            <td class="px-4 py-3">$3.00 per 1M tokens</td>
-            <td class="px-4 py-3">$15.00 per 1M tokens</td>
-            <td class="px-4 py-3"><span class="text-gray-400">No</span></td>
-            <td class="px-4 py-3 text-gray-600">Enterprise RAG pipelines, knowledge base search, and grounded question-answering systems</td>
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">7</td>
+            <td class="px-4 py-3 font-medium">DeepSeek-V3 / DeepSeek-R1</td>
+            <td class="px-4 py-3 text-gray-500">DeepSeek</td>
+            <td class="px-4 py-3">128,000 tokens</td>
+            <td class="px-4 py-3">$0.27 (DeepSeek-V3 cache miss)</td>
+            <td class="px-4 py-3">$1.10</td>
+            <td class="px-4 py-3"><span class="tag tag-green">Yes</span></td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">DeepSeek-R1 became one of the fastest-growing models on HuggingFace in early 2025 with millions of downloads within weeks of release, and DeepSeek's app briefly topped App Store charts globally in January 2025.</td>
+            <td class="px-4 py-3"><a href="https://www.deepseek.com" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
           </tr>
           
           <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">8</td>
+            <td class="px-4 py-3 font-medium">Gemini 2.0 Flash</td>
+            <td class="px-4 py-3 text-gray-500">Google DeepMind</td>
+            <td class="px-4 py-3">1,000,000 tokens</td>
+            <td class="px-4 py-3">$0.075</td>
+            <td class="px-4 py-3">$0.30</td>
+            <td class="px-4 py-3"><span class="text-gray-400">No</span></td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Gemini 2.0 Flash achieved rapid adoption as Google's recommended default API model for speed-sensitive applications, with Google reporting it as the most-called model in the Gemini API by request volume shortly after launch.</td>
+            <td class="px-4 py-3"><a href="https://deepmind.google/technologies/gemini/" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
+          </tr>
+          
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">9</td>
+            <td class="px-4 py-3 font-medium">Qwen2.5 (family)</td>
+            <td class="px-4 py-3 text-gray-500">Alibaba Cloud</td>
+            <td class="px-4 py-3">128,000 tokens</td>
+            <td class="px-4 py-3">$0.00 (self-hosted open weights)</td>
+            <td class="px-4 py-3">$0.00 (self-hosted open weights)</td>
+            <td class="px-4 py-3"><span class="tag tag-green">Yes</span></td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Qwen2.5 models became among the top-10 most downloaded model families on HuggingFace in late 2024, with particularly strong adoption across Asian developer markets and strong benchmark results driving community uptake.</td>
+            <td class="px-4 py-3"><a href="https://qwen.readthedocs.io" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
+          </tr>
+          
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-indigo-600">10</td>
             <td class="px-4 py-3 font-medium">Grok-2</td>
             <td class="px-4 py-3 text-gray-500">xAI</td>
-            <td class="px-4 py-3">128K tokens</td>
-            <td class="px-4 py-3">$2.00 per 1M tokens</td>
-            <td class="px-4 py-3">$10.00 per 1M tokens</td>
+            <td class="px-4 py-3">131,072 tokens</td>
+            <td class="px-4 py-3">$2.00</td>
+            <td class="px-4 py-3">$10.00</td>
             <td class="px-4 py-3"><span class="text-gray-400">No</span></td>
-            <td class="px-4 py-3 text-gray-600">Real-time social media analysis, trend monitoring, and applications requiring up-to-date web information</td>
+            <td class="px-4 py-3 text-gray-500 text-xs max-w-xs">Grok-2 gained measurable developer adoption following its API launch in late 2024 and integration into X (Twitter), with xAI reporting growing API usage and Grok appearing in emerging developer tool surveys by end of 2024.</td>
+            <td class="px-4 py-3"><a href="https://x.ai" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a></td>
           </tr>
           
         </tbody>
       </table>
     </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#1</span>
+            <h3 class="font-bold">GPT-4o</h3>
+          </div>
+          
+        </div>
+        <p class="text-xs text-gray-400 mb-1">OpenAI</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Consistently ranked #1 in developer API usage; OpenAI reported over 100 million weekly active users on ChatGPT and GPT-4o dominates Stack Overflow 2024 AI tool surveys as the most-used LLM API.</p>
+        <a href="https://openai.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://openai.com</a>
+        <div><span class="tag tag-purple">Multimodal (text, image, audio, vision)</span><span class="tag tag-purple">Fast inference with high accuracy</span><span class="tag tag-purple">Broad ecosystem and plugin support</span><span class="tag tag-purple">Strong coding and reasoning capabilities</span><span class="tag tag-purple">Widest third-party integration coverage</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#2</span>
+            <h3 class="font-bold">Llama 3.1 / Llama 3.2 (family)</h3>
+          </div>
+          <span class="tag tag-green">Open Source</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Meta</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Llama models collectively account for the highest HuggingFace download volumes of any model family, with hundreds of millions of downloads and the largest self-hosted developer base globally.</p>
+        <a href="https://ai.meta.com/llama/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://ai.meta.com/llama/</a>
+        <div><span class="tag tag-purple">Fully open weights enabling local deployment</span><span class="tag tag-purple">Massive community fine-tune ecosystem</span><span class="tag tag-purple">Multiple size variants (1B to 405B)</span><span class="tag tag-purple">No API cost when self-hosted</span><span class="tag tag-purple">Strong benchmark performance at its weight class</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#3</span>
+            <h3 class="font-bold">Claude 3.5 Sonnet</h3>
+          </div>
+          
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Anthropic</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Anthropic's Claude 3.5 Sonnet ranked as the top-preferred model for coding tasks in multiple 2024 developer surveys and saw rapid enterprise API adoption, with Anthropic reporting significant revenue growth driven by this model.</p>
+        <a href="https://www.anthropic.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.anthropic.com</a>
+        <div><span class="tag tag-purple">Industry-leading long-context understanding</span><span class="tag tag-purple">Top-tier coding and software engineering performance</span><span class="tag tag-purple">Strong instruction following and nuanced reasoning</span><span class="tag tag-purple">Low hallucination rate on factual tasks</span><span class="tag tag-purple">200K context window for large document analysis</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#4</span>
+            <h3 class="font-bold">Gemini 1.5 Pro</h3>
+          </div>
+          
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Google DeepMind</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Gemini 1.5 Pro is the most-used model in Google's AI ecosystem with over 1.5 million developers using the Gemini API per Google I/O 2024 announcements, ranking highly in JetBrains 2024 developer surveys.</p>
+        <a href="https://deepmind.google/technologies/gemini/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://deepmind.google/technologies/gemini/</a>
+        <div><span class="tag tag-purple">Largest context window among major commercial models (1M tokens)</span><span class="tag tag-purple">Native multimodal (text, image, video, audio, code)</span><span class="tag tag-purple">Deep Google Workspace and Cloud integration</span><span class="tag tag-purple">Strong multilingual capabilities</span><span class="tag tag-purple">Efficient long-context retrieval</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#5</span>
+            <h3 class="font-bold">GPT-3.5 Turbo</h3>
+          </div>
+          
+        </div>
+        <p class="text-xs text-gray-400 mb-1">OpenAI</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Despite newer models, GPT-3.5 Turbo retains massive legacy usage due to its low cost and remains one of the highest API call volume models per OpenAI usage data and third-party analytics platforms like usage.ai.</p>
+        <a href="https://openai.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://openai.com</a>
+        <div><span class="tag tag-purple">Very low cost per token</span><span class="tag tag-purple">Fast response times</span><span class="tag tag-purple">Massive existing integration base</span><span class="tag tag-purple">Reliable for straightforward NLP tasks</span><span class="tag tag-purple">Well-documented with extensive community resources</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#6</span>
+            <h3 class="font-bold">Mistral Large / Mistral family</h3>
+          </div>
+          <span class="tag tag-green">Open Source</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Mistral AI</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Mistral models rank among the top downloaded open-weight models on HuggingFace and Mistral's API saw rapid European enterprise adoption, with Mistral 7B being one of the most-downloaded models of 2024 on HuggingFace.</p>
+        <a href="https://mistral.ai" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://mistral.ai</a>
+        <div><span class="tag tag-purple">Strong performance-to-size ratio</span><span class="tag tag-purple">Open weights for smaller models (7B, 8x7B)</span><span class="tag tag-purple">European data sovereignty compliance</span><span class="tag tag-purple">Efficient mixture-of-experts architecture (Mixtral)</span><span class="tag tag-purple">Competitive multilingual support</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#7</span>
+            <h3 class="font-bold">DeepSeek-V3 / DeepSeek-R1</h3>
+          </div>
+          <span class="tag tag-green">Open Source</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">DeepSeek</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">DeepSeek-R1 became one of the fastest-growing models on HuggingFace in early 2025 with millions of downloads within weeks of release, and DeepSeek's app briefly topped App Store charts globally in January 2025.</p>
+        <a href="https://www.deepseek.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.deepseek.com</a>
+        <div><span class="tag tag-purple">Exceptional cost efficiency vs. performance ratio</span><span class="tag tag-purple">Strong mathematical and reasoning capabilities</span><span class="tag tag-purple">Open weights available for self-hosting</span><span class="tag tag-purple">Competitive with GPT-4 class models at fraction of cost</span><span class="tag tag-purple">Strong coding performance</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#8</span>
+            <h3 class="font-bold">Gemini 2.0 Flash</h3>
+          </div>
+          
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Google DeepMind</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Gemini 2.0 Flash achieved rapid adoption as Google's recommended default API model for speed-sensitive applications, with Google reporting it as the most-called model in the Gemini API by request volume shortly after launch.</p>
+        <a href="https://deepmind.google/technologies/gemini/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://deepmind.google/technologies/gemini/</a>
+        <div><span class="tag tag-purple">Extremely low cost with very fast latency</span><span class="tag tag-purple">1M token context at low price</span><span class="tag tag-purple">Multimodal input support</span><span class="tag tag-purple">Optimized for high-throughput production workloads</span><span class="tag tag-purple">Strong performance for its price tier</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#9</span>
+            <h3 class="font-bold">Qwen2.5 (family)</h3>
+          </div>
+          <span class="tag tag-green">Open Source</span>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">Alibaba Cloud</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Qwen2.5 models became among the top-10 most downloaded model families on HuggingFace in late 2024, with particularly strong adoption across Asian developer markets and strong benchmark results driving community uptake.</p>
+        <a href="https://qwen.readthedocs.io" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://qwen.readthedocs.io</a>
+        <div><span class="tag tag-purple">Strong multilingual capabilities especially for Asian languages</span><span class="tag tag-purple">Full open-weight release across multiple sizes (0.5B to 72B)</span><span class="tag tag-purple">Competitive coding and math performance</span><span class="tag tag-purple">Active HuggingFace community with many fine-tunes</span><span class="tag tag-purple">Commercial-friendly license</span></div>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">#10</span>
+            <h3 class="font-bold">Grok-2</h3>
+          </div>
+          
+        </div>
+        <p class="text-xs text-gray-400 mb-1">xAI</p>
+        <p class="text-xs text-indigo-600 mb-2 italic">Grok-2 gained measurable developer adoption following its API launch in late 2024 and integration into X (Twitter), with xAI reporting growing API usage and Grok appearing in emerging developer tool surveys by end of 2024.</p>
+        <a href="https://x.ai" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://x.ai</a>
+        <div><span class="tag tag-purple">Real-time access to X (Twitter) data and web information</span><span class="tag tag-purple">Strong performance on reasoning benchmarks</span><span class="tag tag-purple">Image understanding capabilities</span><span class="tag tag-purple">Less restrictive content policies for certain use cases</span><span class="tag tag-purple">Growing API ecosystem with competitive pricing</span></div>
+      </div>
+      
+    </div>
     
-  </section>
+  </div>
 
-  <!-- Repositories -->
-  <section id="repositories">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-700">Model Repositories & Platforms</h2>
+  <!-- REPOSITORIES TAB -->
+  <div id="tab-repositories" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">Model Repositories & Platforms</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    
+    <p class="text-gray-600 mb-6">The AI model repository and deployment ecosystem has rapidly matured into a diverse landscape spanning open-source community hubs, local inference tools, and managed cloud APIs. Platforms range from massive public repositories like Hugging Face with hundreds of thousands of models to specialized inference providers like Fireworks AI and Together AI optimized for speed and cost efficiency. Enterprises and developers can choose between self-hosted solutions, pay-per-token APIs, and fully managed cloud services depending on their privacy, scalability, and budget requirements.</p>
+    
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Hugging Face</h3>
-        <p class="text-sm text-gray-500 mb-1">900,000+ models models · Free for public models and basic hosting; Pro plan at $9/month; Enterprise from $20/user/month; Inference Endpoints billed per compute hour (from ~$0.06/hr for CPU, $0.60–$6+/hr for GPU)</p>
-        <p class="text-sm text-gray-700 mb-3">The largest open-source AI model hub and community platform for sharing, discovering, and deploying machine learning models, datasets, and demos.</p>
-        <div class="mb-3"><span class="tag tag-purple">Massive open-source model repository covering NLP, vision, audio, and multimodal models</span><span class="tag tag-purple">Model cards with documentation, evaluation metrics, and usage examples</span><span class="tag tag-purple">Hugging Face Spaces for hosting interactive ML demos (Gradio, Streamlit)</span><span class="tag tag-purple">Inference API for quick serverless model testing and integration</span><span class="tag tag-purple">Dedicated Inference Endpoints for private, scalable model deployment</span><span class="tag tag-purple">Datasets hub with thousands of curated training datasets</span><span class="tag tag-purple">AutoTrain for no-code model fine-tuning</span><span class="tag tag-purple">Deep integration with the Transformers, Diffusers, and PEFT libraries</span><span class="tag tag-purple">Active community with discussions, papers, and leaderboards</span><span class="tag tag-purple">Private model repositories and access controls for teams</span></div>
-        <p class="text-sm"><span class="font-medium">Best for:</span> Researchers, data scientists, and ML engineers who want access to the broadest range of open-source models, community collaboration, and flexible self-service or managed deployment options.</p>
-        <a href="https://huggingface.co" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://huggingface.co</a>
+        <p class="text-sm text-gray-500 mb-1">900,000+ models models · Free tier for public repositories and limited Inference API usage; Pro plan at $9/month; Enterprise Hub starting at $20/user/month; Inference Endpoints billed per compute hour (e.g., ~$0.06/hr for CPU, $0.60–$6/hr for GPU instances)</p>
+        <a href="https://huggingface.co" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://huggingface.co</a>
+        <p class="text-sm text-gray-700 mb-3">The largest open-source AI model repository and collaboration platform, serving as the de facto hub for sharing, discovering, and deploying machine learning models, datasets, and demos.</p>
+        <div class="mb-3"><span class="tag tag-purple">Massive public model and dataset repository</span><span class="tag tag-purple">Spaces for hosting ML demos and apps (Gradio, Streamlit)</span><span class="tag tag-purple">Inference API for quick model testing and production use</span><span class="tag tag-purple">Inference Endpoints for dedicated, scalable deployments</span><span class="tag tag-purple">AutoTrain for no-code model fine-tuning</span><span class="tag tag-purple">Model cards and documentation standards</span><span class="tag tag-purple">Private repositories and organization management</span><span class="tag tag-purple">Integration with major frameworks (PyTorch, TensorFlow, JAX)</span><span class="tag tag-purple">Active community forums and leaderboards</span></div>
+        <p class="text-sm"><span class="font-medium">Best for:</span> Researchers, data scientists, and ML engineers who want to discover, share, or fine-tune open-source models, as well as teams needing a collaborative model registry.</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Ollama</h3>
-        <p class="text-sm text-gray-500 mb-1">200+ curated models (Llama, Mistral, Gemma, Phi, Qwen, etc.) models · Completely free and open-source; costs are only hardware/electricity on your own machine</p>
-        <p class="text-sm text-gray-700 mb-3">A local-first tool that allows developers to download, run, and manage large language models entirely on their own machines with a simple CLI and local API server.</p>
-        <div class="mb-3"><span class="tag tag-purple">One-command model download and execution (e.g., 'ollama run llama3')</span><span class="tag tag-purple">Runs fully offline with no data sent to external servers</span><span class="tag tag-purple">Local REST API compatible with OpenAI's API schema for easy integration</span><span class="tag tag-purple">Supports macOS (Apple Silicon optimized), Linux, and Windows</span><span class="tag tag-purple">Custom model creation via Modelfile configuration</span><span class="tag tag-purple">GPU acceleration support (NVIDIA CUDA, Apple Metal, AMD ROCm)</span><span class="tag tag-purple">Multi-model management with easy switching between models</span><span class="tag tag-purple">Native integration with tools like Open WebUI, Continue, and LangChain</span><span class="tag tag-purple">Supports quantized models (GGUF format) for efficient local inference</span><span class="tag tag-purple">Active library of community-contributed models and variants</span></div>
-        <p class="text-sm"><span class="font-medium">Best for:</span> Privacy-conscious developers, hobbyists, and enterprise teams needing fully local, offline LLM inference without API costs or data privacy concerns.</p>
-        <a href="https://ollama.com" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://ollama.com</a>
+        <p class="text-sm text-gray-500 mb-1">300+ curated models (Llama, Mistral, Gemma, Phi, Qwen, etc.) models · Completely free and open-source; costs are limited to your own hardware and electricity</p>
+        <a href="https://ollama.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://ollama.com</a>
+        <p class="text-sm text-gray-700 mb-3">A local model runtime and management tool that allows users to download, run, and manage large language models entirely on their own hardware without internet connectivity or cloud costs.</p>
+        <div class="mb-3"><span class="tag tag-purple">One-command model download and execution</span><span class="tag tag-purple">OpenAI-compatible REST API (localhost)</span><span class="tag tag-purple">Support for CPU and GPU (NVIDIA, AMD, Apple Silicon) inference</span><span class="tag tag-purple">Modelfile system for custom model configuration and system prompts</span><span class="tag tag-purple">Multi-model management with easy switching</span><span class="tag tag-purple">Runs fully offline with no data leaving the device</span><span class="tag tag-purple">Cross-platform support (macOS, Linux, Windows)</span><span class="tag tag-purple">Integration with LangChain, LlamaIndex, Open WebUI, and others</span><span class="tag tag-purple">Automatic hardware optimization and quantization support</span></div>
+        <p class="text-sm"><span class="font-medium">Best for:</span> Privacy-conscious developers, hobbyists, and enterprises that need fully local inference with no data egress, or those who want to experiment with LLMs without cloud costs.</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Replicate</h3>
-        <p class="text-sm text-gray-500 mb-1">50,000+ public models models · Pay-per-second of compute; CPU from ~$0.0001/sec; GPU ranges from ~$0.000225/sec (T4) to ~$0.002315/sec (A100 80GB); no subscription required</p>
-        <p class="text-sm text-gray-700 mb-3">A cloud platform that makes it easy to run open-source AI models via a simple API, with a focus on accessibility for developers who want to deploy models without managing infrastructure.</p>
-        <div class="mb-3"><span class="tag tag-purple">Instant API access to thousands of community-published models</span><span class="tag tag-purple">Support for a wide range of modalities: text, image, video, audio, and 3D</span><span class="tag tag-purple">Automatic scaling with cold-start inference (no always-on cost)</span><span class="tag tag-purple">Deployments feature for reserved, low-latency instances</span><span class="tag tag-purple">Fine-tuning support for popular models (e.g., SDXL, Llama) via the platform</span><span class="tag tag-purple">Cog open-source tool for packaging models into containers for Replicate</span><span class="tag tag-purple">Webhooks for async predictions on long-running tasks</span><span class="tag tag-purple">Simple REST API and official client libraries (Python, Node.js)</span><span class="tag tag-purple">Streaming output support for real-time text generation</span><span class="tag tag-purple">Version pinning for reproducible model deployments</span></div>
-        <p class="text-sm"><span class="font-medium">Best for:</span> Developers and startups wanting quick, pay-as-you-go access to a huge variety of open-source models—especially image generation and media models—without DevOps overhead.</p>
-        <a href="https://replicate.com" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://replicate.com</a>
+        <p class="text-sm text-gray-500 mb-1">50,000+ public models models · Pay-per-second of compute time; pricing varies by hardware (e.g., ~$0.000225/sec on Nvidia T4, ~$0.001400/sec on Nvidia A100); no upfront costs; free tier credits for new users</p>
+        <a href="https://replicate.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://replicate.com</a>
+        <p class="text-sm text-gray-700 mb-3">A cloud platform for running open-source machine learning models via a simple API, with a focus on ease of deployment and a marketplace of community-contributed models spanning language, image, video, and audio.</p>
+        <div class="mb-3"><span class="tag tag-purple">Instant API access to thousands of community models</span><span class="tag tag-purple">Support for image, video, audio, and language models</span><span class="tag tag-purple">Custom model deployment with Cog (Docker-based packaging tool)</span><span class="tag tag-purple">Automatic scaling from zero to handle traffic spikes</span><span class="tag tag-purple">Webhooks for async predictions</span><span class="tag tag-purple">Deployments feature for dedicated, low-latency endpoints</span><span class="tag tag-purple">Fine-tuning support for select models (e.g., SDXL, Llama)</span><span class="tag tag-purple">Simple REST API with client libraries (Python, Node.js)</span><span class="tag tag-purple">Model versioning and rollback</span></div>
+        <p class="text-sm"><span class="font-medium">Best for:</span> Developers and startups who want quick API access to diverse open-source models—especially image and multimedia models—without managing infrastructure.</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Together AI</h3>
-        <p class="text-sm text-gray-500 mb-1">100+ open-source models models · Pay-per-token; competitive rates starting at ~$0.10/M tokens for smaller models (e.g., Llama 3.1 8B) up to ~$3.50/M tokens for large models (e.g., Llama 3.1 405B); fine-tuning billed per GPU hour</p>
-        <p class="text-sm text-gray-700 mb-3">A cloud AI platform offering fast, scalable inference and fine-tuning for leading open-source language models, targeting developers and enterprises that need high-throughput and cost-effective LLM access.</p>
-        <div class="mb-3"><span class="tag tag-purple">High-speed inference with low latency optimized for throughput-heavy applications</span><span class="tag tag-purple">OpenAI-compatible API for drop-in integration</span><span class="tag tag-purple">Supports leading open models: Llama 3, Mistral, Qwen, DBRX, and more</span><span class="tag tag-purple">Custom fine-tuning service with managed infrastructure</span><span class="tag tag-purple">Dedicated endpoints for private, reserved capacity deployments</span><span class="tag tag-purple">Together Embeddings for vector embedding generation</span><span class="tag tag-purple">Function calling and JSON mode support</span><span class="tag tag-purple">Serverless and dedicated instance options</span><span class="tag tag-purple">Active research arm publishing open-source models and datasets</span><span class="tag tag-purple">Enterprise SLAs and data privacy guarantees available</span></div>
-        <p class="text-sm"><span class="font-medium">Best for:</span> Developers and enterprises seeking a cost-effective, high-performance alternative to closed APIs (OpenAI/Anthropic) using open-source models, especially for high-volume production workloads.</p>
-        <a href="https://www.together.ai" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://www.together.ai</a>
+        <p class="text-sm text-gray-500 mb-1">100+ supported models (Llama, Mistral, Qwen, DBRX, Gemma, Stable Diffusion, etc.) models · Pay-per-token API pricing (e.g., Llama 3.1 8B at ~$0.10–$0.18/M tokens; Llama 3.1 70B at ~$0.88/M tokens); fine-tuning priced per token trained; free $25 credit for new accounts</p>
+        <a href="https://www.together.ai" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.together.ai</a>
+        <p class="text-sm text-gray-700 mb-3">A cloud AI platform providing fast, cost-efficient inference for leading open-source language and embedding models, along with fine-tuning and training capabilities at scale.</p>
+        <div class="mb-3"><span class="tag tag-purple">High-throughput, low-latency inference API</span><span class="tag tag-purple">OpenAI-compatible API endpoints for easy migration</span><span class="tag tag-purple">Custom fine-tuning on proprietary data</span><span class="tag tag-purple">Support for chat, completion, embedding, and image generation endpoints</span><span class="tag tag-purple">Together Inference Engine optimized for speed</span><span class="tag tag-purple">Dedicated endpoints for consistent latency SLAs</span><span class="tag tag-purple">Supports multi-GPU and large-context models</span><span class="tag tag-purple">Transparent model performance and pricing benchmarks</span><span class="tag tag-purple">Enterprise features including SSO and private deployments</span></div>
+        <p class="text-sm"><span class="font-medium">Best for:</span> Developers and enterprises needing fast, affordable inference on popular open-source LLMs with an easy drop-in replacement for OpenAI APIs, and teams requiring custom fine-tuning.</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Fireworks AI</h3>
-        <p class="text-sm text-gray-500 mb-1">50+ optimized models models · Pay-per-token and pay-per-second; text models from ~$0.10/M tokens (small models) to ~$0.90/M tokens (large models); image generation ~$0.002 per image step; serverless and dedicated options available</p>
-        <p class="text-sm text-gray-700 mb-3">An inference platform built for production-grade speed and reliability, specializing in ultra-fast LLM and image model serving with a strong focus on developer experience and enterprise performance.</p>
-        <div class="mb-3"><span class="tag tag-purple">Industry-leading inference speed with proprietary FireAttention optimization engine</span><span class="tag tag-purple">OpenAI-compatible REST API for seamless migration</span><span class="tag tag-purple">Serverless inference with fast cold starts and automatic scaling</span><span class="tag tag-purple">On-demand and reserved dedicated GPU deployments</span><span class="tag tag-purple">Support for compound AI systems and multi-model pipelines</span><span class="tag tag-purple">Fine-tuned model hosting and serving (LoRA adapters supported)</span><span class="tag tag-purple">Function calling, JSON mode, and grammar-constrained outputs</span><span class="tag tag-purple">Streaming responses for real-time token delivery</span><span class="tag tag-purple">SLA-backed uptime guarantees for enterprise customers</span><span class="tag tag-purple">Multi-modal support including image generation (SDXL, Flux)</span></div>
-        <p class="text-sm"><span class="font-medium">Best for:</span> Production engineering teams and enterprises requiring the fastest possible inference latency, high reliability SLAs, and OpenAI-compatible APIs with open-source models at scale.</p>
-        <a href="https://fireworks.ai" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://fireworks.ai</a>
+        <p class="text-sm text-gray-500 mb-1">50+ production-ready models plus custom model deployment models · Pay-per-token pricing (e.g., Llama 3.1 8B at ~$0.20/M tokens; Llama 3.1 70B at ~$0.90/M tokens; Mixtral 8x7B at ~$0.50/M tokens); serverless and dedicated deployment options; free tier credits available</p>
+        <a href="https://fireworks.ai" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://fireworks.ai</a>
+        <p class="text-sm text-gray-700 mb-3">A high-performance generative AI inference platform focused on delivering industry-leading speed and reliability for open-source and custom models, with advanced features like compound AI systems and function calling.</p>
+        <div class="mb-3"><span class="tag tag-purple">Fastest open-source model inference speeds (consistently top benchmarks)</span><span class="tag tag-purple">FireAttention custom inference kernel for GPU optimization</span><span class="tag tag-purple">OpenAI-compatible API</span><span class="tag tag-purple">Function calling and JSON mode for structured outputs</span><span class="tag tag-purple">Support for mixture-of-experts (MoE) models</span><span class="tag tag-purple">Compound AI system building with multiple model chaining</span><span class="tag tag-purple">Fine-tuned model deployment and hosting</span><span class="tag tag-purple">On-demand and reserved capacity options</span><span class="tag tag-purple">SOC 2 Type II compliance and enterprise security</span><span class="tag tag-purple">Real-time and batch inference modes</span></div>
+        <p class="text-sm"><span class="font-medium">Best for:</span> Production engineering teams and enterprises that prioritize inference speed, reliability, and advanced features like function calling for building sophisticated AI-powered applications.</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">AWS Bedrock</h3>
-        <p class="text-sm text-gray-500 mb-1">50+ foundation models from 10+ providers (Anthropic, Meta, Mistral, Cohere, Stability AI, Amazon Titan, AI21, etc.) models · Pay-per-token (on-demand) or Provisioned Throughput for reserved capacity billed hourly; prices vary by model—e.g., Claude 3.5 Sonnet at $3/M input tokens, $15/M output tokens; Amazon Titan Text Lite at $0.15/M input tokens; Provisioned Throughput from hundreds of dollars per month per Model Unit</p>
-        <p class="text-sm text-gray-700 mb-3">A fully managed AWS service that provides access to a curated selection of foundation models from top AI companies via a single API, deeply integrated with the AWS cloud ecosystem for enterprise-grade security and scalability.</p>
-        <div class="mb-3"><span class="tag tag-purple">Single unified API to access models from multiple leading AI providers</span><span class="tag tag-purple">Deep AWS ecosystem integration (IAM, VPC, CloudWatch, S3, Lambda, SageMaker)</span><span class="tag tag-purple">No data used for model training; full data isolation and privacy</span><span class="tag tag-purple">Agents for Bedrock: orchestrate multi-step agentic workflows with tool use</span><span class="tag tag-purple">Knowledge Bases for Bedrock: managed RAG pipeline with vector store integration</span><span class="tag tag-purple">Guardrails for content filtering, PII redaction, and topic denial</span><span class="tag tag-purple">Model fine-tuning and continued pre-training support</span><span class="tag tag-purple">Provisioned Throughput for guaranteed, consistent low-latency inference</span><span class="tag tag-purple">Model Evaluation for comparing and benchmarking models</span><span class="tag tag-purple">Full compliance support: HIPAA, SOC, GDPR, FedRAMP (where applicable)</span></div>
-        <p class="text-sm"><span class="font-medium">Best for:</span> Enterprise organizations already invested in the AWS ecosystem that need production-ready, secure, and compliant access to multiple foundation models with governance controls and seamless cloud integration.</p>
-        <a href="https://aws.amazon.com/bedrock" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://aws.amazon.com/bedrock</a>
+        <p class="text-sm text-gray-500 mb-1">50+ foundation models from providers including Anthropic (Claude), Meta (Llama), Mistral, Amazon (Titan, Nova), Cohere, Stability AI, and AI21 Labs models · Pay-per-token (on-demand) pricing varies by model (e.g., Claude 3.5 Sonnet ~$3/M input tokens, $15/M output tokens; Llama 3.1 70B ~$0.72–$0.99/M tokens); Provisioned Throughput for reserved capacity billed hourly; model customization (fine-tuning) charged separately</p>
+        <a href="https://aws.amazon.com/bedrock" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://aws.amazon.com/bedrock</a>
+        <p class="text-sm text-gray-700 mb-3">A fully managed AWS service that provides access to a curated selection of foundation models from leading AI companies via a unified API, deeply integrated with the AWS cloud ecosystem for secure, enterprise-grade AI deployment.</p>
+        <div class="mb-3"><span class="tag tag-purple">Unified API across multiple frontier model providers</span><span class="tag tag-purple">Deep AWS ecosystem integration (IAM, VPC, CloudWatch, S3, Lambda)</span><span class="tag tag-purple">Bedrock Agents for autonomous multi-step task execution</span><span class="tag tag-purple">Knowledge Bases for RAG with managed vector storage</span><span class="tag tag-purple">Guardrails for content filtering and safety policies</span><span class="tag tag-purple">Model evaluation tools for benchmarking and A/B testing</span><span class="tag tag-purple">Fine-tuning and continued pre-training on custom data</span><span class="tag tag-purple">No data used for model training by providers</span><span class="tag tag-purple">HIPAA, SOC, GDPR compliance and data residency options</span><span class="tag tag-purple">Provisioned Throughput for consistent, high-volume workloads</span></div>
+        <p class="text-sm"><span class="font-medium">Best for:</span> Enterprises already invested in the AWS ecosystem that need governed, compliant, and secure access to top frontier models with robust tooling for agents, RAG pipelines, and production-grade AI applications.</p>
       </div>
       
     </div>
     
-  </section>
+  </div>
 
-  <!-- Databases -->
-  <section id="databases">
-    <h2 class="text-2xl font-bold mb-6 text-indigo-700">AI in Major Databases</h2>
+  <!-- DATABASES TAB -->
+  <div id="tab-databases" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">AI in Major Databases</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    
+    <p class="text-gray-600 mb-6">Modern databases have evolved far beyond simple data storage, now embedding sophisticated AI and ML capabilities directly into the data platform to eliminate the need to move data to external systems. From native LLM integrations and vector search to in-database model training and inference, these platforms allow developers and data scientists to run AI workloads where the data already lives. This convergence of databases and AI dramatically reduces latency, simplifies architecture, and lowers the barrier to building intelligent applications.</p>
+    
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       
       <div class="card">
         <div class="flex justify-between items-start mb-1">
-          <h3 class="font-bold text-lg">Snowflake</h3>
+          <h3 class="font-bold text-lg">Snowflake (Cortex AI)</h3>
           <span class="tag tag-green">Vector Search</span>
         </div>
-        <p class="text-xs text-indigo-600 font-medium mb-2">Cortex AI</p>
-        <p class="text-sm text-gray-700 mb-2">Snowflake Cortex AI is a fully managed suite of machine learning and AI capabilities built natively into Snowflake. It includes Cortex LLM Functions (COMPLETE, SUMMARIZE, SENTIMENT, TRANSLATE, EXTRACT_ANSWER) that run large language models directly on your data using SQL. Cortex Search enables hybrid search over unstructured text, Cortex Analyst allows natural language querying of structured data, and Cortex Fine-tuning lets users fine-tune supported LLMs on their own data without managing infrastructure. All processing happens within the Snowflake security perimeter.</p>
-        <p class="text-sm mb-1"><span class="font-medium">LLM:</span> Native LLM functions via SQL including models from Mistral, Meta Llama, Snowflake Arctic, Reka, and others. Supports COMPLETE(), SUMMARIZE(), SENTIMENT(), TRANSLATE(), and EXTRACT_ANSWER() functions. Cortex Analyst provides natural language to SQL via LLMs. Fine-tuning available for select models.</p>
-        <p class="text-sm text-gray-500">Billed in Snowflake credits. LLM functions cost varies by model and token count (e.g., Llama 3.1 405B ~0.068 credits per 1K tokens). Cortex Search has separate indexing and query costs. Costs are in addition to standard Snowflake compute and storage charges. Fine-tuning incurs additional per-token costs.</p>
-        <a href="https://www.snowflake.com/en/data-cloud/cortex/" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://www.snowflake.com/en/data-cloud/cortex/</a>
+        <p class="text-xs text-indigo-600 font-medium mb-1">Snowflake Cortex AI</p>
+        <a href="https://docs.snowflake.com/en/guides-overview-ai-features" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.snowflake.com/en/guides-overview-ai-features</a>
+        <p class="text-sm text-gray-700 mb-2">Snowflake Cortex AI provides a suite of fully managed ML and LLM functions directly within Snowflake SQL. It includes COMPLETE() for LLM text generation, SENTIMENT() and SUMMARIZE() for NLP tasks, CLASSIFY_TEXT() for zero-shot classification, and Cortex Search for hybrid vector + keyword search. Cortex Analyst enables natural language querying of structured data. Models from Mistral, Meta Llama, Reka, and others are available without any infrastructure management. Fine-tuning is supported via Cortex Fine-tuning, and ML functions like FORECAST() and ANOMALY_DETECTION() handle time-series use cases natively.</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Native support for Mistral Large/7B, Meta Llama 3.1/3.3 (8B, 70B, 405B), Reka Flash, Snowflake Arctic, and others via Cortex LLM functions. Models are called directly in SQL using functions like SNOWFLAKE.CORTEX.COMPLETE(). Cortex Search provides hybrid retrieval combining dense vector and BM25 keyword search for RAG pipelines.</p>
+        <p class="text-sm text-gray-500">Priced in Snowflake credits. LLM functions are billed per token processed (e.g., Llama 3.1 8B costs ~0.0000225 credits per token). Cortex Search is billed for documents indexed and queries served. ML functions like FORECAST() are billed per compute credit. Costs vary significantly by model size and region. Free tier available for trial accounts.</p>
       </div>
       
       <div class="card">
         <div class="flex justify-between items-start mb-1">
-          <h3 class="font-bold text-lg">Google BigQuery</h3>
+          <h3 class="font-bold text-lg">Google BigQuery (BigQuery ML + Vertex AI)</h3>
           <span class="tag tag-green">Vector Search</span>
         </div>
-        <p class="text-xs text-indigo-600 font-medium mb-2">BigQuery ML + Vertex AI Integration</p>
-        <p class="text-sm text-gray-700 mb-2">BigQuery ML enables data analysts to create and execute machine learning models directly in BigQuery using SQL. Supported model types include linear regression, binary and multiclass logistic regression, k-means clustering, matrix factorization, time series forecasting (ARIMA+), boosted trees (XGBoost), deep neural networks, and AutoML models. BigQuery also integrates natively with Vertex AI, allowing users to call Vertex AI hosted models and Gemini models using the ML.GENERATE_TEXT and ML.EMBED_TEXT SQL functions. Vector search is supported via VECTOR_SEARCH() function over ARRAY<FLOAT64> columns.</p>
-        <p class="text-sm mb-1"><span class="font-medium">LLM:</span> Deep integration with Google Vertex AI and Gemini models. ML.GENERATE_TEXT() allows calling Gemini Pro, Gemini Flash, and other text generation models via SQL. ML.EMBED_TEXT() generates embeddings using Vertex AI text embedding models. Remote model connections allow invoking any Vertex AI endpoint. Supports grounding and RAG patterns natively.</p>
-        <p class="text-sm text-gray-500">BigQuery ML model training uses BigQuery compute slots or on-demand pricing (per TB scanned). Remote model calls (Gemini, Vertex AI) are billed based on the underlying Vertex AI model pricing per character or token. VECTOR_SEARCH is charged as standard BigQuery query compute. BigQuery editions (Standard, Enterprise, Enterprise Plus) affect ML availability and cost.</p>
-        <a href="https://cloud.google.com/bigquery/docs/bqml-introduction" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://cloud.google.com/bigquery/docs/bqml-introduction</a>
+        <p class="text-xs text-indigo-600 font-medium mb-1">BigQuery ML + Vertex AI Integration</p>
+        <a href="https://cloud.google.com/bigquery/docs/bqml-introduction" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://cloud.google.com/bigquery/docs/bqml-introduction</a>
+        <p class="text-sm text-gray-700 mb-2">BigQuery ML allows users to create, train, and run ML models directly using standard SQL syntax, supporting logistic regression, k-means clustering, matrix factorization, boosted trees (XGBoost), deep neural networks (DNNs/AutoML), and time-series ARIMA+ forecasting. Through native Vertex AI integration, BigQuery can call hosted Gemini models for text generation, embeddings, and multimodal tasks via ML.GENERATE_TEXT() and ML.EMBED_TEXT(). Vector search is supported via the VECTOR_SEARCH() function and native vector indexes on BigQuery tables, enabling scalable approximate nearest-neighbor search for RAG architectures.</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Deep integration with Google Vertex AI and Gemini models (Gemini 1.5 Flash, Gemini 1.5 Pro, Gemini 2.0). Remote models are registered as BigQuery ML models via CREATE MODEL with REMOTE_WITH_CONNECTION. ML.GENERATE_TEXT() enables text generation and ML.EMBED_TEXT() produces vector embeddings in SQL. Supports PaLM 2 legacy models and open models hosted on Vertex AI Model Garden including Llama and Mistral variants.</p>
+        <p class="text-sm text-gray-500">BigQuery ML model training is free for linear/logistic regression; AutoML and DNN training incur Vertex AI training costs. Inference via GENERATE_TEXT() is billed at Vertex AI pricing per 1K characters or tokens depending on model (e.g., Gemini 1.5 Flash is ~$0.075/1M input tokens). Vector index creation and VECTOR_SEARCH queries are billed as standard BigQuery compute (on-demand: $6.25/TB scanned or flat-rate slots). BigQuery ML predictions are billed per query.</p>
       </div>
       
       <div class="card">
         <div class="flex justify-between items-start mb-1">
-          <h3 class="font-bold text-lg">PostgreSQL</h3>
+          <h3 class="font-bold text-lg">PostgreSQL (pgvector + pgai)</h3>
           <span class="tag tag-green">Vector Search</span>
         </div>
-        <p class="text-xs text-indigo-600 font-medium mb-2">pgvector + pgai</p>
-        <p class="text-sm text-gray-700 mb-2">pgvector is an open-source PostgreSQL extension that adds vector similarity search capabilities, enabling storage and querying of high-dimensional vectors alongside relational data. It supports exact and approximate nearest neighbor search using IVFFLAT and HNSW indexing algorithms. pgai (from Timescale) extends PostgreSQL further by adding functions to call LLM APIs (OpenAI, Ollama, Cohere) directly from SQL, generate embeddings, and perform vectorizer automation. Together they enable full AI-native workflows within a standard PostgreSQL database without external services.</p>
-        <p class="text-sm mb-1"><span class="font-medium">LLM:</span> pgai provides SQL functions to call OpenAI (chat completions, embeddings), Ollama (local LLMs), Cohere, and Anthropic APIs directly from PostgreSQL. Functions include ai.openai_chat_complete(), ai.openai_embed(), ai.ollama_chat_complete(). pgai Vectorizer automates embedding generation and synchronization. Available on managed services like Timescale Cloud and Supabase.</p>
-        <p class="text-sm text-gray-500">pgvector and pgai are open-source and free to use on self-hosted PostgreSQL. Managed hosting costs depend on provider (e.g., Timescale Cloud, Supabase, AWS RDS, Azure). LLM API calls via pgai are billed by the respective third-party provider (OpenAI, Cohere, etc.) at their standard rates. No additional licensing fee for the extensions themselves.</p>
-        <a href="https://github.com/pgvector/pgvector" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://github.com/pgvector/pgvector</a>
+        <p class="text-xs text-indigo-600 font-medium mb-1">pgvector + pgai Extensions</p>
+        <a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://github.com/pgvector/pgvector</a>
+        <p class="text-sm text-gray-700 mb-2">pgvector is an open-source PostgreSQL extension that adds a native vector data type and enables exact and approximate nearest-neighbor search using IVFFLAT and HNSW indexing algorithms, making PostgreSQL a capable vector database for semantic search and RAG applications. pgai (developed by Timescale) extends this by enabling direct calls to external LLM APIs (OpenAI, Ollama, Cohere, Anthropic) from within SQL functions, allowing embedding generation, text completion, and model inference without leaving the database. Together they allow developers to store embeddings alongside relational data and query them with standard SQL joins and filters.</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> pgai provides SQL wrapper functions to call OpenAI (text-embedding-3-small, GPT-4o), Ollama (local models), Anthropic Claude, Cohere, and others directly from PostgreSQL functions. For example, ai.openai_embed() generates embeddings inline during INSERT or SELECT. Vectorizer (part of pgai) automates embedding creation and synchronization for table columns. No native LLM hosting — it proxies to external APIs using stored API keys in database secrets.</p>
+        <p class="text-sm text-gray-500">Both pgvector and pgai are open-source (PostgreSQL License and Apache 2.0 respectively) and free to install on any self-hosted PostgreSQL instance. When using managed services like Timescale Cloud, Supabase, or AWS RDS/Aurora PostgreSQL with pgvector, you pay standard compute/storage fees for the database instance. LLM API calls made through pgai are billed directly by the respective provider (e.g., OpenAI API pricing). No additional licensing fees for the extensions themselves.</p>
       </div>
       
       <div class="card">
@@ -337,56 +698,62 @@
           <h3 class="font-bold text-lg">Amazon (Aurora ML + Redshift ML)</h3>
           <span class="tag tag-green">Vector Search</span>
         </div>
-        <p class="text-xs text-indigo-600 font-medium mb-2">Aurora ML + Redshift ML + Amazon Bedrock Integration</p>
-        <p class="text-sm text-gray-700 mb-2">Aurora ML enables Amazon Aurora (MySQL and PostgreSQL-compatible) to call Amazon SageMaker and Amazon Comprehend models via SQL functions, supporting sentiment analysis, entity detection, and custom ML model inference. Redshift ML allows Amazon Redshift users to create, train, and deploy machine learning models using SQL by leveraging Amazon SageMaker AutoPilot under the hood. It supports classification, regression, and time series models. Both services now also support integration with Amazon Bedrock for generative AI and LLM capabilities including vector search via pgvector on Aurora PostgreSQL.</p>
-        <p class="text-sm mb-1"><span class="font-medium">LLM:</span> Aurora PostgreSQL supports pgvector extension for vector storage and similarity search. Amazon Bedrock integration allows calling foundation models (Claude, Titan, Llama, Mistral) via Aurora and Redshift. Redshift ML integrates with SageMaker for custom model inference. Aurora ML supports Amazon Comprehend for NLP tasks (sentiment, key phrases, language detection) natively via SQL functions.</p>
-        <p class="text-sm text-gray-500">Aurora ML charges are based on the number of inference requests made to SageMaker or Comprehend endpoints plus standard Aurora instance pricing. Redshift ML incurs SageMaker training and hosting costs in addition to Redshift cluster costs. Amazon Bedrock calls are billed per input/output token based on selected model. pgvector on Aurora PostgreSQL has no additional extension cost beyond standard instance pricing.</p>
-        <a href="https://aws.amazon.com/rds/aurora/machine-learning/" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://aws.amazon.com/rds/aurora/machine-learning/</a>
+        <p class="text-xs text-indigo-600 font-medium mb-1">Aurora ML + Redshift ML + Amazon Bedrock Integration</p>
+        <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-ml.html" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-ml.html</a>
+        <p class="text-sm text-gray-700 mb-2">Aurora ML enables Amazon Aurora (MySQL and PostgreSQL-compatible) to invoke ML models hosted on Amazon SageMaker and Amazon Comprehend directly via SQL functions, allowing sentiment analysis, fraud detection, and custom inference without ETL. Redshift ML allows Amazon Redshift users to create, train, and deploy ML models using SQL with CREATE MODEL syntax, automatically leveraging SageMaker Autopilot under the hood. Both services also integrate with Amazon Bedrock for generative AI capabilities including text generation, summarization, and embedding generation from foundation models, and pgvector support is available on Aurora PostgreSQL for vector workloads.</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Amazon Bedrock integration allows Aurora and Redshift to call foundation models including Amazon Titan (text and embeddings), Anthropic Claude 2/3, Meta Llama 3, Mistral, Cohere Command, and AI21 Jurassic via SQL. Aurora PostgreSQL supports pgvector extension for vector storage and similarity search. Redshift supports vector data types and cosine/L2 similarity functions. SageMaker-hosted custom models can be invoked from both Aurora and Redshift via IAM-authorized endpoints.</p>
+        <p class="text-sm text-gray-500">Aurora ML incurs charges for SageMaker inference endpoint usage (per hour per instance) plus standard Aurora compute/storage costs. Redshift ML charges for SageMaker Autopilot training jobs (per training hour) plus Redshift compute costs; predictions themselves are free after model deployment if using built-in prediction function. Bedrock API calls are billed per token/character by model (e.g., Claude 3 Sonnet ~$3/1M input tokens). pgvector on Aurora PostgreSQL has no additional cost beyond instance pricing. Free tier available for new AWS accounts on eligible services.</p>
       </div>
       
       <div class="card">
         <div class="flex justify-between items-start mb-1">
-          <h3 class="font-bold text-lg">Databricks</h3>
+          <h3 class="font-bold text-lg">Databricks (MLflow + DBRX)</h3>
           <span class="tag tag-green">Vector Search</span>
         </div>
-        <p class="text-xs text-indigo-600 font-medium mb-2">MLflow + DBRX + Mosaic AI</p>
-        <p class="text-sm text-gray-700 mb-2">Databricks provides a comprehensive AI and ML platform through Mosaic AI, which unifies MLflow (open-source ML lifecycle management), Model Serving, Vector Search, Feature Store, and AutoML. MLflow handles experiment tracking, model registry, and deployment. DBRX is Databricks' own open-source large language model optimized for enterprise use. Databricks also offers AI Playground for prompt engineering, Lakehouse AI for integrating ML with data pipelines, and Unity Catalog for governing ML models and embeddings. The platform supports fine-tuning, RAG pipelines, and agent frameworks.</p>
-        <p class="text-sm mb-1"><span class="font-medium">LLM:</span> Databricks Model Serving supports deploying DBRX, Llama, Mistral, and other open-source LLMs with one click. External model integrations support OpenAI, Anthropic, and Cohere APIs through a unified API gateway. AI Gateway provides rate limiting, token usage tracking, and fallback routing. Foundation Model APIs provide pay-per-token access to curated models including DBRX Instruct, Meta Llama, and Mixtral. LangChain and LlamaIndex integrations are natively supported.</p>
-        <p class="text-sm text-gray-500">MLflow is open-source and free. Databricks platform costs are based on Databricks Units (DBUs) consumed by clusters. Vector Search is billed per DBU for indexing and querying. Foundation Model API pricing is per token (e.g., DBRX Instruct at approximately $0.75 per 1M input tokens). Model Serving costs depend on instance type and uptime. Enterprise contracts may include committed use discounts.</p>
-        <a href="https://www.databricks.com/product/machine-learning" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://www.databricks.com/product/machine-learning</a>
+        <p class="text-xs text-indigo-600 font-medium mb-1">Databricks AI — MLflow, DBRX, Mosaic AI, Unity Catalog AI</p>
+        <a href="https://docs.databricks.com/en/machine-learning/index.html" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.databricks.com/en/machine-learning/index.html</a>
+        <p class="text-sm text-gray-700 mb-2">Databricks offers one of the most comprehensive in-platform AI ecosystems. MLflow (open-source, created by Databricks) provides end-to-end ML lifecycle management including experiment tracking, model registry, and serving. Mosaic AI (formerly Databricks ML) includes AutoML for automated model building, Feature Store for feature management, Model Serving for low-latency inference endpoints, and AI Playground for LLM experimentation. DBRX is Databricks' own open-source mixture-of-experts LLM optimized for enterprise use. Vector Search is a native managed vector database built into Unity Catalog. Databricks also supports fine-tuning, RAG pipeline construction, and agent frameworks via LangChain and LlamaIndex integrations.</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Databricks Model Serving hosts DBRX, Meta Llama 3 (8B, 70B), Mistral, MPT, and other open models as pay-per-token APIs. External model integrations support OpenAI, Anthropic, Cohere, and Amazon Bedrock through the AI Gateway (MLflow Gateway). Databricks Vector Search integrates with embedding models to auto-sync Delta Lake tables into searchable vector indexes. Foundation Model APIs provide standardized OpenAI-compatible endpoints. LangChain and LlamaIndex have native Databricks integrations for building RAG and agent workflows.</p>
+        <p class="text-sm text-gray-500">MLflow is fully open-source and free. Managed MLflow on Databricks is included with the platform at no extra charge. Foundation Model API (DBRX, Llama) is billed per token (e.g., DBRX Instruct ~$0.75/1M input tokens, $2.25/1M output tokens). Vector Search is billed by DBUs (Databricks Units) per hour for the index pipeline plus storage. Model Serving endpoints are billed per DBU-hour of compute. Databricks uses a subscription model with DBU pricing that varies by cloud (AWS, Azure, GCP) and tier (Standard, Premium, Enterprise). Free trial available.</p>
       </div>
       
       <div class="card">
         <div class="flex justify-between items-start mb-1">
-          <h3 class="font-bold text-lg">MongoDB Atlas</h3>
+          <h3 class="font-bold text-lg">MongoDB Atlas Vector Search</h3>
           <span class="tag tag-green">Vector Search</span>
         </div>
-        <p class="text-xs text-indigo-600 font-medium mb-2">Atlas Vector Search</p>
-        <p class="text-sm text-gray-700 mb-2">MongoDB Atlas Vector Search enables storing, indexing, and querying vector embeddings natively alongside operational data in MongoDB. It uses the Hierarchical Navigable Small World (HNSW) algorithm for approximate nearest neighbor search and supports filtering on metadata fields for pre-filtered and post-filtered vector search. Atlas Vector Search integrates with popular AI frameworks including LangChain, LlamaIndex, and Hugging Face. It is designed for building RAG (Retrieval-Augmented Generation) applications, semantic search, recommendation systems, and AI-powered features directly on the operational database without data movement.</p>
-        <p class="text-sm mb-1"><span class="font-medium">LLM:</span> Atlas Vector Search integrates with external LLM providers including OpenAI, Azure OpenAI, Google Vertex AI, Anthropic, and Hugging Face for embedding generation and RAG pipelines. Native integrations with LangChain, LlamaIndex, and Spring AI frameworks. MongoDB Atlas also offers Charts AI (natural language chart generation) and is expanding into generative AI features. Does not host LLMs natively but orchestrates with external providers seamlessly.</p>
-        <p class="text-sm text-gray-500">Atlas Vector Search is available on M10 dedicated clusters and above. No separate per-query fee for vector search on Atlas; costs are included in cluster pricing based on instance size. Additional costs apply for storage of vector data. Atlas free tier (M0) does not support Vector Search. Serverless instances have limited Vector Search support. Pricing varies by cloud provider (AWS, GCP, Azure) and region.</p>
-        <a href="https://www.mongodb.com/products/platform/atlas-vector-search" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://www.mongodb.com/products/platform/atlas-vector-search</a>
+        <p class="text-xs text-indigo-600 font-medium mb-1">MongoDB Atlas Vector Search + AI Integrations</p>
+        <a href="https://www.mongodb.com/products/platform/atlas-vector-search" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.mongodb.com/products/platform/atlas-vector-search</a>
+        <p class="text-sm text-gray-700 mb-2">MongoDB Atlas Vector Search enables storing vector embeddings as fields within MongoDB documents alongside their source data and metadata, then performing approximate nearest-neighbor (ANN) search using HNSW indexing at scale. This makes it straightforward to build semantic search and RAG applications without a separate vector database. Queries use the $vectorSearch aggregation stage, allowing vector search to be combined with Atlas full-text search ($search), geospatial filters, and standard MongoDB query operators in a single pipeline. Atlas also integrates with major LLM frameworks and offers Atlas Stream Processing and Data API for real-time AI application backends.</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> MongoDB Atlas does not host LLMs natively but provides first-class integrations with LangChain, LlamaIndex, Haystack, Spring AI, and Semantic Kernel, positioning Atlas as the vector store layer in RAG architectures. Native connectors exist for OpenAI, Azure OpenAI, Cohere, Hugging Face, Google Vertex AI, and Amazon Bedrock for embedding generation workflows. The Atlas Data API and MongoDB Drivers allow any LLM application to read/write embeddings programmatically. Atlas Charts and no-code AI application templates are available for rapid prototyping.</p>
+        <p class="text-sm text-gray-500">Vector Search indexing is available on M10+ dedicated clusters (starting ~$0.08/hour for M10 on AWS). Free shared tier (M0) does not support Vector Search indexes. Pricing is based on the underlying Atlas cluster tier (compute + storage) with no separate per-query charge for vector search operations — queries consume normal cluster resources. Data transfer and backup costs apply per standard Atlas pricing. Serverless instances have limited Vector Search support. Enterprise agreements available for large deployments. Free $200 credit available for new Atlas accounts.</p>
       </div>
       
     </div>
     
-  </section>
+  </div>
 
-  <!-- Observability -->
-  <section id="observability">
-    <h2 class="text-2xl font-bold mb-4 text-indigo-700">AI Observability & Cost Monitoring</h2>
+  <!-- OBSERVABILITY TAB -->
+  <div id="tab-observability" class="tab-panel">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">AI Observability & Cost Monitoring</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    
+    <p class="text-gray-600 mb-6">AI observability is critical for understanding how large language models behave in production, helping teams debug issues, optimize performance, and control costs. As LLM applications scale, without proper monitoring it becomes nearly impossible to trace failures, measure quality, or identify expensive inefficiencies in prompts and model usage. These tools provide the visibility needed to build reliable, cost-effective AI systems.</p>
+    
     
     <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8">
-      <h3 class="font-bold text-amber-800 mb-3">Cost Reduction Tips</h3>
+      <h3 class="font-bold text-amber-800 mb-3">💡 Cost Reduction Tips</h3>
       <ul class="space-y-1">
         
-        <li class="text-sm text-amber-900 flex gap-2"><span>•</span>Implement semantic caching by storing embeddings of past prompts and returning cached responses for semantically similar queries, which can reduce redundant API calls by 20-40% for applications with repetitive user inputs</li>
+        <li class="text-sm text-amber-900 flex gap-2"><span>•</span>Implement prompt caching and semantic caching: use tools like Helicone's built-in cache or Redis with embedding similarity checks to serve repeated or near-identical queries from cache, which can reduce API call volume by 20-60% for applications with repetitive inputs.</li>
         
-        <li class="text-sm text-amber-900 flex gap-2"><span>•</span>Right-size your model selection by routing simpler or lower-stakes tasks to smaller, cheaper models like GPT-4o-mini or Claude Haiku while reserving larger models like GPT-4o or Claude Opus only for complex reasoning tasks that genuinely require them</li>
+        <li class="text-sm text-amber-900 flex gap-2"><span>•</span>Right-size your model selection by routing queries based on complexity: use smaller, cheaper models such as GPT-4o-mini or Claude Haiku for simple classification or extraction tasks, and reserve expensive frontier models only for reasoning-heavy tasks that genuinely require their capability.</li>
         
-        <li class="text-sm text-amber-900 flex gap-2"><span>•</span>Optimize prompt design by reducing unnecessary verbosity in system prompts, trimming conversation history with summarization techniques, and using structured output formats to minimize response token counts without sacrificing quality</li>
+        <li class="text-sm text-amber-900 flex gap-2"><span>•</span>Audit and compress your prompts regularly: system prompts often grow bloated over time with redundant instructions; trimming unnecessary tokens, using concise language, and removing duplicate context can reduce costs by 10-30% without degrading output quality.</li>
         
-        <li class="text-sm text-amber-900 flex gap-2"><span>•</span>Set hard budget limits and usage alerts at the provider and observability layer levels, and regularly audit cost attribution by feature or user segment so you can identify and deprecate low-value high-cost workflows before they accumulate significant spend</li>
+        <li class="text-sm text-amber-900 flex gap-2"><span>•</span>Set hard spend limits and monitor per-feature or per-user costs: use observability tools to tag requests with metadata, then analyze which features, user segments, or prompt templates drive the most spend, allowing you to prioritize optimizations where they have the greatest financial impact.</li>
         
       </ul>
     </div>
@@ -396,61 +763,61 @@
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">LangSmith</h3>
-        <p class="text-sm text-gray-500 mb-2">LLM traces, chain executions, agent runs, prompt versions, and dataset evaluations within LangChain and LangGraph workflows</p>
-        <div class="mb-3"><span class="tag">End-to-end tracing of LangChain and LangGraph pipelines</span><span class="tag">Prompt versioning and management hub</span><span class="tag">Dataset creation and regression testing</span><span class="tag">LLM-as-a-judge automated evaluations</span><span class="tag">Token usage and latency tracking per run</span><span class="tag">Annotation queues for human feedback</span><span class="tag">Online and offline evaluation workflows</span><span class="tag">Playground for prompt experimentation</span></div>
-        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Free tier: 5,000 traces/month. Developer: $39/month for 50,000 traces. Plus: $150/month for 500,000 traces. Enterprise: custom pricing. Additional traces billed per usage.</p>
-        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Teams heavily using LangChain or LangGraph who need deep pipeline tracing, prompt management, and built-in evaluation workflows in a tightly integrated ecosystem</p>
-        <a href="https://smith.langchain.com" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://smith.langchain.com</a>
+        <p class="text-sm text-gray-500 mb-1">LLM traces, chain executions, agent runs, prompt versions, and evaluation metrics within LangChain and LangGraph workflows</p>
+        <a href="https://www.langchain.com/langsmith" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.langchain.com/langsmith</a>
+        <div class="mb-3"><span class="tag">End-to-end trace visualization for LangChain pipelines</span><span class="tag">Prompt versioning and A/B testing</span><span class="tag">Dataset creation and automated evaluations</span><span class="tag">Latency and token usage tracking per run</span><span class="tag">Human feedback annotation and scoring</span><span class="tag">Integration with LangChain, LangGraph, and custom SDKs</span></div>
+        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Free tier: 5,000 traces/month. Developer: $39/month for 50,000 traces. Plus: $150/month for 200,000 traces. Enterprise: custom pricing.</p>
+        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Teams already using LangChain or LangGraph who need deep pipeline tracing, prompt management, and built-in evaluation workflows</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Helicone</h3>
-        <p class="text-sm text-gray-500 mb-2">LLM API requests and responses, token consumption, costs, latency, error rates, and user-level usage across providers like OpenAI, Anthropic, Azure, and others</p>
-        <div class="mb-3"><span class="tag">One-line proxy integration requiring minimal code changes</span><span class="tag">Real-time cost and token usage dashboards</span><span class="tag">Request caching to reduce redundant API calls</span><span class="tag">Rate limiting and threat detection</span><span class="tag">Custom properties and user-level segmentation</span><span class="tag">Prompt templating and versioning</span><span class="tag">Session and multi-step trace grouping</span><span class="tag">Webhook and alerting support</span><span class="tag">Self-hosting option available</span></div>
-        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Free tier: 10,000 requests/month. Pro: $20/month for 100,000 requests. Growth: $100/month for 1 million requests. Enterprise: custom. Overage charged per 1,000 requests.</p>
-        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Developers who want quick cost visibility and monitoring with minimal setup overhead, especially those needing caching and rate limiting to directly reduce API spend</p>
-        <a href="https://helicone.ai" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://helicone.ai</a>
+        <p class="text-sm text-gray-500 mb-1">LLM API requests and responses, token usage, cost per request, latency, error rates, and user-level analytics</p>
+        <a href="https://www.helicone.ai" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.helicone.ai</a>
+        <div class="mb-3"><span class="tag">One-line proxy integration requiring minimal code changes</span><span class="tag">Real-time cost and token usage dashboards</span><span class="tag">Request caching to reduce redundant API calls</span><span class="tag">Rate limiting and spend controls per user or API key</span><span class="tag">Prompt templating and versioning</span><span class="tag">Support for OpenAI, Anthropic, Azure, Cohere, and more</span><span class="tag">Custom metadata tagging for segmentation</span></div>
+        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Free tier: 10,000 requests/month. Pro: $20/month for 500,000 requests. Growth: $100/month for 5 million requests. Enterprise: custom pricing.</p>
+        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Developers who want quick, low-friction LLM cost monitoring and caching without heavy instrumentation or framework lock-in</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Weights & Biases (W&B)</h3>
-        <p class="text-sm text-gray-500 mb-2">ML experiments, LLM fine-tuning runs, prompt engineering iterations, model performance metrics, artifacts, and inference costs across the full ML lifecycle</p>
-        <div class="mb-3"><span class="tag">Experiment tracking with rich metric visualization</span><span class="tag">W&B Weave for LLM tracing and evaluation</span><span class="tag">Prompt and model versioning via artifact registry</span><span class="tag">Sweeps for hyperparameter optimization</span><span class="tag">Reports for collaborative analysis and sharing</span><span class="tag">Dataset and model lineage tracking</span><span class="tag">Integration with major ML frameworks and LLM providers</span><span class="tag">Online evaluations and guardrails via Weave</span><span class="tag">Team collaboration and access controls</span></div>
-        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Free tier: 100GB storage, unlimited personal projects. Team: $50/user/month with shared projects. Enterprise: custom pricing. W&B Weave has separate consumption-based pricing.</p>
-        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> ML and AI teams that need comprehensive experiment tracking for fine-tuning and training alongside LLM observability, particularly those with existing W&B workflows</p>
-        <a href="https://wandb.ai" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://wandb.ai</a>
+        <p class="text-sm text-gray-500 mb-1">Model training runs, LLM fine-tuning experiments, prompt evaluation pipelines, inference traces, and dataset versioning</p>
+        <a href="https://wandb.ai" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://wandb.ai</a>
+        <div class="mb-3"><span class="tag">Experiment tracking with rich metric visualization</span><span class="tag">W&B Weave for LLM tracing and evaluation</span><span class="tag">Prompt and model versioning with artifact management</span><span class="tag">Automated hyperparameter sweeps</span><span class="tag">Collaborative dashboards and reports</span><span class="tag">Integration with PyTorch, TensorFlow, Hugging Face, and LLM frameworks</span><span class="tag">Dataset and model lineage tracking</span></div>
+        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Free tier: unlimited personal projects with limited team features. Teams: $50/user/month. Enterprise: custom pricing with SSO and advanced security.</p>
+        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> ML and research teams who need comprehensive experiment tracking spanning both traditional model training and LLM evaluation in one unified platform</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Arize AI</h3>
-        <p class="text-sm text-gray-500 mb-2">LLM and ML model performance in production, including embeddings, retrieval quality, hallucinations, toxicity, prompt-response quality, and data drift over time</p>
-        <div class="mb-3"><span class="tag">Phoenix open-source local observability tool included</span><span class="tag">RAG pipeline evaluation and retrieval tracing</span><span class="tag">Embedding visualization and clustering</span><span class="tag">Hallucination and toxicity detection</span><span class="tag">Data drift and model performance monitoring</span><span class="tag">LLM-as-a-judge evaluation templates</span><span class="tag">A/B testing and model comparison</span><span class="tag">Automated alerting on quality degradation</span><span class="tag">Integrations with LangChain, LlamaIndex, and OpenTelemetry</span></div>
-        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Phoenix: free and open source for local use. Arize AX (cloud): free tier available with limited volume. Pro and Enterprise: custom pricing based on data volume and features. Contact sales for quotes.</p>
-        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Enterprise teams that need production-grade model monitoring with a focus on quality, safety, and bias detection in addition to cost, especially those running RAG or embedding-heavy workloads</p>
-        <a href="https://arize.com" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://arize.com</a>
+        <p class="text-sm text-gray-500 mb-1">LLM response quality, embedding drift, retrieval performance in RAG pipelines, hallucination rates, and production model degradation</p>
+        <a href="https://arize.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://arize.com</a>
+        <div class="mb-3"><span class="tag">LLM tracing with span-level visibility into RAG and agent workflows</span><span class="tag">Embedding visualization and drift detection</span><span class="tag">Automated hallucination and toxicity scoring</span><span class="tag">Performance alerting and anomaly detection</span><span class="tag">Support for evaluation with custom LLM judges</span><span class="tag">Integration with OpenAI, Anthropic, LangChain, LlamaIndex</span><span class="tag">Phoenix open-source local observability companion tool</span></div>
+        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Phoenix open-source: free and self-hosted. Arize cloud free tier available with limited data retention. Growth and Enterprise plans: custom pricing based on data volume.</p>
+        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Enterprise teams building production RAG systems who need deep quality monitoring, drift detection, and root cause analysis for LLM failures</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">Langfuse</h3>
-        <p class="text-sm text-gray-500 mb-2">LLM application traces, prompt performance, token usage, costs, latency, user sessions, and evaluation scores across any LLM provider or framework</p>
-        <div class="mb-3"><span class="tag">Open-source with self-hosting option</span><span class="tag">Detailed trace and span visualization</span><span class="tag">Prompt management and versioning</span><span class="tag">Score and evaluation tracking with custom metrics</span><span class="tag">Dataset creation for testing and benchmarking</span><span class="tag">Cost attribution by user, session, or feature</span><span class="tag">SDKs for Python and JS/TS with framework integrations</span><span class="tag">OpenTelemetry-compatible ingestion</span><span class="tag">User and session level analytics</span></div>
-        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Self-hosted: free and open source. Cloud Hobby: free with 50,000 observations/month. Cloud Pro: $59/month for 1 million observations. Team: $499/month. Enterprise: custom pricing.</p>
-        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Teams that want open-source flexibility and self-hosting control with production-ready cloud options, ideal for privacy-conscious organizations or those wanting to avoid vendor lock-in</p>
-        <a href="https://langfuse.com" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://langfuse.com</a>
+        <p class="text-sm text-gray-500 mb-1">LLM traces, prompt versions, evaluation scores, token costs, latency, and user session analytics across any LLM provider</p>
+        <a href="https://langfuse.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://langfuse.com</a>
+        <div class="mb-3"><span class="tag">Open-source with self-hosting option for full data control</span><span class="tag">Nested trace and span visualization for complex workflows</span><span class="tag">Prompt management with versioning and staging environments</span><span class="tag">Cost tracking across multiple LLM providers</span><span class="tag">User feedback collection and scoring integration</span><span class="tag">SDKs for Python, JavaScript, and native OpenAI integration</span><span class="tag">Dataset management and batch evaluation runs</span></div>
+        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Self-hosted: free and open-source. Cloud Hobby: free up to 50,000 observations/month. Pro: $59/month for higher limits. Team and Enterprise: custom pricing.</p>
+        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Privacy-conscious teams or startups wanting an open-source, self-hostable observability platform with strong prompt management and multi-provider cost tracking</p>
       </div>
       
       <div class="card">
         <h3 class="font-bold text-lg mb-1">OpenLLMetry</h3>
-        <p class="text-sm text-gray-500 mb-2">LLM calls, token usage, latency, and errors across frameworks and providers using the OpenTelemetry standard, exporting data to any compatible observability backend</p>
-        <div class="mb-3"><span class="tag">Built on OpenTelemetry for vendor-neutral instrumentation</span><span class="tag">Auto-instrumentation for OpenAI, Anthropic, Cohere, and more</span><span class="tag">Framework support for LangChain, LlamaIndex, Haystack, and others</span><span class="tag">Exports to Datadog, Grafana, Jaeger, Langfuse, and any OTLP backend</span><span class="tag">Semantic conventions for LLM spans</span><span class="tag">Minimal code change required via automatic patching</span><span class="tag">Open-source and community-driven</span><span class="tag">Traceloop cloud dashboard option available</span></div>
-        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Open-source SDK: free. Traceloop cloud platform: free tier available. Pro and Enterprise tiers available via Traceloop with custom pricing. Self-export to your own backend incurs no additional cost.</p>
-        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Engineering teams already invested in OpenTelemetry infrastructure who want standardized LLM observability that sends data to existing backends like Datadog or Grafana without adopting a new platform</p>
-        <a href="https://github.com/traceloop/openllmetry" target="_blank" class="text-xs text-indigo-500 hover:underline mt-2 block">https://github.com/traceloop/openllmetry</a>
+        <p class="text-sm text-gray-500 mb-1">LLM API calls, token usage, latency, and errors using OpenTelemetry-compatible instrumentation across multiple providers and frameworks</p>
+        <a href="https://www.traceloop.com/docs/openllmetry" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.traceloop.com/docs/openllmetry</a>
+        <div class="mb-3"><span class="tag">Built on OpenTelemetry standard for vendor-neutral tracing</span><span class="tag">Auto-instrumentation for OpenAI, Anthropic, Cohere, LangChain, LlamaIndex, and more</span><span class="tag">Exports traces to any OTel-compatible backend such as Datadog, Grafana, Jaeger, or Honeycomb</span><span class="tag">Minimal code change required for integration</span><span class="tag">Span attributes for model name, token counts, and prompt content</span><span class="tag">Open-source and community maintained</span><span class="tag">Works alongside existing observability infrastructure</span></div>
+        <p class="text-sm mb-1"><span class="font-medium">Pricing:</span> Free and open-source. Backend costs depend on the observability platform you export data to.</p>
+        <p class="text-sm text-gray-600"><span class="font-medium">Best for:</span> Engineering teams with existing OpenTelemetry infrastructure who want to add LLM observability using familiar tooling without adopting a separate dedicated platform</p>
       </div>
       
     </div>
     
-  </section>
+  </div>
 
 </main>
 
@@ -458,5 +825,15 @@
   AI Landscape Dashboard · Content generated by Claude · Auto-refreshes every 24h
 </footer>
 
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    const labels = ['overview','code-tools','models','repositories','databases','observability'];
+    document.querySelectorAll('.tab-btn')[labels.indexOf(id)].classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
 </body>
 </html>

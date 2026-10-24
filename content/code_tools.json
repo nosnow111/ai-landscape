@@ -1,167 +1,251 @@
 {
+  "summary": "The AI code generation landscape is dominated by a handful of tools that have achieved broad developer adoption through deep IDE integration, strong language model capabilities, and freemium pricing strategies. GitHub Copilot maintains the largest market share as of early 2025, with competitors like Cursor, Tabnine, and Amazon CodeWhisperer carving out significant niches. Enterprise adoption is accelerating, and the market is rapidly consolidating around tools that offer chat-based assistance, inline completions, and agentic coding capabilities.",
   "tools": [
-    {
-      "name": "Claude Code",
-      "vendor": "Anthropic",
-      "pricing_free": false,
-      "pricing_paid": "Usage-based via Anthropic API; included with Claude Pro ($20/month) and Claude Max ($100/month) subscriptions; also available via Claude.ai and API pricing starting at $3 per million input tokens (Sonnet)",
-      "strengths": [
-        "Agentic coding with full terminal and file system access",
-        "Handles large, multi-file refactoring tasks end-to-end",
-        "Strong reasoning and code explanation capabilities",
-        "Deep codebase understanding via context ingestion",
-        "Runs autonomously with minimal human intervention",
-        "Supports bash commands, git operations, and test execution",
-        "Excellent at greenfield project scaffolding"
-      ],
-      "ide_support": [
-        "Terminal/CLI (primary interface)",
-        "VS Code (via terminal integration)",
-        "Any editor accessible from command line"
-      ],
-      "best_for": "Developers who want an autonomous AI agent to handle complex, multi-step coding tasks, refactoring entire codebases, or building features from scratch with minimal supervision",
-      "url": "https://claude.ai/code"
-    },
     {
       "name": "GitHub Copilot",
       "vendor": "GitHub (Microsoft)",
+      "rank": 1,
       "pricing_free": true,
-      "pricing_paid": "Copilot Pro at $10/month or $100/year; Copilot Business at $19/user/month; Copilot Enterprise at $39/user/month; Free tier includes 2,000 completions and 50 chat messages per month",
+      "pricing_paid": "Copilot Pro at $10/month, Copilot Business at $19/user/month, Copilot Enterprise at $39/user/month",
       "strengths": [
-        "Deep GitHub and repository integration",
-        "Multi-model support (GPT-4o, Claude 3.5 Sonnet, Gemini)",
-        "Copilot Workspace for issue-to-PR automation",
-        "Pull request summaries and code review assistance",
-        "Inline code completions with high accuracy",
-        "Copilot Chat for contextual Q&A",
-        "Extensive enterprise security and compliance features",
-        "Large ecosystem and community adoption"
+        "Largest training dataset from public GitHub repositories",
+        "Deep integration with VS Code and GitHub ecosystem",
+        "Multi-line and whole-function completions",
+        "Copilot Chat for conversational coding assistance",
+        "Supports dozens of programming languages",
+        "Enterprise security and policy controls",
+        "Copilot Workspace for agentic task completion"
       ],
       "ide_support": [
         "VS Code",
         "Visual Studio",
-        "JetBrains IDEs (IntelliJ, PyCharm, WebStorm, etc.)",
+        "JetBrains IDEs",
         "Neovim",
-        "Xcode",
+        "Vim",
         "Azure Data Studio",
         "GitHub.com web editor"
       ],
-      "best_for": "Teams and enterprises already using GitHub who want tightly integrated AI assistance across the entire software development lifecycle from issue tracking to code review",
+      "best_for": "Individual developers and enterprises wanting the most widely adopted, ecosystem-integrated AI coding assistant with broad language and IDE support",
       "url": "https://github.com/features/copilot"
     },
     {
       "name": "Cursor",
       "vendor": "Anysphere",
+      "rank": 2,
       "pricing_free": true,
-      "pricing_paid": "Pro at $20/month (500 fast premium requests, unlimited slow requests); Business at $40/user/month with SSO and privacy controls; Free tier includes 2-week Pro trial then limited usage",
+      "pricing_paid": "Pro at $20/month, Business at $40/user/month",
       "strengths": [
-        "Purpose-built AI-first code editor (VS Code fork)",
-        "Composer agent for multi-file edits in one session",
-        "Codebase-wide context and semantic search",
-        "Supports multiple frontier models (GPT-4o, Claude 3.5, Gemini)",
-        "Natural language to code with inline diffs",
-        ".cursorrules for project-specific AI instructions",
-        "Tab completion with predictive next-action suggestions",
-        "Strong context window utilization"
+        "Purpose-built AI-first code editor forked from VS Code",
+        "Codebase-aware context with @codebase references",
+        "Multi-file editing and agentic code changes",
+        "Supports multiple underlying models (GPT-4, Claude, Gemini)",
+        "Composer mode for large-scale refactoring",
+        "Privacy mode with no code retention option",
+        "Rapidly growing developer community"
       ],
       "ide_support": [
-        "Cursor (standalone editor, VS Code-based)",
-        "VS Code extensions compatible"
+        "Cursor (standalone VS Code fork)"
       ],
-      "best_for": "Individual developers and small teams who want the most deeply integrated AI coding experience and are willing to switch to a dedicated AI-native editor for maximum productivity",
-      "url": "https://cursor.com"
-    },
-    {
-      "name": "Codeium (Windsurf)",
-      "vendor": "Codeium (Exafunction)",
-      "pricing_free": true,
-      "pricing_paid": "Codeium Teams at $12/user/month; Codeium Enterprise with custom pricing; Windsurf Pro at $15/month; Free tier is generous with unlimited completions for individual use",
-      "strengths": [
-        "Generous free tier with unlimited completions",
-        "Windsurf editor as an AI-native IDE alternative to Cursor",
-        "Cascade agentic AI with multi-step task execution",
-        "Fast and low-latency code completions",
-        "Broad language and framework support",
-        "Context-aware completions across the codebase",
-        "Self-hosted enterprise deployment options",
-        "Strong privacy guarantees with no training on user code"
-      ],
-      "ide_support": [
-        "VS Code",
-        "JetBrains IDEs",
-        "Windsurf (standalone editor)",
-        "Neovim",
-        "Emacs",
-        "Vim",
-        "Visual Studio",
-        "Eclipse",
-        "Jupyter Notebook",
-        "Chrome extension for web-based IDEs"
-      ],
-      "best_for": "Individual developers and startups looking for a powerful free alternative to Copilot with broad IDE support, or teams needing enterprise-grade on-premises deployment",
-      "url": "https://codeium.com"
-    },
-    {
-      "name": "Amazon CodeWhisperer",
-      "vendor": "Amazon Web Services (AWS)",
-      "pricing_free": true,
-      "pricing_paid": "CodeWhisperer Professional at $19/user/month; Free Individual tier available with no usage limits on code suggestions; Professional adds security scanning, SSO, and admin controls",
-      "strengths": [
-        "Native AWS service integration and cloud-aware suggestions",
-        "Built-in security vulnerability scanning (OWASP, CWEs)",
-        "License and reference tracking for open-source compliance",
-        "Optimized for AWS SDKs, CDK, and CloudFormation",
-        "Supports 15+ programming languages",
-        "Strong Java, Python, and TypeScript support",
-        "Enterprise compliance and audit logging via AWS",
-        "Integration with AWS Lambda, S3, DynamoDB patterns"
-      ],
-      "ide_support": [
-        "VS Code",
-        "JetBrains IDEs",
-        "AWS Cloud9",
-        "AWS Lambda console",
-        "Amazon SageMaker Studio",
-        "AWS Glue Studio",
-        "Visual Studio (preview)"
-      ],
-      "best_for": "AWS-centric development teams and enterprises building cloud-native applications on AWS infrastructure who need compliance-friendly AI assistance with security scanning",
-      "url": "https://aws.amazon.com/codewhisperer"
+      "best_for": "Developers who want a fully AI-native editor experience with deep codebase understanding and the ability to make coordinated multi-file changes",
+      "url": "https://www.cursor.com"
     },
     {
       "name": "Tabnine",
       "vendor": "Tabnine",
+      "rank": 3,
       "pricing_free": true,
-      "pricing_paid": "Tabnine Pro at $12/user/month; Tabnine Enterprise at $39/user/month with on-premises hosting and custom model training; Free tier with basic completions",
+      "pricing_paid": "Pro at $12/user/month, Enterprise with custom pricing",
       "strengths": [
-        "Privacy-first design with air-gapped and on-premises options",
-        "Custom model training on private codebases",
-        "Team learning that adapts to organizational coding patterns",
+        "Strong enterprise privacy with on-premises deployment option",
+        "Trained on permissively licensed code only",
         "Whole-line and full-function completions",
-        "Does not train on user code by default",
-        "Long-standing enterprise trust and adoption",
-        "Supports 80+ programming languages",
-        "Works offline with local model option",
-        "Compliance certifications (SOC 2, GDPR)"
+        "Personalized model that learns from your codebase",
+        "Long track record of adoption pre-dating Copilot",
+        "SOC 2 compliance and air-gapped deployment"
+      ],
+      "ide_support": [
+        "VS Code",
+        "JetBrains IDEs",
+        "Vim",
+        "Neovim",
+        "Emacs",
+        "Sublime Text",
+        "Eclipse",
+        "Visual Studio"
+      ],
+      "best_for": "Privacy-conscious enterprises and developers who need on-premises deployment, compliance guarantees, and code trained only on permissively licensed sources",
+      "url": "https://www.tabnine.com"
+    },
+    {
+      "name": "Amazon CodeWhisperer (Amazon Q Developer)",
+      "vendor": "Amazon Web Services",
+      "rank": 4,
+      "pricing_free": true,
+      "pricing_paid": "Amazon Q Developer Pro at $19/user/month",
+      "strengths": [
+        "Free Individual tier with no usage limits for core completions",
+        "Deep AWS SDK and service awareness",
+        "Built-in security vulnerability scanning",
+        "Reference tracker for open-source license attribution",
+        "Rebranded and expanded as Amazon Q Developer with chat and agents",
+        "Strong adoption among AWS-centric development teams"
       ],
       "ide_support": [
         "VS Code",
         "JetBrains IDEs",
         "Visual Studio",
-        "Eclipse",
-        "Neovim",
-        "Vim",
-        "Emacs",
-        "Sublime Text",
-        "Atom",
-        "Jupyter Notebook"
+        "AWS Cloud9",
+        "AWS Lambda console",
+        "Amazon SageMaker Studio",
+        "JupyterLab",
+        "AWS Glue Studio"
       ],
-      "best_for": "Privacy-conscious enterprises and regulated industries (finance, healthcare, defense) that require on-premises deployment, custom model training on proprietary code, and strict data governance",
-      "url": "https://tabnine.com"
+      "best_for": "AWS developers and cloud engineers building on the AWS ecosystem who need context-aware completions, security scanning, and license compliance tracking",
+      "url": "https://aws.amazon.com/q/developer/"
+    },
+    {
+      "name": "Codeium",
+      "vendor": "Codeium (Windsurf)",
+      "rank": 5,
+      "pricing_free": true,
+      "pricing_paid": "Pro at $15/month, Teams and Enterprise with custom pricing",
+      "strengths": [
+        "Completely free for individual developers with no usage cap",
+        "Windsurf agentic IDE with multi-step task execution",
+        "Fast autocomplete with low latency",
+        "Broad language support across 70+ languages",
+        "Search and context across entire repositories",
+        "Chat assistant with codebase awareness"
+      ],
+      "ide_support": [
+        "VS Code",
+        "JetBrains IDEs",
+        "Vim",
+        "Neovim",
+        "Emacs",
+        "Visual Studio",
+        "Eclipse",
+        "Windsurf (standalone editor)"
+      ],
+      "best_for": "Individual developers seeking a generous free tier with no usage limits and an optional agentic IDE experience through the Windsurf editor",
+      "url": "https://codeium.com"
+    },
+    {
+      "name": "Sourcegraph Cody",
+      "vendor": "Sourcegraph",
+      "rank": 6,
+      "pricing_free": true,
+      "pricing_paid": "Pro at $9/month, Enterprise with custom pricing",
+      "strengths": [
+        "Entire-codebase context using Sourcegraph's code intelligence graph",
+        "Supports multiple LLM backends (Claude, GPT-4, Gemini)",
+        "Inline completions and chat in one tool",
+        "Precise code navigation and reference understanding",
+        "Strong enterprise offering with large-scale codebase indexing",
+        "Open-source client"
+      ],
+      "ide_support": [
+        "VS Code",
+        "JetBrains IDEs",
+        "Neovim",
+        "Emacs"
+      ],
+      "best_for": "Teams with large, complex codebases who need AI assistance grounded in accurate whole-repository context and code intelligence rather than just recent file context",
+      "url": "https://sourcegraph.com/cody"
+    },
+    {
+      "name": "Continue",
+      "vendor": "Continue (open source)",
+      "rank": 7,
+      "pricing_free": true,
+      "pricing_paid": "Free and open source; enterprise support available via Continue Hub",
+      "strengths": [
+        "Fully open-source and self-hostable",
+        "Bring-your-own-model flexibility (Ollama, OpenAI, Anthropic, etc.)",
+        "Deep customization and extensibility",
+        "Tab autocomplete and chat in one plugin",
+        "Active open-source community",
+        "No vendor lock-in"
+      ],
+      "ide_support": [
+        "VS Code",
+        "JetBrains IDEs"
+      ],
+      "best_for": "Developers and enterprises who want full control over their AI stack, model choice, and data privacy through a self-hosted or locally-run open-source solution",
+      "url": "https://www.continue.dev"
+    },
+    {
+      "name": "Replit AI (Ghostwriter)",
+      "vendor": "Replit",
+      "rank": 8,
+      "pricing_free": true,
+      "pricing_paid": "Replit Core at $20/month which includes AI features; Teams plans available",
+      "strengths": [
+        "Fully browser-based with no local setup required",
+        "AI deeply embedded in an online IDE and hosting platform",
+        "Instant deployment and collaborative coding",
+        "Strong adoption in education and prototyping",
+        "Code generation, explanation, debugging, and transformation",
+        "AI Agent can build apps from natural language prompts"
+      ],
+      "ide_support": [
+        "Replit web IDE (browser-based)"
+      ],
+      "best_for": "Students, educators, and rapid prototypers who want an all-in-one browser-based environment where AI assistance, coding, and deployment are seamlessly integrated",
+      "url": "https://replit.com/ai"
+    },
+    {
+      "name": "JetBrains AI Assistant",
+      "vendor": "JetBrains",
+      "rank": 9,
+      "pricing_free": false,
+      "pricing_paid": "Included with All Products Pack subscription; AI Pro add-on at $10/month for individual IDE subscribers",
+      "strengths": [
+        "Native deep integration across all JetBrains IDEs",
+        "Context-aware completions using IDE's semantic understanding",
+        "AI chat with awareness of project structure, errors, and VCS history",
+        "Commit message and documentation generation",
+        "Test generation integrated into JetBrains test frameworks",
+        "Trusted vendor for enterprise JetBrains shops"
+      ],
+      "ide_support": [
+        "IntelliJ IDEA",
+        "PyCharm",
+        "WebStorm",
+        "GoLand",
+        "Rider",
+        "CLion",
+        "DataGrip",
+        "All JetBrains IDEs"
+      ],
+      "best_for": "JetBrains ecosystem users who want AI assistance that is natively and deeply integrated into their existing IDE with full access to semantic code intelligence",
+      "url": "https://www.jetbrains.com/ai/"
+    },
+    {
+      "name": "Aider",
+      "vendor": "Aider (open source, Paul Gauthier)",
+      "rank": 10,
+      "pricing_free": true,
+      "pricing_paid": "Free and open source; users pay only for their own API keys (OpenAI, Anthropic, etc.)",
+      "strengths": [
+        "Terminal-based AI pair programmer with strong agentic capabilities",
+        "Deep Git integration with automatic commits for each AI change",
+        "Supports GPT-4, Claude, and local models via API",
+        "Whole-repository context and multi-file editing",
+        "Highly rated on benchmarks like SWE-bench",
+        "Transparent diff-based workflow that developers can review"
+      ],
+      "ide_support": [
+        "Terminal / CLI (works alongside any editor)",
+        "VS Code (via terminal)",
+        "Neovim (via terminal)"
+      ],
+      "best_for": "Power users and backend developers who prefer a terminal-driven, Git-integrated AI coding agent capable of complex multi-file refactoring with full transparency and model flexibility",
+      "url": "https://aider.chat"
     }
   ],
   "_meta": {
     "title": "Code Generation Tools",
-    "generated_at": "2026-10-24T19:37:20.566432+00:00"
+    "generated_at": "2026-10-24T19:58:41.777133+00:00"
   }
 }
