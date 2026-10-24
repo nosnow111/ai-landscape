@@ -1,117 +1,127 @@
 {
-  "summary": "The AI model repository and deployment ecosystem in 2026 is highly concentrated, with Hugging Face dominating open-source hosting at over 2 million models while the top 0.01% of models account for nearly half of all downloads. Deployment platforms like Ollama, Replicate, Together AI, Fireworks AI, and AWS Bedrock serve distinct segments ranging from local hobbyist inference to enterprise-grade scalable APIs. The ecosystem is bifurcating between open-weight model hosting and managed inference layers, with Qwen derivatives and OpenAI-compatible APIs driving the majority of adoption across both categories.",
+  "summary": "The AI model repository and deployment platform ecosystem in 2026 is highly concentrated, with Hugging Face dominating open-source model hosting at over 2 million models while the top 0.01% of models account for nearly half of all downloads. Deployment-focused platforms like Ollama, Replicate, Together AI, Fireworks AI, and AWS Bedrock have emerged to bridge the gap between model repositories and production inference, each targeting different segments from individual developers to enterprise cloud users. Qwen derivatives and OpenAI-compatible APIs have become de facto standards, with hardware vendors AMD and NVIDIA increasingly publishing open models to drive chip adoption.",
   "platforms": [
     {
       "name": "Hugging Face",
-      "purpose": "The central open-source hub for discovering, sharing, and versioning machine learning models, datasets, and Spaces (demo apps). Acts as the GitHub of AI with collaborative tools and a model registry.",
+      "purpose": "Central open-source hub for hosting, sharing, discovering, and fine-tuning machine learning models, datasets, and demo applications",
       "model_count": "2,000,000+ models (3 million repositories total as of mid-2026)",
-      "pricing": "Free tier for public models and datasets; PRO plan at $9/month; Enterprise Hub from $20/user/month; Inference Endpoints billed per compute hour based on hardware (CPU from ~$0.06/hr, GPU from ~$0.60/hr)",
+      "pricing": "Free tier for public models and datasets; Pro plan ~$9/month; Enterprise Hub from $20/user/month; Inference API usage-based pricing per token/request",
       "features": [
-        "2M+ public models with 45.4 billion all-time downloads as of Oct 2025",
-        "Model cards, versioning, and dataset integration",
-        "Spaces for interactive demos powered by Gradio or Streamlit",
-        "Inference Endpoints for one-click private deployments",
-        "Supports GGUF, LoRA, MLX, LeRobot, and 100+ framework libraries",
+        "Largest public model repository with 2M+ models and 500K+ datasets",
+        "Spaces for hosting interactive ML demos and apps",
+        "Inference API and dedicated inference endpoints",
+        "AutoTrain for no-code fine-tuning",
+        "Model cards, leaderboards, and evaluation frameworks",
+        "Transformers, Diffusers, and PEFT library integrations",
+        "Top 200 models account for 49.6% of all downloads",
         "30%+ of Fortune 500 companies maintain verified accounts",
-        "Private model repos, SSO, and audit logs on Enterprise tier",
-        "Active community forums and leaderboards"
+        "45.4 billion total Hub downloads as of October 2025"
       ],
-      "best_for": "Researchers, data scientists, and enterprises that need to discover, fine-tune, share, or deploy open-weight models with full transparency and community support.",
+      "best_for": "Researchers, data scientists, and developers who need to discover, share, fine-tune, or experiment with open-source models across any modality",
       "url": "https://huggingface.co"
     },
     {
       "name": "Ollama",
-      "purpose": "A local model runtime that allows developers to download and run open-weight LLMs directly on their own hardware (Mac, Windows, Linux) with a simple CLI and REST API interface.",
-      "model_count": "500+ curated models in the official library (including Llama, Mistral, Qwen, Gemma, Phi families)",
-      "pricing": "Completely free and open-source; costs are only your own hardware and electricity",
+      "purpose": "Local model runtime and registry enabling developers to download, run, and manage large language models entirely on their own hardware with a simple CLI and REST API",
+      "model_count": "500+ curated models in the Ollama library (primarily GGUF-quantized versions of popular open models)",
+      "pricing": "Completely free and open-source; costs are limited to your own hardware and electricity",
       "features": [
-        "One-command model pull and run (e.g., ollama run qwen3:8b)",
-        "Local REST API compatible with OpenAI API schema",
-        "GPU acceleration on Apple Silicon (Metal), NVIDIA CUDA, and AMD ROCm",
-        "Model quantization via GGUF format for reduced memory footprint",
-        "Multimodal model support including vision models",
-        "Modelfile system for custom system prompts and parameter tuning",
-        "Zero data egress \u2014 fully air-gapped and private",
-        "Active library of community-contributed Modelfiles"
+        "One-command model download and execution (e.g., ollama run llama3)",
+        "GGUF format support enabling CPU and mixed CPU/GPU inference",
+        "OpenAI-compatible REST API for drop-in integration",
+        "Modelfile system for customizing system prompts and parameters",
+        "Multi-platform support: macOS (Apple Silicon optimized), Linux, Windows",
+        "Model library growing 464% in GGUF repositories on Hugging Face in 2026",
+        "Supports Llama, Qwen, Mistral, Gemma, DeepSeek, and many more families",
+        "Private and offline operation with no data leaving local machine"
       ],
-      "best_for": "Individual developers, privacy-focused users, and teams that want to run open-weight models completely locally without API costs or data leaving their machine.",
+      "best_for": "Individual developers, privacy-conscious users, and teams who want to run open-source LLMs locally without cloud costs or data privacy concerns",
       "url": "https://ollama.com"
     },
     {
       "name": "Replicate",
-      "purpose": "A cloud platform for running open-source and community-contributed AI models via a simple API, with a strong focus on media generation models including image, video, audio, and 3D.",
-      "model_count": "100,000+ public models contributed by the community",
-      "pricing": "Pay-per-second of compute time; CPU from ~$0.0001/sec, GPU (T4) from ~$0.00055/sec, A100 from ~$0.0023/sec; no minimum spend or subscription required",
+      "purpose": "Cloud platform for running open-source and custom machine learning models via a simple API without managing infrastructure",
+      "model_count": "100,000+ public models spanning language, image, video, audio, and more",
+      "pricing": "Pay-per-second of compute time; CPU from ~$0.0001/second, T4 GPU ~$0.00055/second, A100 ~$0.0023/second; no seat fees or subscriptions required",
       "features": [
-        "Instant API access to any public model with no infrastructure setup",
-        "Strong catalog of image generation models (Stable Diffusion, FLUX, etc.)",
-        "Video and audio generation model support",
-        "Fine-tuning workflows with Dreambooth and LoRA directly on platform",
-        "Deployments feature for scaling dedicated endpoints",
+        "Instant API access to popular open-source models with no setup",
+        "Cog framework for packaging and deploying custom models as containers",
+        "Automatic scaling including scale-to-zero to eliminate idle costs",
+        "Support for image generation (SDXL, Flux), LLMs, video, and audio models",
         "Webhooks and async prediction support for production workflows",
-        "Python, JavaScript, and HTTP client SDKs",
-        "Community model publishing with versioning"
+        "Model versioning and reproducible predictions",
+        "Community model sharing and discovery",
+        "Python, Node.js, and HTTP client libraries"
       ],
-      "best_for": "Product developers and startups building creative or generative media applications who need rapid prototyping and pay-as-you-go pricing without managing GPU infrastructure.",
+      "best_for": "Startups, indie developers, and product teams that need rapid API access to diverse open-source models for prototyping and production without DevOps overhead",
       "url": "https://replicate.com"
     },
     {
       "name": "Together AI",
-      "purpose": "A cloud inference and fine-tuning platform optimized for open-source LLMs, offering high-throughput serverless and dedicated endpoints with a strong focus on speed and developer experience.",
-      "model_count": "200+ leading open-weight models including Llama, Qwen, Mistral, DBRX, and Mixtral families",
-      "pricing": "Serverless inference priced per million tokens (e.g., Llama 3.1 8B at ~$0.18/M tokens, Llama 3.1 70B at ~$0.88/M tokens); dedicated GPU instances also available; free $25 credit on signup",
+      "purpose": "Cloud inference and fine-tuning platform specializing in fast, cost-efficient serving of leading open-source language and embedding models at scale",
+      "model_count": "100+ curated open-source models including Llama, Qwen, Mistral, DBRX, and embedding models",
+      "pricing": "Pay-per-token inference; Llama 3.1 8B from ~$0.10/million tokens; Llama 3.1 70B ~$0.88/million tokens; fine-tuning charged per token trained; volume discounts available",
       "features": [
-        "OpenAI-compatible API for drop-in replacement workflows",
-        "Serverless inference with industry-competitive latency",
-        "Fine-tuning service for custom model training on proprietary data",
-        "Together Embeddings API for vector search use cases",
-        "Batch inference at reduced cost for offline workloads",
-        "Support for function calling and JSON mode on supported models",
-        "Team management and usage dashboards",
-        "RedPajama open dataset contributions and research focus"
+        "OpenAI-compatible Chat Completions and Embeddings API",
+        "Custom fine-tuning with LoRA on proprietary data",
+        "Together Inference Stack optimized for high throughput and low latency",
+        "Dedicated endpoints for guaranteed capacity",
+        "Mixture-of-Experts model support including DeepSeek and Qwen-MoE",
+        "Batch inference for high-volume offline workloads at reduced cost",
+        "Safety and moderation tools built in",
+        "SOC 2 Type II compliance for enterprise security requirements"
       ],
-      "best_for": "AI engineers and enterprises needing fast, affordable inference on the latest open-weight models with fine-tuning capabilities and OpenAI API compatibility for easy migration.",
+      "best_for": "AI engineers and enterprises needing high-throughput, cost-efficient open-source model inference with fine-tuning capabilities and OpenAI API compatibility",
       "url": "https://www.together.ai"
     },
     {
       "name": "Fireworks AI",
-      "purpose": "A high-performance inference platform specializing in extremely fast token generation for open-source LLMs, targeting production applications requiring low latency and high throughput.",
-      "model_count": "150+ open-weight models with a curated focus on top-performing LLMs and code models",
-      "pricing": "Per-million-token pricing; Llama 3.1 8B from ~$0.20/M tokens; Mixtral 8x7B from ~$0.50/M tokens; compound AI and image generation priced separately; volume discounts available",
+      "purpose": "High-performance generative AI inference platform focused on delivering industry-leading speed and uptime for open-source models in production applications",
+      "model_count": "50+ production-ready models with emphasis on top-tier open-source LLMs, code models, and multimodal models",
+      "pricing": "Pay-per-token; Llama 3.1 8B from ~$0.10/million tokens; Llama 3.1 70B ~$0.90/million tokens; serverless and dedicated deployment options; enterprise contracts available",
       "features": [
-        "Industry-leading token generation speeds via custom inference stack (FireAttention)",
-        "OpenAI-compatible REST API with streaming support",
-        "Serverless and on-demand dedicated deployments",
-        "Support for function calling, grammar mode, and structured JSON output",
-        "Image generation API including FLUX and SDXL models",
-        "Fine-tuned model hosting and deployment",
-        "Compound AI system support for multi-model pipelines",
-        "SLA guarantees and enterprise support tiers"
+        "FireAttention inference engine delivering some of the fastest open-source model latency benchmarks",
+        "OpenAI-compatible API for seamless migration",
+        "Compound AI system support for multi-model workflows and function calling",
+        "LoRA fine-tuning with rapid deployment of custom adapters",
+        "On-demand and reserved capacity options",
+        "Structured output and JSON mode enforcement",
+        "Multimodal support including vision-language models",
+        "SOC 2 Type II and HIPAA-eligible deployment options"
       ],
-      "best_for": "Production engineering teams building latency-sensitive applications such as real-time chat, coding assistants, and agent pipelines that require the fastest possible open-model inference.",
+      "best_for": "Production engineering teams and enterprises building latency-sensitive applications that require the fastest possible open-source model inference with enterprise reliability guarantees",
       "url": "https://fireworks.ai"
     },
     {
       "name": "AWS Bedrock",
-      "purpose": "A fully managed AWS service that provides access to foundation models from leading AI companies (Anthropic, Meta, Mistral, Amazon, Cohere, AI21) via a unified API integrated into the AWS cloud ecosystem.",
-      "model_count": "50+ foundation models from multiple providers including Amazon Nova, Claude, Llama, Mistral, Cohere, and Titan families",
-      "pricing": "On-demand pay-per-token pricing varies by model (e.g., Claude Haiku 3.5 at $0.80/M input tokens; Llama 3.1 70B at ~$0.99/M tokens); Provisioned Throughput for reserved capacity billed hourly; no upfront cost",
+      "purpose": "Fully managed AWS service providing access to a broad selection of foundation models from leading AI companies and open-source providers via a unified API within the AWS ecosystem",
+      "model_count": "50+ foundation models from providers including Anthropic, Meta, Mistral, Stability AI, Cohere, Amazon Nova, and AI21 Labs",
+      "pricing": "On-demand pay-per-token (e.g., Claude Sonnet ~$3/million input tokens, $15/million output tokens); Provisioned Throughput for reserved capacity billed hourly; model customization charged separately per training token",
       "features": [
-        "Single API for models from Anthropic, Meta, Mistral, Cohere, Amazon, and AI21",
-        "Native integration with AWS services (S3, Lambda, SageMaker, IAM, CloudWatch)",
-        "Bedrock Agents for building autonomous multi-step AI workflows",
-        "Knowledge Bases with managed RAG pipelines and vector storage",
-        "Guardrails for content filtering and PII redaction",
-        "Model evaluation and A/B testing tools",
-        "Fine-tuning and continued pre-training on custom data",
-        "VPC support, PrivateLink, and SOC2/HIPAA compliance for enterprise security"
+        "Single API spanning models from Anthropic Claude, Meta Llama, Mistral, Amazon Nova, and more",
+        "Native AWS IAM, VPC, and PrivateLink integration for enterprise security",
+        "Bedrock Agents for building multi-step agentic workflows with tool use",
+        "Knowledge Bases for RAG with managed vector store integration",
+        "Model customization via fine-tuning and continued pre-training",
+        "Guardrails for content filtering and responsible AI policy enforcement",
+        "Model Evaluation for automated and human review benchmarking",
+        "No data used for model training; data stays within AWS region",
+        "Integrated with SageMaker, Lambda, and broader AWS data services"
       ],
-      "best_for": "Enterprise teams already invested in the AWS ecosystem that need governed, compliant, and deeply integrated AI capabilities with access to both proprietary and open-weight frontier models.",
+      "best_for": "Enterprise teams already invested in the AWS ecosystem who need managed, secure, compliant access to both proprietary and open-source foundation models without operating their own inference infrastructure",
       "url": "https://aws.amazon.com/bedrock"
     }
   ],
   "_meta": {
     "title": "Model Repositories & Platforms",
-    "generated_at": "2026-10-24T20:26:45.663212+00:00"
-  }
+    "generated_at": "2026-10-24T20:50:44.664661+00:00"
+  },
+  "sources": [
+    "https://huggingface.co/blog/huggingface/state-of-os-hf-spring-2026",
+    "https://discuss.huggingface.co/t/downloadsalltime-decreasing-day-over-day-for-multiple-public-models-expected-behavior/176918",
+    "https://huggingface.co/blog/ivanfioravanti/three-million-models-and-counting",
+    "https://huggingface.co/blog/state-of-open-models-summer-2026",
+    "https://orca.security/resources/blog/top-10-ai-models-of-2026",
+    "https://pickaxe.co/post/top-ai-platforms"
+  ]
 }
