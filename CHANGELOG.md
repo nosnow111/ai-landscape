@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0] - 2026-10-24
+### Changed
+- Smart 10–15 ranking cutoff: all ranked sections now extend beyond 10 only when adoption clusters tightly (within ~25%), cutting at natural drop-off
+- Expanded Tavily research: 3–5 queries per section including "complete list / alternatives / lesser known" discovery queries
+- Claude instructed to surface tools found in research even if not named in the prompt
+- Wave (wave.com, AI meeting recorder) added to workspace section
+
 ## [0.6.0] - 2026-10-24
 ### Added
 - AI Productivity & Workspace Tools section (NotebookLM, M365 Copilot, Notion AI, Perplexity, etc.)

@@ -47,12 +47,24 @@ Each section maps to a JSON file in content/ and a tab in the UI:
   and can be triggered manually from the Actions tab
 - **Secret required:** `ANTHROPIC_API_KEY` must be set in repo Settings → Secrets → Actions
 
+## Ranking rule (all sections)
+Rankings use a 10–15 smart cutoff defined in `_RANK_RULE` in `generator.py`:
+- Always include top 10 by adoption
+- Extend to #11–15 only if their adoption is within ~25% of #10 (no clear gap)
+- Stop at the first significant drop-off; never pad to fill 15
+
+## Research strategy (research.py)
+Each section fires 3–5 Tavily queries: targeted known-tool queries + broader
+"complete list / alternatives / lesser known" discovery queries. Claude is
+instructed to include tools found in research even if not named in the prompt.
+
 ## Key decisions
 - Static site (no server) keeps hosting free forever on GitHub Pages
 - Content JSON is committed to the repo so the site survives even if the API is unavailable
 - `max_tokens=8192` prevents JSON truncation on longer sections
 - Prompts explicitly request unbiased rankings based on actual usage data
 - Tavily web search runs before each Claude call to ground content in live data
+- Wave (wave.com) — AI meeting recorder — confirmed as workspace tool, not web scraper
 
 ## Hosting platforms evaluated (and why rejected)
 | Platform | Reason rejected |
