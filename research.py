@@ -31,9 +31,11 @@ QUERIES = {
 }
 
 
-def research_section(key: str) -> str:
+def research_section(key: str) -> tuple[str, list[str]]:
+    """Returns (context_text, list_of_source_urls)"""
     queries = QUERIES.get(key, [])
     results = []
+    sources = []
     for query in queries:
         try:
             response = client.search(
@@ -45,23 +47,29 @@ def research_section(key: str) -> str:
             if response.get("answer"):
                 results.append(f"Q: {query}\nA: {response['answer']}")
             for r in response.get("results", []):
+                url = r.get("url", "")
                 snippet = r.get("content", "")[:400]
                 if snippet:
-                    results.append(f"Source ({r.get('url', '')}): {snippet}")
+                    results.append(f"Source ({url}): {snippet}")
+                if url and url not in sources:
+                    sources.append(url)
         except Exception as e:
             print(f"  Search error for '{query}': {e}")
-    return "\n\n".join(results)
+    return "\n\n".join(results), sources
 
 
 def research_all() -> dict:
+    """Returns dict of key -> {'context': str, 'sources': list}"""
     data = {}
     for key in QUERIES:
         print(f"  Researching: {key}")
-        data[key] = research_section(key)
+        context, sources = research_section(key)
+        data[key] = {"context": context, "sources": sources}
     return data
 
 
 if __name__ == "__main__":
     results = research_all()
     for k, v in results.items():
-        print(f"\n=== {k} ===\n{v[:300]}...")
+        print(f"\n=== {k} ===\n{v['context'][:300]}...")
+        print(f"Sources: {v['sources']}")

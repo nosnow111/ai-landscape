@@ -139,7 +139,12 @@ def run_generation(sections: list = None):
 
     for key in targets:
         try:
-            data = generate_section(key, SECTIONS[key], research_data.get(key, ""))
+            section_research = research_data.get(key, {})
+            context = section_research.get("context", "") if isinstance(section_research, dict) else ""
+            sources = section_research.get("sources", []) if isinstance(section_research, dict) else []
+            data = generate_section(key, SECTIONS[key], context)
+            if sources:
+                data["sources"] = sources
             path = os.path.join(CONTENT_DIR, f"{key}.json")
             with open(path, "w") as f:
                 json.dump(data, f, indent=2)
