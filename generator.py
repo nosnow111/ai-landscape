@@ -79,7 +79,7 @@ def generate_section(key: str, section: dict) -> dict:
     print(f"  Generating: {section['title']}")
     message = client.messages.create(
         model="claude-sonnet-4-6",
-        max_tokens=2048,
+        max_tokens=8192,
         messages=[
             {
                 "role": "user",
