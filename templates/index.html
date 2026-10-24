@@ -70,6 +70,9 @@
     <button class="tab-btn" onclick="showTab('repositories')">🗄️ Repositories</button>
     <button class="tab-btn" onclick="showTab('databases')">🗃️ Databases</button>
     <button class="tab-btn" onclick="showTab('observability')">📊 Observability</button>
+    <button class="tab-btn" onclick="showTab('image-gen')">🖼️ Image Gen</button>
+    <button class="tab-btn" onclick="showTab('video-gen')">🎬 Video Gen</button>
+    <button class="tab-btn" onclick="showTab('web-scrapers')">🕷️ Web Scrapers</button>
   </div>
 </nav>
 
@@ -179,6 +182,71 @@
         <div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>
         {% endif %}
         <div onclick="showTab('observability')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
+      </div>
+
+      <!-- Image Gen column -->
+      <div>
+        <div onclick="showTab('image-gen')" class="cursor-pointer text-white font-bold text-sm px-3 py-3 rounded-t-xl flex items-center gap-2 hover:opacity-90" style="background:#0891b2;">
+          🖼️ Image Gen
+        </div>
+        {% if sections.image_gen.get('tools') %}
+          {% for t in sections.image_gen.tools[:4] %}
+          <div onclick="showTab('image-gen')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-cyan-50 transition-colors {% if loop.last %}rounded-b-xl{% endif %}">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-xs font-bold text-gray-800">{{ t.name }}</p>
+              {% if t.get('rank') %}<span style="background:#cffafe;color:#0e7490;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:9999px;">#{{ t.rank }}</span>{% endif %}
+            </div>
+            <p class="text-xs text-gray-500">{{ t.vendor }}</p>
+            {% if t.pricing_free %}<span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Free tier</span>{% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+        <div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>
+        {% endif %}
+        <div onclick="showTab('image-gen')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
+      </div>
+
+      <!-- Video Gen column -->
+      <div>
+        <div onclick="showTab('video-gen')" class="cursor-pointer text-white font-bold text-sm px-3 py-3 rounded-t-xl flex items-center gap-2 hover:opacity-90" style="background:#9333ea;">
+          🎬 Video Gen
+        </div>
+        {% if sections.video_gen.get('tools') %}
+          {% for t in sections.video_gen.tools[:4] %}
+          <div onclick="showTab('video-gen')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-purple-50 transition-colors {% if loop.last %}rounded-b-xl{% endif %}">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-xs font-bold text-gray-800">{{ t.name }}</p>
+              {% if t.get('rank') %}<span style="background:#f3e8ff;color:#7e22ce;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:9999px;">#{{ t.rank }}</span>{% endif %}
+            </div>
+            <p class="text-xs text-gray-500">{{ t.vendor }}</p>
+          </div>
+          {% endfor %}
+        {% else %}
+        <div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>
+        {% endif %}
+        <div onclick="showTab('video-gen')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
+      </div>
+
+      <!-- Web Scrapers column -->
+      <div>
+        <div onclick="showTab('web-scrapers')" class="cursor-pointer text-white font-bold text-sm px-3 py-3 rounded-t-xl flex items-center gap-2 hover:opacity-90" style="background:#374151;">
+          🕷️ Web Scrapers
+        </div>
+        {% if sections.web_scrapers.get('tools') %}
+          {% for t in sections.web_scrapers.tools[:4] %}
+          <div onclick="showTab('web-scrapers')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-gray-50 transition-colors {% if loop.last %}rounded-b-xl{% endif %}">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-xs font-bold text-gray-800">{{ t.name }}</p>
+              {% if t.get('rank') %}<span style="background:#f3f4f6;color:#374151;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:9999px;">#{{ t.rank }}</span>{% endif %}
+            </div>
+            <p class="text-xs text-gray-500">{{ t.vendor }}</p>
+            {% if t.pricing_free %}<span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Free tier</span>{% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+        <div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>
+        {% endif %}
+        <div onclick="showTab('web-scrapers')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
       </div>
 
     </div>
@@ -418,6 +486,126 @@
     {% endif %}
   </div>
 
+  <!-- IMAGE GEN TAB -->
+  <div id="tab-image-gen" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold text-cyan-700">🖼️ AI Image Generation — Top 10 by Usage</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.image_gen.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.image_gen.summary }}</p>
+    {% endif %}
+    {% if sections.image_gen.get('tools') %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for t in sections.image_gen.tools %}
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <div class="flex items-center gap-2">
+            {% if t.get('rank') %}<span style="background:#0891b2;color:white;font-size:0.7rem;font-weight:700;border-radius:9999px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">#{{ t.rank }}</span>{% endif %}
+            <h3 class="font-bold text-lg">{{ t.name }}</h3>
+          </div>
+          {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
+        </div>
+        <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
+        {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
+        <div class="mb-3">{% for s in t.strengths %}<span class="tag">{{ s }}</span>{% endfor %}</div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> {{ t.best_for }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% if sections.image_gen.get('sources') %}
+    <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
+      <ul class="space-y-1">{% for s in sections.image_gen.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- VIDEO GEN TAB -->
+  <div id="tab-video-gen" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold text-purple-700">🎬 AI Video Generation — Top 10 by Usage</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.video_gen.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.video_gen.summary }}</p>
+    {% endif %}
+    {% if sections.video_gen.get('tools') %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for t in sections.video_gen.tools %}
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <div class="flex items-center gap-2">
+            {% if t.get('rank') %}<span style="background:#9333ea;color:white;font-size:0.7rem;font-weight:700;border-radius:9999px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">#{{ t.rank }}</span>{% endif %}
+            <h3 class="font-bold text-lg">{{ t.name }}</h3>
+          </div>
+          {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
+        </div>
+        <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
+        {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
+        <p class="text-sm text-gray-600 mb-1"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
+        {% if t.get('max_length') %}<p class="text-xs text-gray-500 mb-1"><span class="font-medium">Max length:</span> {{ t.max_length }}</p>{% endif %}
+        {% if t.get('max_resolution') %}<p class="text-xs text-gray-500 mb-2"><span class="font-medium">Resolution:</span> {{ t.max_resolution }}</p>{% endif %}
+        <div class="mb-3">{% for s in t.strengths %}<span class="tag tag-purple">{{ s }}</span>{% endfor %}</div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> {{ t.best_for }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% if sections.video_gen.get('sources') %}
+    <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
+      <ul class="space-y-1">{% for s in sections.video_gen.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- WEB SCRAPERS TAB -->
+  <div id="tab-web-scrapers" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold text-gray-700">🕷️ AI Web Scrapers & Browser Automation</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.web_scrapers.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.web_scrapers.summary }}</p>
+    {% endif %}
+    {% if sections.web_scrapers.get('tools') %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for t in sections.web_scrapers.tools %}
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <div class="flex items-center gap-2">
+            {% if t.get('rank') %}<span style="background:#374151;color:white;font-size:0.7rem;font-weight:700;border-radius:9999px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">#{{ t.rank }}</span>{% endif %}
+            <h3 class="font-bold text-lg">{{ t.name }}</h3>
+          </div>
+          {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
+        </div>
+        <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
+        {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
+        {% if t.get('ai_features') %}<div class="mb-2">{% for f in t.ai_features %}<span class="tag tag-amber">{{ f }}</span>{% endfor %}</div>{% endif %}
+        <div class="mb-3">{% for s in t.strengths %}<span class="tag">{{ s }}</span>{% endfor %}</div>
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> {{ t.best_for }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% if sections.web_scrapers.get('sources') %}
+    <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
+      <ul class="space-y-1">{% for s in sections.web_scrapers.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
 </main>
 
 <footer class="text-center text-xs text-gray-400 py-8 border-t border-gray-200 mt-10">
@@ -429,7 +617,7 @@
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + id).classList.add('active');
-    const labels = ['overview','code-tools','models','repositories','databases','observability'];
+    const labels = ['overview','code-tools','models','repositories','databases','observability','image-gen','video-gen','web-scrapers'];
     document.querySelectorAll('.tab-btn')[labels.indexOf(id)].classList.add('active');
     window.scrollTo(0, 0);
   }

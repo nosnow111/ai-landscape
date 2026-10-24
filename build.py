@@ -27,6 +27,9 @@ def build():
         "repositories": load_content("repositories"),
         "databases": load_content("databases"),
         "observability": load_content("observability"),
+        "image_gen": load_content("image_gen"),
+        "video_gen": load_content("video_gen"),
+        "web_scrapers": load_content("web_scrapers"),
     }
 
     html = template.render(sections=sections, refresh_hours=REFRESH_HOURS)

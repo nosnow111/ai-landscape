@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-24
+### Added
+- Image Generation section (Midjourney, DALL-E, Flux, etc. — top 10 by usage)
+- Video Generation section (Sora, Runway, Pika, Kling, etc. — top 10 by usage)
+- AI Web Scrapers & Browser Automation section (Firecrawl, Apify, AgentQL, etc.)
+- Tavily web research queries for all three new sections
+- New tab buttons and detail panels for each new section
+- New overview columns with colored headers for each new section
+
 ## [0.3.0] - 2026-10-24
 ### Changed
 - Switched to static site architecture (GitHub Pages + GitHub Actions)

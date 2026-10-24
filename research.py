@@ -28,6 +28,18 @@ QUERIES = {
         "LLM observability monitoring tools adoption 2026",
         "AI cost monitoring LangSmith Helicone usage 2026",
     ],
+    "image_gen": [
+        "most popular AI image generation tools users 2026 rankings",
+        "Midjourney vs DALL-E vs Stable Diffusion vs Flux adoption 2026",
+    ],
+    "video_gen": [
+        "most popular AI video generation tools 2026 adoption",
+        "Sora Runway Pika Kling Luma video AI comparison 2026",
+    ],
+    "web_scrapers": [
+        "top AI web scraping browser automation tools developers 2026",
+        "Firecrawl Apify AgentQL Browserbase adoption 2026",
+    ],
 }
 
 

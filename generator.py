@@ -88,6 +88,52 @@ SECTIONS = {
             "and 'cost_tips' (array of strings)."
         ),
     },
+    "image_gen": {
+        "title": "AI Image Generation",
+        "prompt": (
+            "List the TOP 10 AI image generation tools ranked by actual user adoption and usage as of your knowledge cutoff. "
+            "Be objective — base rankings on user counts, social media activity, API usage, and developer surveys. "
+            "Include tools like Midjourney, DALL-E 3, Stable Diffusion, Flux, Adobe Firefly, Ideogram, "
+            "Leonardo AI, Runway, Canva AI, and others that qualify. Only include what truly belongs in the top 10. "
+            "For each tool cover: vendor, pricing (free tier + paid), key strengths, output quality, best use case, url. "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of the AI image generation landscape) and "
+            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
+            "strengths (list of strings), best_for (string), url (string))."
+        ),
+    },
+    "video_gen": {
+        "title": "AI Video Generation",
+        "prompt": (
+            "List the TOP 10 AI video and movie generation tools ranked by actual user adoption as of your knowledge cutoff. "
+            "Be objective — include tools like Sora (OpenAI), Runway ML, Pika Labs, Kling AI, Luma Dream Machine, "
+            "HeyGen, Synthesia, Veo (Google), Udio, and others that qualify by actual usage. "
+            "For each tool cover: vendor, pricing, key strengths, max video length/resolution, best use case, url. "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of the AI video generation landscape) and "
+            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
+            "max_length (string), max_resolution (string), "
+            "strengths (list of strings), best_for (string), url (string))."
+        ),
+    },
+    "web_scrapers": {
+        "title": "AI Web Scrapers & Browser Automation",
+        "prompt": (
+            "List the TOP 10 AI-powered web scraping and browser automation tools ranked by developer adoption. "
+            "Include tools like Firecrawl, Apify, Browse.ai, Browserbase, AgentQL, Playwright with AI, "
+            "Wave (Waveterm), Diffbot, Octoparse, and others that qualify. "
+            "Be objective — rank by actual developer usage, GitHub stars, and community adoption. "
+            "For each tool cover: vendor, pricing (free tier + paid), key strengths, "
+            "AI capabilities (LLM-powered extraction, natural language queries, etc.), best use case, url. "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of AI in web scraping and browser automation) and "
+            "'tools' (array of up to 10 items SORTED by adoption rank, where each item has: "
+            "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
+            "ai_features (list of strings), strengths (list of strings), best_for (string), url (string))."
+        ),
+    },
 }
 
 CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
