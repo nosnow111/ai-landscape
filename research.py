@@ -2,12 +2,13 @@
 Web research for content generation.
 
 Provider priority:
-  1. Tavily  — best answer synthesis; uses TAVILY_API_KEY
-  2. Serper  — Google results fallback; uses SERPER_API_KEY
-  3. None    — skips research; Claude generates from training data only
+  1. Firecrawl — AI-optimized search + content extraction; uses FIRECRAWL_API_KEY
+  2. Tavily    — best answer synthesis; uses TAVILY_API_KEY
+  3. Serper    — Google results fallback; uses SERPER_API_KEY
+  4. None      — skips research; Claude generates from training data only
 
-Set whichever key(s) you have in .env. If both are set, Tavily is tried first
-and Serper is used automatically if Tavily hits a rate limit or quota error.
+Set whichever key(s) you have in .env. Firecrawl is tried first (1,000 free/month),
+then Tavily, then Serper. All three give the same 1,000 free queries/month or better.
 """
 
 import os
@@ -74,6 +75,35 @@ QUERIES = {
 }
 
 
+# ── Firecrawl ──────────────────────────────────────────────────────────────
+
+def _firecrawl_search(query: str) -> dict | None:
+    """Returns normalized response dict (Tavily-like shape), or None."""
+    key = os.environ.get("FIRECRAWL_API_KEY")
+    if not key:
+        return None
+    try:
+        import requests
+        resp = requests.post(
+            "https://api.firecrawl.dev/v1/search",
+            headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+            json={"query": query, "limit": 5},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        results = []
+        for item in data.get("data", [])[:3]:
+            results.append({
+                "url": item.get("url", ""),
+                "content": item.get("description") or item.get("markdown", "")[:400],
+            })
+        return {"answer": "", "results": results}
+    except Exception as e:
+        print(f"  Firecrawl error for '{query[:50]}': {e}")
+        return None
+
+
 # ── Tavily ─────────────────────────────────────────────────────────────────
 
 def _tavily_search(query: str, retries: int = 3) -> dict | None:
@@ -102,14 +132,14 @@ def _tavily_search(query: str, retries: int = 3) -> dict | None:
                 print(f"  Tavily rate limited — retrying in {wait}s")
                 time.sleep(wait)
             else:
-                return None  # quota exhausted or error — fall through to Serper
+                return None
     return None
 
 
 # ── Serper ─────────────────────────────────────────────────────────────────
 
 def _serper_search(query: str) -> dict | None:
-    """Returns normalized response dict (same shape as Tavily), or None."""
+    """Returns normalized response dict (Tavily-like shape), or None."""
     key = os.environ.get("SERPER_API_KEY")
     if not key:
         return None
@@ -123,14 +153,12 @@ def _serper_search(query: str) -> dict | None:
         )
         resp.raise_for_status()
         data = resp.json()
-        # Normalize to Tavily-like shape
         results = []
         for item in data.get("organic", [])[:3]:
             results.append({
                 "url": item.get("link", ""),
                 "content": item.get("snippet", ""),
             })
-        # Serper doesn't synthesize an answer — use the answerBox if present
         answer = data.get("answerBox", {}).get("answer") or data.get("answerBox", {}).get("snippet", "")
         return {"answer": answer, "results": results}
     except Exception as e:
@@ -141,17 +169,17 @@ def _serper_search(query: str) -> dict | None:
 # ── unified search ─────────────────────────────────────────────────────────
 
 def _search(query: str) -> dict:
-    """Try Tavily first, fall back to Serper, return empty dict if both fail."""
-    result = _tavily_search(query)
-    if result is not None:
-        return result
-    result = _serper_search(query)
-    if result is not None:
-        return result
+    """Try Firecrawl → Tavily → Serper; return empty dict if all fail."""
+    for fn in (_firecrawl_search, _tavily_search, _serper_search):
+        result = fn(query)
+        if result is not None:
+            return result
     return {}
 
 
 def _active_provider() -> str:
+    if os.environ.get("FIRECRAWL_API_KEY"):
+        return "Firecrawl"
     if os.environ.get("TAVILY_API_KEY"):
         return "Tavily"
     if os.environ.get("SERPER_API_KEY"):
