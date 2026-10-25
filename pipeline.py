@@ -148,15 +148,23 @@ def stage_generate(research_data: dict = None):
 
 
 def stage_validate():
-    stage_banner("validate", "Link relevance check — advisory, never blocks build")
+    stage_banner("validate", "Link relevance check + auto-fix — advisory, never blocks build")
     import validate_links
 
     results = validate_links.validate_all(verbose=True)
     validate_links.print_summary(results)
 
+    # Auto-fix flagged links using Tavily search
+    fixed = validate_links.apply_fixes(results, dry_run=False)
+
     ok = sum(1 for r in results if r["flag"] == "✅ ok")
     flagged = len(results) - ok
-    save_checkpoint("validate", {"total": len(results), "ok": ok, "flagged": flagged})
+    save_checkpoint("validate", {
+        "total": len(results),
+        "ok": ok,
+        "flagged": flagged,
+        "auto_fixed": len(fixed),
+    })
 
 
 def stage_build():
