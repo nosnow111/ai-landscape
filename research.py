@@ -45,6 +45,12 @@ QUERIES = {
         "Sora Runway Pika Kling Luma video AI comparison 2026",
         "AI video generation tools emerging new 2026 complete list",
     ],
+    "fine_tuning": [
+        "LLM fine-tuning platforms tools adoption 2026 developer survey",
+        "OpenAI fine-tuning vs Hugging Face AutoTrain vs Together AI comparison 2026",
+        "fine-tuning vs RAG vs prompt engineering when to use 2026",
+        "open source LLM fine-tuning tools Axolotl Unsloth LLaMA-Factory 2026",
+    ],
     "web_scrapers": [
         "top AI web scraping browser automation tools developers 2026",
         "Firecrawl Apify AgentQL Browserbase adoption 2026",

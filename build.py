@@ -31,6 +31,7 @@ def build():
         "video_gen": load_content("video_gen"),
         "web_scrapers": load_content("web_scrapers"),
         "workspace": load_content("workspace"),
+        "fine_tuning": load_content("fine_tuning"),
     }
 
     html = template.render(sections=sections, refresh_hours=REFRESH_HOURS)

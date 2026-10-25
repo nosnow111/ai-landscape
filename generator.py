@@ -157,6 +157,28 @@ SECTIONS = {
             "capabilities (list of strings), integrations (list of strings), best_for (string), url (string))."
         ),
     },
+    "fine_tuning": {
+        "title": "LLM Fine-Tuning Platforms",
+        "prompt": (
+            "List the TOP 10 platforms and tools for fine-tuning large language models, ranked by actual developer "
+            "and enterprise adoption. Include managed cloud services and open-source frameworks. "
+            "Consider: OpenAI Fine-Tuning API, Hugging Face AutoTrain, Together AI, Replicate, Modal, "
+            "Vertex AI (Google), Amazon Bedrock fine-tuning, Axolotl, LLaMA-Factory, Unsloth, "
+            "and others that qualify by actual usage. "
+            "For each cover: vendor, supported base models, pricing model, whether it requires GPUs locally, "
+            "key features, best use case (e.g. domain adaptation, instruction tuning, RLHF), and url. "
+            "Also include a 'when_to_fine_tune' field (1 sentence on the right scenario to choose fine-tuning "
+            "over RAG or prompt engineering). "
+            f"{_RANK_RULE} "
+            "Return a JSON object with three keys: "
+            "'summary' (2-3 sentences on when fine-tuning makes sense vs RAG vs prompting), "
+            "'when_to_fine_tune' (3-4 bullet points as a list of strings), and "
+            "'tools' (array SORTED by adoption rank, where each item has: "
+            "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
+            "supported_models (list of strings), requires_local_gpu (bool), "
+            "features (list of strings), best_for (string), url (string))."
+        ),
+    },
     "web_scrapers": {
         "title": "AI Web Scrapers & Browser Automation",
         "prompt": (
