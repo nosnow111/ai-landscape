@@ -18,6 +18,14 @@ _RANK_RULE = (
     "Never pad to 15 — only include beyond 10 when the numbers genuinely cluster together."
 )
 
+_URL_RULE = (
+    "URL REQUIREMENT: every item's 'url' field MUST be a real, currently accessible webpage — "
+    "the official product or documentation page for that exact tool or model version. "
+    "Do NOT invent, guess, or hallucinate URLs. "
+    "If you cannot provide a verified URL for an item, omit that item entirely. "
+    "Use the live research data provided above to confirm correct URLs."
+)
+
 SECTIONS = {
     "code_tools": {
         "title": "Code Generation Tools",
@@ -30,7 +38,7 @@ SECTIONS = {
             "Tabnine, and others — rank all candidates then apply the cutoff rule below. "
             "For each tool cover: vendor, pricing (free tier + paid), key strengths, IDE support, "
             "best use case, and vendor website URL. "
-            f"{_RANK_RULE} "
+            f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the AI code generation landscape) and "
             "'tools' (array SORTED by adoption rank, where each item has: "
@@ -41,9 +49,9 @@ SECTIONS = {
     "models": {
         "title": "Major AI Models",
         "prompt": (
-            "List the TOP 10 large language models ranked strictly by real-world developer usage and adoption "
-            "as of your knowledge cutoff. Be completely objective and unbiased — do NOT assume any model belongs "
-            "in the list. Base rankings on: API call volume, developer surveys (Stack Overflow, JetBrains), "
+            "List the TOP 10 large language models ranked strictly by real-world developer usage and adoption. "
+            "Be completely objective and unbiased — do NOT assume any model belongs in the list. "
+            "Base rankings on: API call volume, developer surveys (Stack Overflow, JetBrains), "
             "HuggingFace download stats, and public adoption data. "
             "IMPORTANT: also factor in enterprise and aggregator reach — a model available through multiple "
             "cloud aggregators (AWS Bedrock, Azure OpenAI, Google Vertex AI, Snowflake Cortex, IBM watsonx) "
@@ -55,7 +63,7 @@ SECTIONS = {
             "open source flag, usage rank (integer 1=most used), popularity_notes (1 sentence citing the "
             "specific data or reason for this rank, including aggregator availability if relevant), "
             "key strengths (list), best use case, vendor website URL. "
-            f"{_RANK_RULE} "
+            f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the LLM landscape today) and "
             "'models' (array SORTED by rank ascending, where each item has: "
@@ -112,7 +120,7 @@ SECTIONS = {
             "Modal, and others that qualify by actual enterprise adoption. "
             "For each cover: what it does (training, deployment, experiment tracking, etc.), "
             "cloud provider, pricing model, who uses it, key differentiators, and url. "
-            f"{_RANK_RULE} "
+            f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentences on the ML platform landscape and when you need one vs. just using a model API) and "
             "'platforms' (array ranked by enterprise adoption, each with: "
@@ -163,7 +171,7 @@ SECTIONS = {
             "Include tools like Midjourney, DALL-E 3, Stable Diffusion, Flux, Adobe Firefly, Ideogram, "
             "Leonardo AI, Runway, Canva AI, and others that qualify — rank all candidates then apply the cutoff rule below. "
             "For each tool cover: vendor, pricing (free tier + paid), key strengths, output quality, best use case, url. "
-            f"{_RANK_RULE} "
+            f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the AI image generation landscape) and "
             "'tools' (array SORTED by adoption rank, where each item has: "
@@ -178,7 +186,7 @@ SECTIONS = {
             "Be objective — include tools like Sora (OpenAI), Runway ML, Pika Labs, Kling AI, Luma Dream Machine, "
             "HeyGen, Synthesia, Veo (Google), Udio, and others that qualify by actual usage. "
             "For each tool cover: vendor, pricing, key strengths, max video length/resolution, best use case, url. "
-            f"{_RANK_RULE} "
+            f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of the AI video generation landscape) and "
             "'tools' (array SORTED by adoption rank, where each item has: "
@@ -199,7 +207,7 @@ SECTIONS = {
             "Be objective — rank by real adoption, user counts, and enterprise deployments. "
             "For each tool cover: vendor, pricing (free tier + paid), key capabilities, "
             "which apps/platforms it integrates with, best use case, and url. "
-            f"{_RANK_RULE} "
+            f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of AI in productivity and workspace tools) and "
             "'tools' (array SORTED by adoption rank, where each item has: "
@@ -237,7 +245,7 @@ SECTIONS = {
             "key features, best use case (e.g. domain adaptation, instruction tuning, RLHF), and url. "
             "Also include a 'when_to_fine_tune' field (1 sentence on the right scenario to choose fine-tuning "
             "over RAG or prompt engineering). "
-            f"{_RANK_RULE} "
+            f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with three keys: "
             "'summary' (2-3 sentences on when fine-tuning makes sense vs RAG vs prompting), "
             "'when_to_fine_tune' (3-4 bullet points as a list of strings), and "
@@ -256,7 +264,7 @@ SECTIONS = {
             "Be objective — rank by actual developer usage, GitHub stars, and community adoption. "
             "For each tool cover: vendor, pricing (free tier + paid), key strengths, "
             "AI capabilities (LLM-powered extraction, natural language queries, etc.), best use case, url. "
-            f"{_RANK_RULE} "
+            f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
             "'summary' (2-3 sentence overview of AI in web scraping and browser automation) and "
             "'tools' (array SORTED by adoption rank, where each item has: "
