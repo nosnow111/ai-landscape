@@ -322,25 +322,25 @@
           <div onclick="showTab('databases')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-amber-50 transition-colors ">
             <p class="text-xs font-bold text-gray-800 mb-1">Snowflake (Cortex AI)</p>
             <p class="text-xs text-gray-500">Snowflake Cortex AI</p>
-            <span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Vector Search</span>
+            <span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Vector ✓</span>
           </div>
           
           <div onclick="showTab('databases')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-amber-50 transition-colors ">
             <p class="text-xs font-bold text-gray-800 mb-1">Google BigQuery (BigQuery ML + Vertex AI)</p>
             <p class="text-xs text-gray-500">BigQuery ML and Vertex AI Integration</p>
-            <span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Vector Search</span>
+            <span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Vector ✓</span>
           </div>
           
           <div onclick="showTab('databases')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-amber-50 transition-colors ">
             <p class="text-xs font-bold text-gray-800 mb-1">PostgreSQL (pgvector + pgai)</p>
             <p class="text-xs text-gray-500">pgvector and pgai Extensions</p>
-            <span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Vector Search</span>
+            <span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Vector ✓</span>
           </div>
           
           <div onclick="showTab('databases')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-amber-50 transition-colors rounded-b-xl">
-            <p class="text-xs font-bold text-gray-800 mb-1">Amazon (Aurora ML + Redshift ML)</p>
-            <p class="text-xs text-gray-500">Aurora ML and Redshift ML</p>
-            <span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Vector Search</span>
+            <p class="text-xs font-bold text-gray-800 mb-1">Amazon Aurora ML</p>
+            <p class="text-xs text-gray-500">Aurora ML (SageMaker + Comprehend integration)</p>
+            <span style="background:#fee2e2;color:#991b1b;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">No native vector</span>
           </div>
           
         
@@ -2044,9 +2044,10 @@
       <div class="card">
         <div class="flex justify-between items-start mb-1">
           <h3 class="font-bold text-lg">Snowflake (Cortex AI)</h3>
-          <span class="tag tag-green">Vector Search</span>
+          <span class="tag tag-green">Vector Search ✓</span>
         </div>
         <p class="text-xs text-indigo-600 font-medium mb-1">Snowflake Cortex AI</p>
+        
         <a href="https://docs.snowflake.com/en/guides-overview-ai-features" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.snowflake.com/en/guides-overview-ai-features</a>
         <p class="text-sm text-gray-700 mb-2">Snowflake Cortex AI is a suite of fully managed AI and ML capabilities running natively inside the Snowflake AI Data Cloud. It includes Cortex LLM Functions for text summarization, classification, translation, and sentiment analysis via SQL; Cortex Analyst for natural language to SQL query generation; Cortex Search for hybrid vector and keyword retrieval; and Cortex Fine-tuning for customizing LLMs on proprietary data. As of February 2026, Snowflake Postgres runs natively in the AI Data Cloud and integrates with pgvector for vector similarity search, while Cortex provides text-to-SQL and embedding generation directly against Postgres data. All compute stays within the Snowflake security perimeter with no data egress to external model providers.</p>
         <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Native LLM functions via COMPLETE(), EMBED_TEXT_768(), EMBED_TEXT_1024() and others in SQL; supports Mistral, Llama 3, Snowflake Arctic, and Reka models; Cortex Analyst provides text-to-SQL; integrates with Snowflake Postgres via pgvector extension for vector similarity search</p>
@@ -2056,9 +2057,10 @@
       <div class="card">
         <div class="flex justify-between items-start mb-1">
           <h3 class="font-bold text-lg">Google BigQuery (BigQuery ML + Vertex AI)</h3>
-          <span class="tag tag-green">Vector Search</span>
+          <span class="tag tag-green">Vector Search ✓</span>
         </div>
         <p class="text-xs text-indigo-600 font-medium mb-1">BigQuery ML and Vertex AI Integration</p>
+        
         <a href="https://cloud.google.com/bigquery/docs/bqml-introduction" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://cloud.google.com/bigquery/docs/bqml-introduction</a>
         <p class="text-sm text-gray-700 mb-2">BigQuery ML allows data analysts to create, train, and deploy ML models using standard SQL directly inside BigQuery, covering logistic regression, boosted trees, matrix factorization, time series forecasting with ARIMA+, and deep neural networks. BigQuery Vector Search adds native approximate nearest neighbor search over ARRAY<FLOAT64> embedding columns using the VECTOR_SEARCH() SQL function. Vertex AI integration enables remote model inference so BigQuery can call Gemini and other Vertex AI hosted models inline during SQL queries via ML.GENERATE_TEXT() and ML.EMBED_TEXT(), enabling RAG pipelines, summarization, and classification without data leaving Google Cloud. Embeddings can be generated at scale using ML.EMBED_TEXT against Vertex AI embedding endpoints.</p>
         <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> ML.GENERATE_TEXT() calls Gemini Pro, Gemini Flash, and other Vertex AI models from SQL; ML.EMBED_TEXT() generates embeddings via Vertex AI text embedding models; VECTOR_SEARCH() performs ANN search over stored embeddings; supports grounding and RAG workflows natively</p>
@@ -2068,9 +2070,10 @@
       <div class="card">
         <div class="flex justify-between items-start mb-1">
           <h3 class="font-bold text-lg">PostgreSQL (pgvector + pgai)</h3>
-          <span class="tag tag-green">Vector Search</span>
+          <span class="tag tag-green">Vector Search ✓</span>
         </div>
         <p class="text-xs text-indigo-600 font-medium mb-1">pgvector and pgai Extensions</p>
+        
         <a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://github.com/pgvector/pgvector</a>
         <p class="text-sm text-gray-700 mb-2">pgvector is an open-source PostgreSQL extension that adds a native vector data type and similarity search operators to Postgres, supporting exact and approximate nearest neighbor search via IVFFlat and HNSW indexing algorithms. It requires no new infrastructure, uses the same security model, backup procedures, and tooling as the existing Postgres instance, making it the lowest-friction path to vector search. pgai is a complementary extension from Timescale that adds SQL functions to call external LLM providers including OpenAI, Ollama, and Anthropic directly from Postgres queries, enabling embedding generation, text completion, and moderation checks inside SQL. For most teams, pgvector on Postgres is recommended as the best vector database for RAG in 2026, handling up to 50 million vectors effectively. Snowflake Postgres now runs natively in the AI Data Cloud with pgvector integration, and pgvector also integrates well with Databricks.</p>
         <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> pgai extension provides pg_openai_embed(), pg_openai_complete(), and similar SQL functions calling OpenAI, Anthropic, Cohere, and Ollama APIs; Snowflake Cortex adds text-to-SQL and embedding generation when running on Snowflake Postgres; no native built-in LLM but integrates with any external provider via pgai</p>
@@ -2079,22 +2082,37 @@
       
       <div class="card">
         <div class="flex justify-between items-start mb-1">
-          <h3 class="font-bold text-lg">Amazon (Aurora ML + Redshift ML)</h3>
-          <span class="tag tag-green">Vector Search</span>
+          <h3 class="font-bold text-lg">Amazon Aurora ML</h3>
+          <span class="tag tag-rose">No Native Vector</span>
         </div>
-        <p class="text-xs text-indigo-600 font-medium mb-1">Aurora ML and Redshift ML</p>
+        <p class="text-xs text-indigo-600 font-medium mb-1">Aurora ML (SageMaker + Comprehend integration)</p>
+        <p class="text-xs text-gray-400 italic mb-1">Via pgvector extension on Aurora PostgreSQL only — not native, not available on Aurora MySQL</p>
+        <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-ml.html" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-ml.html</a>
+        <p class="text-sm text-gray-700 mb-2">Aurora ML integrates Amazon Aurora (PostgreSQL and MySQL compatible) with Amazon SageMaker and Amazon Comprehend, letting you call hosted ML model endpoints directly from SQL functions during queries. Aurora PostgreSQL also supports pgvector as an extension for vector similarity search, enabling RAG workloads without data leaving the AWS perimeter. Aurora MySQL does not support pgvector.</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Calls SageMaker-hosted model endpoints and Amazon Comprehend for NLP tasks (sentiment, entity detection) from SQL; pgvector on Aurora PostgreSQL enables embedding storage and ANN search</p>
+        <p class="text-sm text-gray-500">Standard Aurora instance pricing plus SageMaker endpoint costs per invocation; pgvector has no additional licensing cost on Aurora PostgreSQL</p>
+      </div>
+      
+      <div class="card">
+        <div class="flex justify-between items-start mb-1">
+          <h3 class="font-bold text-lg">Amazon Redshift ML</h3>
+          <span class="tag tag-green">Vector Search ✓</span>
+        </div>
+        <p class="text-xs text-indigo-600 font-medium mb-1">Redshift ML (SageMaker AutoPilot + Bedrock integration)</p>
+        <p class="text-xs text-gray-400 italic mb-1">Native approximate nearest neighbor vector similarity search built into Redshift</p>
         <a href="https://aws.amazon.com/redshift/features/redshift-ml/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://aws.amazon.com/redshift/features/redshift-ml/</a>
-        <p class="text-sm text-gray-700 mb-2">Redshift ML allows users to create, train, and invoke ML models using SQL CREATE MODEL statements; it automatically exports data to Amazon S3, trains models in Amazon SageMaker AutoPilot, and imports the model back as a SQL function callable in queries, supporting classification, regression, and K-means clustering. Aurora ML integrates Amazon Aurora (MySQL and PostgreSQL compatible) with SageMaker and Amazon Comprehend, enabling SQL functions that call hosted ML model endpoints for inference directly during database queries. Amazon Aurora PostgreSQL also supports pgvector as an extension for native vector similarity search, enabling RAG workloads without leaving the database. Redshift supports approximate nearest neighbor vector similarity search natively for embedding-based workloads, and integrates with Amazon Bedrock for LLM inference from SQL via the ML.PREDICT function family.</p>
-        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Aurora PostgreSQL supports pgvector for vector search plus Amazon Comprehend integration for NLP; Redshift ML integrates with Amazon Bedrock via SageMaker endpoints for LLM inference in SQL; supports calling Titan, Claude, and other Bedrock models for text generation and embedding tasks from query context</p>
-        <p class="text-sm text-gray-500">Redshift ML model training billed through SageMaker AutoPilot per training hour; prediction inference billed per query in Redshift standard compute; Aurora ML charges standard Aurora instance pricing plus SageMaker endpoint costs per invocation; pgvector on Aurora PostgreSQL has no additional licensing cost beyond standard Aurora pricing; Bedrock model calls billed per token by Amazon Bedrock separately</p>
+        <p class="text-sm text-gray-700 mb-2">Redshift ML lets you create, train, and invoke ML models using SQL CREATE MODEL statements. It exports data to S3, trains via SageMaker AutoPilot, and imports the model back as a SQL function — supporting classification, regression, and K-means. Redshift also supports vector similarity search natively for embedding-based workloads and integrates with Amazon Bedrock for LLM inference from SQL.</p>
+        <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Integrates with Amazon Bedrock via SageMaker endpoints for LLM inference in SQL; supports Titan, Claude, and other Bedrock models for text generation and embedding tasks</p>
+        <p class="text-sm text-gray-500">Model training billed through SageMaker AutoPilot per training hour; inference billed per query in standard Redshift compute; Bedrock model calls billed per token separately</p>
       </div>
       
       <div class="card">
         <div class="flex justify-between items-start mb-1">
           <h3 class="font-bold text-lg">Databricks (MLflow + DBRX)</h3>
-          <span class="tag tag-green">Vector Search</span>
+          <span class="tag tag-green">Vector Search ✓</span>
         </div>
         <p class="text-xs text-indigo-600 font-medium mb-1">Databricks AI — MLflow, DBRX, Mosaic AI, and Vector Search</p>
+        
         <a href="https://docs.databricks.com/en/machine-learning/index.html" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.databricks.com/en/machine-learning/index.html</a>
         <p class="text-sm text-gray-700 mb-2">Databricks provides an integrated AI platform combining MLflow for end-to-end ML lifecycle management (experiment tracking, model registry, deployment, and observability), Mosaic AI for training and fine-tuning LLMs at scale, and DBRX as Databricks' own open-source mixture-of-experts LLM. Databricks Vector Search is a native serverless vector database built into the Lakehouse that automatically syncs with Delta Lake tables, supports real-time and batch indexing, and provides ANN search via REST API and Python SDK. Databricks AI Gateway provides a unified endpoint for calling external LLMs including OpenAI, Anthropic, and self-hosted models with governance, rate limiting, and cost tracking. Mosaic AI Model Serving hosts custom and foundation models as scalable REST endpoints. pgvector integrates well with Databricks for teams using Postgres alongside the Lakehouse.</p>
         <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Databricks AI Gateway provides governed access to OpenAI, Anthropic, Azure OpenAI, and self-hosted models from notebooks and pipelines; DBRX open-source LLM available for self-hosting or via Databricks Model Serving; Mosaic AI supports LLM fine-tuning with proprietary data; Foundation Model APIs provide pay-per-token access to Llama 3, DBRX, and Mixtral from within Databricks</p>
@@ -2104,9 +2122,10 @@
       <div class="card">
         <div class="flex justify-between items-start mb-1">
           <h3 class="font-bold text-lg">MongoDB Atlas Vector Search</h3>
-          <span class="tag tag-green">Vector Search</span>
+          <span class="tag tag-green">Vector Search ✓</span>
         </div>
         <p class="text-xs text-indigo-600 font-medium mb-1">MongoDB Atlas Vector Search</p>
+        
         <a href="https://www.mongodb.com/products/platform/atlas-vector-search" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.mongodb.com/products/platform/atlas-vector-search</a>
         <p class="text-sm text-gray-700 mb-2">MongoDB Atlas Vector Search is a native capability of MongoDB Atlas that stores vector embeddings directly alongside operational document data in the same collection, enabling semantic similarity search without a separate vector store. It uses an HNSW (Hierarchical Navigable Small World) index for approximate nearest neighbor search and is queried via the MongoDB Aggregation Pipeline using the $vectorSearch stage, allowing vector search to be combined with standard MongoDB filters, projections, and joins in a single query. Atlas Vector Search integrates with major embedding providers including OpenAI, Cohere, and HuggingFace, and is a first-class component in LangChain, LlamaIndex, and other RAG frameworks. Atlas also offers Atlas Stream Processing and Atlas SQL Interface, enabling hybrid transactional, analytical, and AI workloads on one platform without ETL. As of 2026, MongoDB Atlas is listed among the top enterprise vector databases with strong adoption in production RAG applications.</p>
         <p class="text-sm mb-1"><span class="font-medium">LLM Integration:</span> Integrates natively with LangChain, LlamaIndex, and Hugging Face as a vector store backend; supports OpenAI, Cohere, and Voyage AI embedding models for automatic embedding generation via Atlas triggers or application layer; Atlas integrations marketplace provides pre-built connectors to OpenAI and Azure OpenAI for end-to-end RAG pipeline setup</p>

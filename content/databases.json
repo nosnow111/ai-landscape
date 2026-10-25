@@ -29,12 +29,23 @@
       "url": "https://github.com/pgvector/pgvector"
     },
     {
-      "name": "Amazon (Aurora ML + Redshift ML)",
-      "ai_feature": "Aurora ML and Redshift ML",
-      "description": "Redshift ML allows users to create, train, and invoke ML models using SQL CREATE MODEL statements; it automatically exports data to Amazon S3, trains models in Amazon SageMaker AutoPilot, and imports the model back as a SQL function callable in queries, supporting classification, regression, and K-means clustering. Aurora ML integrates Amazon Aurora (MySQL and PostgreSQL compatible) with SageMaker and Amazon Comprehend, enabling SQL functions that call hosted ML model endpoints for inference directly during database queries. Amazon Aurora PostgreSQL also supports pgvector as an extension for native vector similarity search, enabling RAG workloads without leaving the database. Redshift supports approximate nearest neighbor vector similarity search natively for embedding-based workloads, and integrates with Amazon Bedrock for LLM inference from SQL via the ML.PREDICT function family.",
+      "name": "Amazon Aurora ML",
+      "ai_feature": "Aurora ML (SageMaker + Comprehend integration)",
+      "description": "Aurora ML integrates Amazon Aurora (PostgreSQL and MySQL compatible) with Amazon SageMaker and Amazon Comprehend, letting you call hosted ML model endpoints directly from SQL functions during queries. Aurora PostgreSQL also supports pgvector as an extension for vector similarity search, enabling RAG workloads without data leaving the AWS perimeter. Aurora MySQL does not support pgvector.",
+      "vector_search": false,
+      "vector_search_notes": "Via pgvector extension on Aurora PostgreSQL only — not native, not available on Aurora MySQL",
+      "llm_integration": "Calls SageMaker-hosted model endpoints and Amazon Comprehend for NLP tasks (sentiment, entity detection) from SQL; pgvector on Aurora PostgreSQL enables embedding storage and ANN search",
+      "pricing_notes": "Standard Aurora instance pricing plus SageMaker endpoint costs per invocation; pgvector has no additional licensing cost on Aurora PostgreSQL",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-ml.html"
+    },
+    {
+      "name": "Amazon Redshift ML",
+      "ai_feature": "Redshift ML (SageMaker AutoPilot + Bedrock integration)",
+      "description": "Redshift ML lets you create, train, and invoke ML models using SQL CREATE MODEL statements. It exports data to S3, trains via SageMaker AutoPilot, and imports the model back as a SQL function — supporting classification, regression, and K-means. Redshift also supports vector similarity search natively for embedding-based workloads and integrates with Amazon Bedrock for LLM inference from SQL.",
       "vector_search": true,
-      "llm_integration": "Aurora PostgreSQL supports pgvector for vector search plus Amazon Comprehend integration for NLP; Redshift ML integrates with Amazon Bedrock via SageMaker endpoints for LLM inference in SQL; supports calling Titan, Claude, and other Bedrock models for text generation and embedding tasks from query context",
-      "pricing_notes": "Redshift ML model training billed through SageMaker AutoPilot per training hour; prediction inference billed per query in Redshift standard compute; Aurora ML charges standard Aurora instance pricing plus SageMaker endpoint costs per invocation; pgvector on Aurora PostgreSQL has no additional licensing cost beyond standard Aurora pricing; Bedrock model calls billed per token by Amazon Bedrock separately",
+      "vector_search_notes": "Native approximate nearest neighbor vector similarity search built into Redshift",
+      "llm_integration": "Integrates with Amazon Bedrock via SageMaker endpoints for LLM inference in SQL; supports Titan, Claude, and other Bedrock models for text generation and embedding tasks",
+      "pricing_notes": "Model training billed through SageMaker AutoPilot per training hour; inference billed per query in standard Redshift compute; Bedrock model calls billed per token separately",
       "url": "https://aws.amazon.com/redshift/features/redshift-ml/"
     },
     {
