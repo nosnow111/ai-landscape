@@ -10,9 +10,9 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
     .tab-btn {
-      padding: 6px 16px;
+      padding: 4px 10px;
       border-radius: 9999px;
-      font-size: 0.875rem;
+      font-size: 0.78rem;
       font-weight: 500;
       white-space: nowrap;
       border: 2px solid transparent;
@@ -54,27 +54,24 @@
 <!-- Header -->
 <header style="background: linear-gradient(135deg, #0f0c29 0%, #302b63 45%, #1a1a2e 100%); position: relative; overflow: hidden;" class="text-white py-3 px-6 shadow-xl">
   <div style="position:absolute;inset:0;background-image:radial-gradient(circle, rgba(167,139,250,0.18) 1px, transparent 1px);background-size:28px 28px;pointer-events:none;"></div>
-  <div style="position:relative;z-index:1;max-width:1280px;margin:0 auto;">
-    <!-- Row 1: title left, emoji right -->
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <h1 class="text-2xl font-bold tracking-tight">AI Landscape Dashboard</h1>
-        <span class="text-2xl leading-none" title="One API call at a time...">🤖🌍⚡</span>
-      </div>
-      <p class="text-indigo-300 text-sm italic hidden sm:block">"AI is taking over — one benchmark at a time"</p>
+  <div style="position:relative;z-index:1;max-width:1280px;margin:0 auto;text-align:center;">
+    <!-- Row 1: title + emoji centered -->
+    <div class="flex items-center justify-center gap-3">
+      <h1 class="text-2xl font-bold tracking-tight">AI Landscape Dashboard</h1>
+      <span class="text-2xl leading-none" title="One API call at a time...">🤖🌍⚡</span>
     </div>
-    <!-- Row 2: meta left, attribution right -->
+    <!-- Row 2: meta + attribution centered -->
     {% set any_meta = sections.code_tools.get('_meta') or sections.models.get('_meta') %}
-    <div class="flex items-center justify-between mt-1">
-      <p class="text-indigo-400 text-xs">Auto-generated · refreshed every {{ refresh_hours }}h{% if any_meta %} · Last updated: {{ any_meta.generated_at[:19] | replace('T',' ') }} UTC{% endif %}</p>
-      <p class="text-indigo-400 text-xs">Curated by <span class="text-indigo-200 font-semibold">Vlad Meyman</span> · Ranked by <span class="text-indigo-200 font-semibold">Claude AI</span></p>
-    </div>
+    <p class="text-indigo-400 text-xs mt-1">
+      Auto-generated · refreshed every {{ refresh_hours }}h{% if any_meta %} · Last updated: {{ any_meta.generated_at[:19] | replace('T',' ') }} UTC{% endif %}
+      · Curated by <span class="text-indigo-200 font-semibold">Vlad Meyman</span> · Ranked by <span class="text-indigo-200 font-semibold">Claude AI</span>
+    </p>
   </div>
 </header>
 
 <!-- Tab Navigation -->
 <nav class="sticky top-0 z-10 bg-white border-b-2 border-indigo-100 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 flex gap-2 overflow-x-auto py-3">
+  <div class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto py-2">
     <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
     <button class="tab-btn" onclick="showTab('code-tools')">⌨️ Code Tools</button>
     <button class="tab-btn" onclick="showTab('models')">🧠 Models</button>
@@ -84,7 +81,7 @@
     <button class="tab-btn" onclick="showTab('image-gen')">🖼️ Image Gen</button>
     <button class="tab-btn" onclick="showTab('video-gen')">🎬 Video Gen</button>
     <button class="tab-btn" onclick="showTab('web-scrapers')">🕷️ Web Scrapers</button>
-    <button class="tab-btn" onclick="showTab('workspace')">💼 Workspace</button>
+    <button class="tab-btn" onclick="showTab('workspace')">💼 Workspace Tools</button>
   </div>
 </nav>
 
