@@ -47,8 +47,14 @@
     .tag-purple { background: #ede9fe; color: #5b21b6; }
     .tag-amber { background: #fef3c7; color: #92400e; }
     .tag-rose { background: #ffe4e6; color: #9f1239; }
+    .agree-strong { background:#dcfce7; color:#166534; font-size:0.6rem; font-weight:700; padding:1px 5px; border-radius:4px; }
+    .agree-minor  { background:#fef3c7; color:#92400e; font-size:0.6rem; font-weight:700; padding:1px 5px; border-radius:4px; }
+    .agree-disagree { background:#fee2e2; color:#991b1b; font-size:0.6rem; font-weight:700; padding:1px 5px; border-radius:4px; }
+    .agree-excluded { background:#f3f4f6; color:#6b7280; font-size:0.6rem; font-weight:700; padding:1px 5px; border-radius:4px; }
   </style>
 </head>
+{% macro agreement_badge(item) %}{% if item.get('rank_agreement') %}{% if item.rank_agreement == 'strong' %}<span class="agree-strong" title="Sonnet #{{ item.rank }} · Opus #{{ item.opus_rank }}">✅ Consensus</span>{% elif item.rank_agreement == 'minor' %}<span class="agree-minor" title="Sonnet #{{ item.rank }} · Opus #{{ item.opus_rank }}">🟡 Minor diff</span>{% elif item.rank_agreement == 'disagree' %}<span class="agree-disagree" title="Sonnet #{{ item.rank }} · Opus #{{ item.opus_rank }}">🔴 Disagree</span>{% elif item.rank_agreement == 'excluded' %}<span class="agree-excluded" title="Opus did not include this in its top list">⚪ Opus excluded</span>{% endif %}{% endif %}{% endmacro %}
+{% macro opus_additions(section) %}{% if section.get('notable_opus_additions') %}<div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm"><span class="font-semibold text-amber-800">🔍 Opus-only picks</span> <span class="text-amber-700">— Claude Opus ranked these in its top 10 but Sonnet did not: <strong>{{ section.notable_opus_additions | join(', ') }}</strong></span></div>{% endif %}{% endmacro %}
 <body class="bg-gray-50 text-gray-800 font-sans">
 
 <!-- Header -->
@@ -432,6 +438,7 @@
           </div>
           {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
         </div>
+        <div class="mb-1">{{ agreement_badge(t) }}</div>
         <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
         {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
@@ -441,6 +448,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.code_tools) }}
     {% if sections.code_tools.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
@@ -478,6 +486,7 @@
             <th class="px-4 py-3 text-left">Cost Out /1M</th>
             <th class="px-4 py-3 text-left">Open</th>
             <th class="px-4 py-3 text-left">Why This Rank</th>
+            <th class="px-4 py-3 text-left">Consensus</th>
             <th class="px-4 py-3 text-left">Link</th>
           </tr>
         </thead>
@@ -492,6 +501,7 @@
             <td class="px-4 py-3">{{ m.cost_output }}</td>
             <td class="px-4 py-3">{% if m.open_source %}<span class="tag tag-green">Yes</span>{% else %}<span class="text-gray-400">No</span>{% endif %}</td>
             <td class="px-4 py-3 text-gray-500 text-xs" style="max-width:200px;">{{ m.get('popularity_notes', '') }}</td>
+            <td class="px-4 py-3">{{ agreement_badge(m) }}</td>
             <td class="px-4 py-3">{% if m.get('url') %}<a href="{{ m.url }}" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a>{% endif %}</td>
           </tr>
           {% endfor %}
@@ -508,6 +518,7 @@
           </div>
           {% if m.open_source %}<span class="tag tag-green">Open Source</span>{% endif %}
         </div>
+        <div class="mb-1">{{ agreement_badge(m) }}</div>
         <p class="text-xs text-gray-400 mb-1">{{ m.vendor }}</p>
         {% if m.get('popularity_notes') %}<p class="text-xs text-indigo-600 mb-2 italic">{{ m.popularity_notes }}</p>{% endif %}
         {% if m.get('url') %}<a href="{{ m.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ m.url }}</a>{% endif %}
@@ -515,6 +526,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.models) }}
     {% if sections.models.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
@@ -623,6 +635,7 @@
           <h3 class="font-bold">{{ p.name }}</h3>
           {% if p.data_residency %}<span class="tag tag-green">Data residency</span>{% endif %}
         </div>
+        <div class="mb-1">{{ agreement_badge(p) }}</div>
         <p class="text-xs text-gray-400 mb-2">{{ p.vendor }}</p>
         {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ p.url }}</a>{% endif %}
         {% if p.get('available_models') %}<p class="text-xs text-gray-500 mb-2"><span class="font-medium">Models:</span> {{ p.available_models | join(', ') }}</p>{% endif %}
@@ -631,6 +644,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.enterprise_apis) }}
     {% if sections.enterprise_apis.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources</p>
@@ -691,6 +705,7 @@
         </div>
         <p class="text-xs text-gray-400 mb-1">{{ p.vendor }} · {{ p.cloud }}</p>
         {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ p.url }}</a>{% endif %}
+        <div class="mb-1">{{ agreement_badge(p) }}</div>
         <div class="flex gap-2 mb-2">
           {% if p.supports_training %}<span class="tag tag-amber">Training</span>{% endif %}
           {% if p.supports_deployment %}<span class="tag tag-green">Deployment</span>{% endif %}
@@ -700,6 +715,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.ml_platforms) }}
     {% if sections.ml_platforms.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources</p>
@@ -813,6 +829,7 @@
           </div>
           {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
         </div>
+        <div class="mb-1">{{ agreement_badge(t) }}</div>
         <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
         {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
@@ -821,6 +838,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.image_gen) }}
     {% if sections.image_gen.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
@@ -852,6 +870,7 @@
           </div>
           {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
         </div>
+        <div class="mb-1">{{ agreement_badge(t) }}</div>
         <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
         {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
         <p class="text-sm text-gray-600 mb-1"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
@@ -862,6 +881,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.video_gen) }}
     {% if sections.video_gen.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
@@ -893,6 +913,7 @@
           </div>
           {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
         </div>
+        <div class="mb-1">{{ agreement_badge(t) }}</div>
         <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
         {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
@@ -902,6 +923,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.web_scrapers) }}
     {% if sections.web_scrapers.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
@@ -933,6 +955,7 @@
           </div>
           {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
         </div>
+        <div class="mb-1">{{ agreement_badge(t) }}</div>
         <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
         {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
@@ -942,6 +965,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.workspace) }}
     {% if sections.workspace.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
@@ -1092,6 +1116,7 @@
           </div>
           {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
         </div>
+        <div class="mb-1">{{ agreement_badge(t) }}</div>
         <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
         {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
         <p class="text-sm text-gray-600 mb-1"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
@@ -1101,6 +1126,7 @@
       </div>
       {% endfor %}
     </div>
+    {{ opus_additions(sections.fine_tuning) }}
     {% if sections.fine_tuning.get('sources') %}
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>

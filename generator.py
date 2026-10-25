@@ -266,9 +266,29 @@ SECTIONS = {
 
 CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
 
+# Sections that have ranked items — eligible for dual-model cross-check
+RANKED_SECTIONS = {
+    "code_tools", "models", "image_gen", "video_gen",
+    "web_scrapers", "workspace", "fine_tuning", "ml_platforms", "enterprise_apis",
+}
 
-def generate_section(key: str, section: dict, research_context: str = "") -> dict:
-    print(f"  Generating: {section['title']}")
+# Key of the items array within each section's JSON
+_ITEMS_KEY = {"models": "models", "enterprise_apis": "platforms", "ml_platforms": "platforms"}
+
+
+def _items_key(key: str) -> str:
+    return _ITEMS_KEY.get(key, "tools")
+
+
+def _normalize(name: str) -> str:
+    import re
+    return re.sub(r"[^a-z0-9]", "", name.lower())
+
+
+def generate_section(key: str, section: dict, research_context: str = "",
+                     model: str = "claude-sonnet-4-6") -> dict:
+    short = model.split("-")[1]  # "sonnet" or "opus"
+    print(f"  Generating [{short}]: {section['title']}")
     context_block = ""
     if research_context:
         context_block = (
@@ -279,7 +299,7 @@ def generate_section(key: str, section: dict, research_context: str = "") -> dic
             "Supplement with your own knowledge where the research is incomplete.\n\n"
         )
     message = client.messages.create(
-        model="claude-sonnet-4-6",
+        model=model,
         max_tokens=8192,
         messages=[
             {
@@ -300,6 +320,41 @@ def generate_section(key: str, section: dict, research_context: str = "") -> dic
     return data
 
 
+def annotate_agreement(key: str, primary: dict, opus: dict) -> dict:
+    """Compare primary (sonnet) and opus rankings; annotate each item with agreement level."""
+    ik = _items_key(key)
+    primary_items = primary.get(ik, [])
+    opus_items = opus.get(ik, [])
+
+    opus_lookup = {_normalize(item.get("name", "")): item.get("rank") for item in opus_items}
+
+    for item in primary_items:
+        n = _normalize(item.get("name", ""))
+        p_rank = item.get("rank")
+        o_rank = opus_lookup.get(n)
+        item["opus_rank"] = o_rank
+        if o_rank is None:
+            item["rank_agreement"] = "excluded"   # opus didn't include it in top 10-15
+        elif abs(p_rank - o_rank) == 0:
+            item["rank_agreement"] = "strong"
+        elif abs(p_rank - o_rank) <= 2:
+            item["rank_agreement"] = "minor"
+        else:
+            item["rank_agreement"] = "disagree"
+
+    # Tools in opus top-10 that sonnet didn't include
+    primary_names = {_normalize(item.get("name", "")) for item in primary_items}
+    additions = [
+        item["name"] for item in opus_items
+        if item.get("rank", 99) <= 10 and _normalize(item.get("name", "")) not in primary_names
+    ]
+    if additions:
+        primary["notable_opus_additions"] = additions
+
+    primary["cross_checked"] = True
+    return primary
+
+
 def run_generation(sections: list = None):
     os.makedirs(CONTENT_DIR, exist_ok=True)
     targets = sections or list(SECTIONS.keys())
@@ -317,7 +372,18 @@ def run_generation(sections: list = None):
         section_research = research_data.get(key, {})
         context = section_research.get("context", "") if isinstance(section_research, dict) else ""
         sources = section_research.get("sources", []) if isinstance(section_research, dict) else []
-        data = generate_section(key, SECTIONS[key], context)
+
+        if key in RANKED_SECTIONS:
+            # Run both models in parallel, then annotate agreement
+            with ThreadPoolExecutor(max_workers=2) as ex:
+                f_sonnet = ex.submit(generate_section, key, SECTIONS[key], context, "claude-sonnet-4-6")
+                f_opus = ex.submit(generate_section, key, SECTIONS[key], context, "claude-opus-4-8")
+                data = f_sonnet.result()
+                opus_data = f_opus.result()
+            data = annotate_agreement(key, data, opus_data)
+        else:
+            data = generate_section(key, SECTIONS[key], context)
+
         if sources:
             data["sources"] = sources
         path = os.path.join(CONTENT_DIR, f"{key}.json")
