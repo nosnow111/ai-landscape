@@ -104,8 +104,8 @@ def stage_research() -> dict:
     return data
 
 
-def stage_generate(research_data: dict = None):
-    stage_banner("generate", "Opus primary · Sonnet cross-check — sections run in parallel")
+def stage_generate(research_data: dict = None, force: bool = False):
+    stage_banner("generate", "Opus primary · GPT-4o cross-check — sections run in parallel")
     from generator import run_generation, SECTIONS, RANKED_SECTIONS
 
     if research_data is None and RESEARCH_CACHE.exists():
@@ -116,7 +116,7 @@ def stage_generate(research_data: dict = None):
     done, todo = [], []
     for key in SECTIONS:
         cf = CONTENT_DIR / f"{key}.json"
-        if cf.exists():
+        if not force and cf.exists():
             d = json.loads(cf.read_text())
             if key not in RANKED_SECTIONS or d.get("cross_checked"):
                 done.append(key)
@@ -241,7 +241,7 @@ def main():
         if stage == "research":
             research_data = stage_research()
         elif stage == "generate":
-            stage_generate(research_data)
+            stage_generate(research_data, force=force_from_here)
         elif stage == "validate":
             stage_validate()
         elif stage == "build":
