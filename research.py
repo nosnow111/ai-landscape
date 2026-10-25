@@ -86,19 +86,39 @@ QUERIES = {
 }
 
 
-def research_section(key: str) -> tuple[str, list[str]]:
-    """Returns (context_text, list_of_source_urls)"""
-    queries = QUERIES.get(key, [])
-    results = []
-    sources = []
-    for query in queries:
+def _search_with_retry(query: str, retries: int = 3) -> dict:
+    """Tavily search with exponential backoff on 429/432 rate limit errors."""
+    import time
+    for attempt in range(retries):
         try:
-            response = client.search(
+            return client.search(
                 query=query,
                 search_depth="basic",
                 max_results=3,
                 include_answer=True,
             )
+        except Exception as e:
+            msg = str(e)
+            if ("429" in msg or "432" in msg) and attempt < retries - 1:
+                wait = 2 ** attempt  # 1s, 2s, 4s
+                print(f"  Rate limited — retrying '{query[:50]}...' in {wait}s")
+                time.sleep(wait)
+            else:
+                raise
+    return {}
+
+
+def research_section(key: str) -> tuple[str, list[str]]:
+    """Returns (context_text, list_of_source_urls)"""
+    import time
+    queries = QUERIES.get(key, [])
+    results = []
+    sources = []
+    for i, query in enumerate(queries):
+        if i > 0:
+            time.sleep(0.3)  # small gap between queries within a section
+        try:
+            response = _search_with_retry(query)
             if response.get("answer"):
                 results.append(f"Q: {query}\nA: {response['answer']}")
             for r in response.get("results", []):
@@ -115,16 +135,26 @@ def research_section(key: str) -> tuple[str, list[str]]:
 
 def research_all() -> dict:
     """Returns dict of key -> {'context': str, 'sources': list}"""
+    import time
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
-    def _research(key):
+    keys = list(QUERIES.keys())
+
+    def _research(args):
+        key, stagger = args
+        if stagger > 0:
+            time.sleep(stagger * 0.5)  # stagger section starts by 0.5s each
         print(f"  Researching: {key}")
         context, sources = research_section(key)
         return key, {"context": context, "sources": sources}
 
+    # Cap concurrent sections at 6 to stay within Tavily rate limits
     data = {}
-    with ThreadPoolExecutor(max_workers=len(QUERIES)) as executor:
-        futures = {executor.submit(_research, key): key for key in QUERIES}
+    with ThreadPoolExecutor(max_workers=6) as executor:
+        futures = {
+            executor.submit(_research, (key, i)): key
+            for i, key in enumerate(keys)
+        }
         for future in as_completed(futures):
             key, result = future.result()
             data[key] = result
