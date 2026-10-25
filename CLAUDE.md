@@ -77,6 +77,16 @@ Rankings use a 10–15 smart cutoff defined in `_RANK_RULE` in `generator.py`:
 - Extend to #11–15 only if their adoption is within ~25% of #10 (no clear gap)
 - Stop at the first significant drop-off; never pad to fill 15
 
+## Section design rationale
+
+### Fine-Tuning vs LLM Optimization — why two separate sections
+These are intentionally distinct concepts:
+- **Fine-Tuning** (`fine_tuning`) — permanently adapting a base model on your own data using training platforms (OpenAI fine-tuning API, Hugging Face AutoTrain, Axolotl, Unsloth). Changes model weights. High cost, high payoff for domain-specific behavior.
+- **LLM Optimization** (`llm_optimization`) — inference-time techniques that cut cost and latency without retraining anything: prompt compression, prompt caching, model right-sizing (Haiku/GPT-4o-mini for simple tasks), semantic caching (GPTCache/Redis), batching, RAG instead of long context, output length control, quantization (self-hosted only). No model weights are changed.
+
+### Knowledge cutoff and Tavily grounding
+Claude's training data cuts off at August 2025. Anything after that — new model releases, updated adoption numbers, pricing changes, new tools — requires live data. The pipeline addresses this: Tavily web search (Stage 1) runs before every generation, pulling current stats and recent announcements. That research context is passed directly into the Opus and GPT-4o prompts. Content/*.json files reflect what was current at generation time, not the training cutoff.
+
 ## Research strategy (research.py)
 Each section fires 3–5 Tavily queries: targeted known-tool queries + broader
 "complete list / alternatives / lesser known" discovery queries. Claude is
