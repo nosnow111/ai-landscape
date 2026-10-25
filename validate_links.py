@@ -115,6 +115,11 @@ def validate_entry(section_key: str, item: dict) -> dict:
     if status == 0:
         result["flag"] = "❌ unreachable"
         return result
+    if status == 403:
+        # Many major platforms (Midjourney, Adobe, etc.) block scrapers but have valid URLs
+        result["relevant"] = True
+        result["flag"] = "✅ ok (403 — scraper blocked, URL assumed valid)"
+        return result
     if status >= 400:
         result["flag"] = f"❌ HTTP {status}"
         return result
