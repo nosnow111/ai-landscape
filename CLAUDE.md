@@ -40,6 +40,8 @@ Each section maps to a JSON file in content/ and a tab in the UI:
 - `video_gen` — Top 10 AI video generation tools ranked by adoption
 - `web_scrapers` — Top 10 AI web scraping and browser automation tools
 - `workspace` — Top 10 AI productivity and workspace tools ranked by adoption
+- `fine_tuning` — Top 10 LLM fine-tuning platforms ranked by adoption; includes when-to-fine-tune guidance
+- `llm_optimization` — LLM cost & performance optimization techniques, quick wins, and tooling
 
 ## Adding a new section
 1. Add an entry to `SECTIONS` dict in `generator.py` with a prompt and title
@@ -71,7 +73,7 @@ instructed to include tools found in research even if not named in the prompt.
 - Tavily web search runs before each Claude call to ground content in live data
 - Wave (wave.com) — AI meeting recorder — confirmed as workspace tool, not web scraper
 - Enterprise/aggregator reach (AWS Bedrock, Azure OpenAI, Snowflake Cortex, Google Vertex AI) is weighted as a positive ranking signal in the models prompt — enterprise traffic via aggregators is invisible in public API stats but represents real adoption
-- Research and generation both parallelized with `ThreadPoolExecutor` — all 9 sections run concurrently (~5× faster than sequential)
+- Research and generation both parallelized with `ThreadPoolExecutor` — all 11 sections run concurrently (~5× faster than sequential)
 - Workflow stashes generated files before `git pull --rebase` to avoid "unstaged changes" error, then rebuilds with latest template before committing
 - Header attribution: "Curated by Vlad Meyman · Ranked by Claude AI"
 - Overview tab includes a collapsible "How Rankings Are Calculated" methodology box explaining signals, aggregator note, and the 10–15 cutoff rule

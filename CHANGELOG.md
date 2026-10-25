@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.10.0] - 2026-10-25
+### Added
+- LLM Cost & Performance Optimization section — techniques table (savings %, difficulty, providers), quick wins box, and optimization tools (GPTCache, LiteLLM, Helicone, etc.)
+
+## [0.9.0] - 2026-10-25
+### Added
+- Fine-Tuning Platforms section — top 10 by adoption with "when to fine-tune vs RAG vs prompting" callout, table with supported models and local GPU requirement, and detail cards
+
+### Changed
+- Tab labels shortened and font/padding reduced further to fit all 12 tabs without scrolling
+
 ## [0.8.0] - 2026-10-25
 ### Added
 - Dark themed header with circuit-dot pattern, 🤖🌍⚡ emoji, centered layout, and compact two-line design

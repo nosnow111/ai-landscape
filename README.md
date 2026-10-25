@@ -15,6 +15,8 @@ https://nosnow111.github.io/ai-landscape
 - **Video Generation** — Sora, Runway, Pika, Kling, Luma, HeyGen, etc.
 - **Web Scrapers & Automation** — Firecrawl, Apify, AgentQL, Browserbase, etc.
 - **Workspace & Productivity** — NotebookLM, M365 Copilot, Notion AI, Perplexity, Otter.ai, etc.
+- **Fine-Tuning Platforms** — OpenAI, Hugging Face AutoTrain, Together AI, Axolotl, Unsloth, etc.
+- **LLM Optimization** — prompt caching, model right-sizing, semantic caching, batching, RAG tradeoffs, etc.
 
 ## Architecture
 ```
@@ -48,7 +50,7 @@ cp .env.example .env
 python generator.py && python build.py && git add content/ docs/ && git commit -m "Regenerate content" && git push
 
 # Or step by step:
-python generator.py   # generate content (all 9 sections run in parallel)
+python generator.py   # generate content (all 11 sections run in parallel)
 python build.py       # build static site
 open docs/index.html  # view in browser
 ```
