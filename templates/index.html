@@ -71,6 +71,8 @@
     <button class="tab-btn" onclick="showTab('code-tools')">⌨️ Code</button>
     <button class="tab-btn" onclick="showTab('models')">🧠 Models</button>
     <button class="tab-btn" onclick="showTab('repositories')">🗄️ Repos</button>
+    <button class="tab-btn" onclick="showTab('enterprise-apis')">🏢 Enterprise APIs</button>
+    <button class="tab-btn" onclick="showTab('ml-platforms')">🔧 ML Platforms</button>
     <button class="tab-btn" onclick="showTab('databases')">🗃️ Databases</button>
     <button class="tab-btn" onclick="showTab('observability')">📊 Observability</button>
     <button class="tab-btn" onclick="showTab('image-gen')">🖼️ Images</button>
@@ -151,6 +153,50 @@
         <div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>
         {% endif %}
         <div onclick="showTab('repositories')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
+      </div>
+
+      <!-- Enterprise APIs column -->
+      <div>
+        <div onclick="showTab('enterprise-apis')" class="cursor-pointer text-white font-bold text-sm px-3 py-3 rounded-t-xl flex items-center gap-2 hover:opacity-90" style="background:#1d4ed8;">
+          🏢 Enterprise APIs
+        </div>
+        {% if sections.enterprise_apis.get('platforms') %}
+          {% for p in sections.enterprise_apis.platforms[:4] %}
+          <div onclick="showTab('enterprise-apis')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-blue-50 transition-colors {% if loop.last %}rounded-b-xl{% endif %}">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-xs font-bold text-gray-800">{{ p.name }}</p>
+              {% if p.get('rank') %}<span style="background:#dbeafe;color:#1d4ed8;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:9999px;">#{{ p.rank }}</span>{% endif %}
+            </div>
+            <p class="text-xs text-gray-500">{{ p.vendor }}</p>
+            {% if p.data_residency %}<span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Data residency</span>{% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+        <div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>
+        {% endif %}
+        <div onclick="showTab('enterprise-apis')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
+      </div>
+
+      <!-- ML Platforms column -->
+      <div>
+        <div onclick="showTab('ml-platforms')" class="cursor-pointer text-white font-bold text-sm px-3 py-3 rounded-t-xl flex items-center gap-2 hover:opacity-90" style="background:#7c3aed;">
+          🔧 ML Platforms
+        </div>
+        {% if sections.ml_platforms.get('platforms') %}
+          {% for p in sections.ml_platforms.platforms[:4] %}
+          <div onclick="showTab('ml-platforms')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-violet-50 transition-colors {% if loop.last %}rounded-b-xl{% endif %}">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-xs font-bold text-gray-800">{{ p.name }}</p>
+              {% if p.get('rank') %}<span style="background:#ede9fe;color:#6d28d9;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:9999px;">#{{ p.rank }}</span>{% endif %}
+            </div>
+            <p class="text-xs text-gray-500">{{ p.vendor }}</p>
+            {% if p.supports_training %}<span style="background:#fef3c7;color:#92400e;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Training</span>{% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+        <div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>
+        {% endif %}
+        <div onclick="showTab('ml-platforms')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
       </div>
 
       <!-- Databases column -->
@@ -512,6 +558,152 @@
       <ul class="space-y-1">
         {% for s in sections.repositories.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}
       </ul>
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- ENTERPRISE APIS TAB -->
+  <div id="tab-enterprise-apis" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold text-blue-700">🏢 Enterprise Model APIs</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.enterprise_apis.get('summary') %}
+    <p class="text-gray-600 mb-4">{{ sections.enterprise_apis.summary }}</p>
+    {% endif %}
+    {% if sections.enterprise_apis.get('why_enterprises_use_aggregators') %}
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+      <p class="text-sm font-semibold text-blue-800 mb-2">🏦 Why enterprises use aggregators instead of vendor APIs directly</p>
+      <ul class="space-y-1">
+        {% for reason in sections.enterprise_apis.why_enterprises_use_aggregators %}
+        <li class="text-sm text-blue-700 flex gap-2"><span>•</span><span>{{ reason }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    {% if sections.enterprise_apis.get('platforms') %}
+    <div class="overflow-x-auto rounded-xl shadow mb-8">
+      <table class="min-w-full bg-white text-sm">
+        <thead class="bg-blue-50 text-blue-800 text-xs uppercase tracking-wide">
+          <tr>
+            <th class="px-4 py-3 text-left">Rank</th>
+            <th class="px-4 py-3 text-left">Platform</th>
+            <th class="px-4 py-3 text-left">Vendor</th>
+            <th class="px-4 py-3 text-left">Available Models</th>
+            <th class="px-4 py-3 text-left">Data Residency</th>
+            <th class="px-4 py-3 text-left">Compliance</th>
+            <th class="px-4 py-3 text-left">Best For</th>
+            <th class="px-4 py-3 text-left">Link</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for p in sections.enterprise_apis.platforms %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-blue-600">{{ p.get('rank','—') }}</td>
+            <td class="px-4 py-3 font-medium">{{ p.name }}</td>
+            <td class="px-4 py-3 text-gray-500">{{ p.vendor }}</td>
+            <td class="px-4 py-3 text-gray-500 text-xs">{{ p.available_models | join(', ') }}</td>
+            <td class="px-4 py-3">{% if p.data_residency %}<span class="tag tag-green">Yes</span>{% else %}<span class="text-gray-400 text-xs">No</span>{% endif %}</td>
+            <td class="px-4 py-3 text-gray-500 text-xs">{{ p.compliance | join(', ') }}</td>
+            <td class="px-4 py-3 text-gray-500 text-xs" style="max-width:160px;">{{ p.best_for }}</td>
+            <td class="px-4 py-3">{% if p.get('url') %}<a href="{{ p.url }}" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for p in sections.enterprise_apis.platforms %}
+      <div class="card">
+        <div class="flex items-center gap-2 mb-1">
+          {% if p.get('rank') %}<span style="background:#1d4ed8;color:white;font-size:0.7rem;font-weight:700;border-radius:9999px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">#{{ p.rank }}</span>{% endif %}
+          <h3 class="font-bold">{{ p.name }}</h3>
+          {% if p.data_residency %}<span class="tag tag-green">Data residency</span>{% endif %}
+        </div>
+        <p class="text-xs text-gray-400 mb-2">{{ p.vendor }}</p>
+        {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ p.url }}</a>{% endif %}
+        {% if p.get('available_models') %}<p class="text-xs text-gray-500 mb-2"><span class="font-medium">Models:</span> {{ p.available_models | join(', ') }}</p>{% endif %}
+        {% if p.get('compliance') %}<p class="text-xs text-gray-500 mb-2"><span class="font-medium">Compliance:</span> {{ p.compliance | join(', ') }}</p>{% endif %}
+        {% if p.get('key_features') %}<div>{% for f in p.key_features %}<span class="tag" style="background:#dbeafe;color:#1d4ed8;">{{ f }}</span>{% endfor %}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% if sections.enterprise_apis.get('sources') %}
+    <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources</p>
+      <ul class="space-y-1">{% for s in sections.enterprise_apis.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- ML PLATFORMS TAB -->
+  <div id="tab-ml-platforms" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold text-violet-700">🔧 ML Training & Deployment Platforms</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.ml_platforms.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.ml_platforms.summary }}</p>
+    {% endif %}
+    {% if sections.ml_platforms.get('platforms') %}
+    <div class="overflow-x-auto rounded-xl shadow mb-8">
+      <table class="min-w-full bg-white text-sm">
+        <thead class="bg-violet-50 text-violet-800 text-xs uppercase tracking-wide">
+          <tr>
+            <th class="px-4 py-3 text-left">Rank</th>
+            <th class="px-4 py-3 text-left">Platform</th>
+            <th class="px-4 py-3 text-left">Cloud</th>
+            <th class="px-4 py-3 text-left">Training</th>
+            <th class="px-4 py-3 text-left">Deployment</th>
+            <th class="px-4 py-3 text-left">Pricing</th>
+            <th class="px-4 py-3 text-left">Best For</th>
+            <th class="px-4 py-3 text-left">Link</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for p in sections.ml_platforms.platforms %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 text-center font-bold text-violet-600">{{ p.get('rank','—') }}</td>
+            <td class="px-4 py-3 font-medium">{{ p.name }}</td>
+            <td class="px-4 py-3 text-gray-500">{{ p.cloud }}</td>
+            <td class="px-4 py-3">{% if p.supports_training %}<span class="tag tag-green">Yes</span>{% else %}<span class="text-gray-400 text-xs">No</span>{% endif %}</td>
+            <td class="px-4 py-3">{% if p.supports_deployment %}<span class="tag tag-green">Yes</span>{% else %}<span class="text-gray-400 text-xs">No</span>{% endif %}</td>
+            <td class="px-4 py-3 text-gray-500">{{ p.pricing }}</td>
+            <td class="px-4 py-3 text-gray-500 text-xs" style="max-width:180px;">{{ p.best_for }}</td>
+            <td class="px-4 py-3">{% if p.get('url') %}<a href="{{ p.url }}" target="_blank" rel="noopener" class="text-indigo-500 hover:underline text-xs">🔗 Visit</a>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for p in sections.ml_platforms.platforms %}
+      <div class="card">
+        <div class="flex items-center gap-2 mb-1">
+          {% if p.get('rank') %}<span style="background:#7c3aed;color:white;font-size:0.7rem;font-weight:700;border-radius:9999px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">#{{ p.rank }}</span>{% endif %}
+          <h3 class="font-bold">{{ p.name }}</h3>
+        </div>
+        <p class="text-xs text-gray-400 mb-1">{{ p.vendor }} · {{ p.cloud }}</p>
+        {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ p.url }}</a>{% endif %}
+        <div class="flex gap-2 mb-2">
+          {% if p.supports_training %}<span class="tag tag-amber">Training</span>{% endif %}
+          {% if p.supports_deployment %}<span class="tag tag-green">Deployment</span>{% endif %}
+        </div>
+        {% if p.get('capabilities') %}<div>{% for c in p.capabilities %}<span class="tag tag-purple">{{ c }}</span>{% endfor %}</div>{% endif %}
+        <p class="text-sm text-gray-700 mt-2"><span class="font-medium">Best for:</span> {{ p.best_for }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% if sections.ml_platforms.get('sources') %}
+    <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources</p>
+      <ul class="space-y-1">{% for s in sections.ml_platforms.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}</ul>
     </div>
     {% endif %}
     {% else %}
@@ -931,7 +1123,7 @@
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + id).classList.add('active');
-    const labels = ['overview','code-tools','models','repositories','databases','observability','image-gen','video-gen','web-scrapers','workspace','fine-tuning','llm-optimization'];
+    const labels = ['overview','code-tools','models','repositories','enterprise-apis','ml-platforms','databases','observability','image-gen','video-gen','web-scrapers','workspace','fine-tuning','llm-optimization'];
     document.querySelectorAll('.tab-btn')[labels.indexOf(id)].classList.add('active');
     window.scrollTo(0, 0);
   }

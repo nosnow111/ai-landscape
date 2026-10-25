@@ -25,6 +25,18 @@ QUERIES = {
         "top AI model repositories platforms adoption 2026",
         "AI model hosting platforms alternatives Hugging Face complete list 2026",
     ],
+    "enterprise_apis": [
+        "AWS Bedrock vs Azure OpenAI vs Google Vertex AI enterprise adoption 2026",
+        "enterprise AI model API aggregators comparison 2026",
+        "Snowflake Cortex IBM watsonx enterprise AI platform adoption 2026",
+        "why enterprises use cloud AI aggregators instead of direct APIs 2026",
+    ],
+    "ml_platforms": [
+        "AWS SageMaker vs Google Vertex AI vs Azure ML adoption 2026",
+        "top MLOps platforms enterprise adoption 2026",
+        "Databricks vs SageMaker ML platform comparison 2026",
+        "ML training deployment platforms complete list 2026",
+    ],
     "databases": [
         "AI features databases Snowflake BigQuery PostgreSQL pgvector 2026",
         "vector database adoption enterprise AI 2026",

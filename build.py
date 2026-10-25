@@ -25,6 +25,8 @@ def build():
         "code_tools": load_content("code_tools"),
         "models": load_content("models"),
         "repositories": load_content("repositories"),
+        "enterprise_apis": load_content("enterprise_apis"),
+        "ml_platforms": load_content("ml_platforms"),
         "databases": load_content("databases"),
         "observability": load_content("observability"),
         "image_gen": load_content("image_gen"),

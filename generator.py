@@ -65,17 +65,58 @@ SECTIONS = {
     "repositories": {
         "title": "Model Repositories & Platforms",
         "prompt": (
-            "Describe the major AI model repositories and deployment platforms: Hugging Face, "
-            "Ollama, Replicate, Together AI, Fireworks AI, AWS Bedrock, and AWS SageMaker. "
-            "Note the distinction: Bedrock is for consuming foundation models via API; "
-            "SageMaker is for training, fine-tuning, and deploying custom models at scale. "
+            "Describe the major open AI model repositories and developer inference platforms: "
+            "Hugging Face, Ollama, Replicate, Together AI, Fireworks AI, SiliconFlow, and similar. "
+            "These are open hubs and developer-facing inference APIs — NOT enterprise aggregators "
+            "(Bedrock, Azure OpenAI) or MLOps platforms (SageMaker, Vertex AI), which are separate. "
             "For each cover: purpose, number of models (approx), pricing model, "
             "key features, and who it is best suited for. "
             "Return a JSON object with two keys: "
-            "'summary' (2-3 sentence overview of the model repository ecosystem) and "
+            "'summary' (2-3 sentence overview of the open model repository ecosystem) and "
             "'platforms' (array where each item has: "
             "name, purpose (string), model_count (string), pricing (string), "
             "features (list of strings), best_for (string), url (string))."
+        ),
+    },
+    "enterprise_apis": {
+        "title": "Enterprise Model APIs",
+        "prompt": (
+            "List and compare the major enterprise AI model API aggregators — cloud platforms that let "
+            "corporations access foundation models (GPT, Claude, Llama, etc.) via a secure managed API "
+            "without data leaving their cloud environment. "
+            "Include: AWS Bedrock, Azure OpenAI Service, Google Vertex AI Model Garden, "
+            "Snowflake Cortex AI, IBM watsonx, Cloudflare Workers AI, Oracle Cloud AI, and others. "
+            "For each cover: which foundation models are available, data residency/compliance features, "
+            "pricing model, key enterprise features (VPC, audit logs, fine-tuning support), and best_for. "
+            "Also include a 'why_enterprises_use_aggregators' field explaining why companies use these "
+            "instead of vendor APIs directly. "
+            "Return a JSON object with three keys: "
+            "'summary' (2-3 sentences on the enterprise model API landscape), "
+            "'why_enterprises_use_aggregators' (list of 4-5 strings — reasons like data residency, "
+            "compliance, single billing, existing cloud contracts), and "
+            "'platforms' (array ranked by enterprise adoption, each with: "
+            "name, vendor, rank (int), available_models (list of strings), "
+            "data_residency (bool), compliance (list of strings), pricing (string), "
+            "key_features (list of strings), best_for (string), url (string))."
+        ),
+    },
+    "ml_platforms": {
+        "title": "ML Training & Deployment Platforms",
+        "prompt": (
+            "List and compare the major end-to-end ML platforms used for training, fine-tuning, "
+            "experimenting with, and deploying machine learning models at scale. "
+            "Include: AWS SageMaker, Google Vertex AI (full platform), Azure Machine Learning, "
+            "Databricks (MLflow + Mosaic AI), DataRobot, H2O.ai, Weights & Biases (as MLOps), "
+            "Modal, and others that qualify by actual enterprise adoption. "
+            "For each cover: what it does (training, deployment, experiment tracking, etc.), "
+            "cloud provider, pricing model, who uses it, key differentiators, and url. "
+            f"{_RANK_RULE} "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentences on the ML platform landscape and when you need one vs. just using a model API) and "
+            "'platforms' (array ranked by enterprise adoption, each with: "
+            "name, vendor, rank (int), cloud (string), capabilities (list of strings), "
+            "supports_training (bool), supports_deployment (bool), pricing (string), "
+            "best_for (string), url (string))."
         ),
     },
     "databases": {
