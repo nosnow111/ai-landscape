@@ -30,6 +30,11 @@ jobs:
       - name: Build static site
         run: python build.py
 
+      - name: Validate links (advisory — never blocks build)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python validate_links.py || true
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"

@@ -286,7 +286,7 @@ def _normalize(name: str) -> str:
 
 
 def generate_section(key: str, section: dict, research_context: str = "",
-                     model: str = "claude-sonnet-4-6") -> dict:
+                     model: str = "claude-opus-4-8") -> dict:
     short = model.split("-")[1]  # "sonnet" or "opus"
     print(f"  Generating [{short}]: {section['title']}")
     context_block = ""
@@ -320,36 +320,36 @@ def generate_section(key: str, section: dict, research_context: str = "",
     return data
 
 
-def annotate_agreement(key: str, primary: dict, opus: dict) -> dict:
-    """Compare primary (sonnet) and opus rankings; annotate each item with agreement level."""
+def annotate_agreement(key: str, primary: dict, secondary: dict) -> dict:
+    """Compare primary (Opus) and secondary (Sonnet) rankings; annotate agreement level."""
     ik = _items_key(key)
     primary_items = primary.get(ik, [])
-    opus_items = opus.get(ik, [])
+    secondary_items = secondary.get(ik, [])
 
-    opus_lookup = {_normalize(item.get("name", "")): item.get("rank") for item in opus_items}
+    secondary_lookup = {_normalize(item.get("name", "")): item.get("rank") for item in secondary_items}
 
     for item in primary_items:
         n = _normalize(item.get("name", ""))
         p_rank = item.get("rank")
-        o_rank = opus_lookup.get(n)
-        item["opus_rank"] = o_rank
-        if o_rank is None:
-            item["rank_agreement"] = "excluded"   # opus didn't include it in top 10-15
-        elif abs(p_rank - o_rank) == 0:
+        s_rank = secondary_lookup.get(n)
+        item["sonnet_rank"] = s_rank
+        if s_rank is None:
+            item["rank_agreement"] = "excluded"   # Sonnet didn't include it
+        elif abs(p_rank - s_rank) == 0:
             item["rank_agreement"] = "strong"
-        elif abs(p_rank - o_rank) <= 2:
+        elif abs(p_rank - s_rank) <= 2:
             item["rank_agreement"] = "minor"
         else:
             item["rank_agreement"] = "disagree"
 
-    # Tools in opus top-10 that sonnet didn't include
+    # Tools in Sonnet top-10 that Opus didn't include
     primary_names = {_normalize(item.get("name", "")) for item in primary_items}
     additions = [
-        item["name"] for item in opus_items
+        item["name"] for item in secondary_items
         if item.get("rank", 99) <= 10 and _normalize(item.get("name", "")) not in primary_names
     ]
     if additions:
-        primary["notable_opus_additions"] = additions
+        primary["notable_sonnet_additions"] = additions
 
     primary["cross_checked"] = True
     return primary
@@ -374,13 +374,13 @@ def run_generation(sections: list = None):
         sources = section_research.get("sources", []) if isinstance(section_research, dict) else []
 
         if key in RANKED_SECTIONS:
-            # Run both models in parallel, then annotate agreement
+            # Opus is primary (more accurate); Sonnet cross-checks
             with ThreadPoolExecutor(max_workers=2) as ex:
-                f_sonnet = ex.submit(generate_section, key, SECTIONS[key], context, "claude-sonnet-4-6")
                 f_opus = ex.submit(generate_section, key, SECTIONS[key], context, "claude-opus-4-8")
-                data = f_sonnet.result()
-                opus_data = f_opus.result()
-            data = annotate_agreement(key, data, opus_data)
+                f_sonnet = ex.submit(generate_section, key, SECTIONS[key], context, "claude-sonnet-4-6")
+                data = f_opus.result()
+                sonnet_data = f_sonnet.result()
+            data = annotate_agreement(key, data, sonnet_data)
         else:
             data = generate_section(key, SECTIONS[key], context)
 
