@@ -91,11 +91,19 @@ def research_section(key: str) -> tuple[str, list[str]]:
 
 def research_all() -> dict:
     """Returns dict of key -> {'context': str, 'sources': list}"""
-    data = {}
-    for key in QUERIES:
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    def _research(key):
         print(f"  Researching: {key}")
         context, sources = research_section(key)
-        data[key] = {"context": context, "sources": sources}
+        return key, {"context": context, "sources": sources}
+
+    data = {}
+    with ThreadPoolExecutor(max_workers=len(QUERIES)) as executor:
+        futures = {executor.submit(_research, key): key for key in QUERIES}
+        for future in as_completed(futures):
+            key, result = future.result()
+            data[key] = result
     return data
 
 

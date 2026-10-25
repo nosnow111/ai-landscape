@@ -1,6 +1,7 @@
 import os
 import json
 import anthropic
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 
@@ -224,20 +225,26 @@ def run_generation(sections: list = None):
     else:
         print("  No TAVILY_API_KEY found — skipping web research.")
 
-    for key in targets:
-        try:
-            section_research = research_data.get(key, {})
-            context = section_research.get("context", "") if isinstance(section_research, dict) else ""
-            sources = section_research.get("sources", []) if isinstance(section_research, dict) else []
-            data = generate_section(key, SECTIONS[key], context)
-            if sources:
-                data["sources"] = sources
-            path = os.path.join(CONTENT_DIR, f"{key}.json")
-            with open(path, "w") as f:
-                json.dump(data, f, indent=2)
-            print(f"  Saved {path}")
-        except Exception as e:
-            print(f"  ERROR generating {key}: {e}")
+    def _generate_and_save(key):
+        section_research = research_data.get(key, {})
+        context = section_research.get("context", "") if isinstance(section_research, dict) else ""
+        sources = section_research.get("sources", []) if isinstance(section_research, dict) else []
+        data = generate_section(key, SECTIONS[key], context)
+        if sources:
+            data["sources"] = sources
+        path = os.path.join(CONTENT_DIR, f"{key}.json")
+        with open(path, "w") as f:
+            json.dump(data, f, indent=2)
+        print(f"  Saved {path}")
+
+    with ThreadPoolExecutor(max_workers=len(targets)) as executor:
+        futures = {executor.submit(_generate_and_save, key): key for key in targets}
+        for future in as_completed(futures):
+            key = futures[future]
+            try:
+                future.result()
+            except Exception as e:
+                print(f"  ERROR generating {key}: {e}")
     print("Done.")
 
 
