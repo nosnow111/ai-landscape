@@ -18,10 +18,15 @@ docs/               # Auto-generated static site (served by GitHub Pages)
 ## How to run locally
 ```bash
 pip install -r requirements.txt
-cp .env.example .env          # add ANTHROPIC_API_KEY
-python generator.py           # generates content/*.json
+cp .env.example .env          # add ANTHROPIC_API_KEY and TAVILY_API_KEY
+python generator.py           # generates content/*.json (all sections run in parallel)
 python build.py               # generates docs/index.html
 open docs/index.html
+```
+
+### Full regenerate + publish command
+```bash
+python generator.py && python build.py && git add content/ docs/ && git commit -m "Regenerate content" && git push
 ```
 
 ## Content sections
@@ -65,6 +70,11 @@ instructed to include tools found in research even if not named in the prompt.
 - Prompts explicitly request unbiased rankings based on actual usage data
 - Tavily web search runs before each Claude call to ground content in live data
 - Wave (wave.com) — AI meeting recorder — confirmed as workspace tool, not web scraper
+- Enterprise/aggregator reach (AWS Bedrock, Azure OpenAI, Snowflake Cortex, Google Vertex AI) is weighted as a positive ranking signal in the models prompt — enterprise traffic via aggregators is invisible in public API stats but represents real adoption
+- Research and generation both parallelized with `ThreadPoolExecutor` — all 9 sections run concurrently (~5× faster than sequential)
+- Workflow stashes generated files before `git pull --rebase` to avoid "unstaged changes" error, then rebuilds with latest template before committing
+- Header attribution: "Curated by Vlad Meyman · Ranked by Claude AI"
+- Overview tab includes a collapsible "How Rankings Are Calculated" methodology box explaining signals, aggregator note, and the 10–15 cutoff rule
 
 ## Hosting platforms evaluated (and why rejected)
 | Platform | Reason rejected |

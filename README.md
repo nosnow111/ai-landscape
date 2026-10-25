@@ -7,10 +7,14 @@ https://nosnow111.github.io/ai-landscape
 
 ## What It Covers
 - **Code Generation Tools** — Claude Code, GitHub Copilot, Cursor, Codeium, etc.
-- **Major AI Models** — GPT-4o, Claude, Gemini, Llama, Mistral, etc.
+- **Major AI Models** — GPT-4o, Claude, Gemini, Llama, Grok, DeepSeek, etc.
 - **Model Repositories** — HuggingFace, Ollama, Replicate, Together AI, etc.
 - **AI in Databases** — Snowflake Cortex, BigQuery ML, pgvector, Amazon Bedrock, etc.
 - **Observability & Cost** — LangSmith, Helicone, Weights & Biases, Arize AI, etc.
+- **Image Generation** — Midjourney, DALL-E, Stable Diffusion, Flux, Adobe Firefly, etc.
+- **Video Generation** — Sora, Runway, Pika, Kling, Luma, HeyGen, etc.
+- **Web Scrapers & Automation** — Firecrawl, Apify, AgentQL, Browserbase, etc.
+- **Workspace & Productivity** — NotebookLM, M365 Copilot, Notion AI, Perplexity, Otter.ai, etc.
 
 ## Architecture
 ```
@@ -30,15 +34,21 @@ cd ai-landscape
 pip install -r requirements.txt
 ```
 
-### 2. Add your Anthropic API key
+### 2. Add your API keys
 ```bash
 cp .env.example .env
-# Edit .env and set ANTHROPIC_API_KEY=your_key_here
+# Edit .env and set:
+#   ANTHROPIC_API_KEY=your_key_here   (required)
+#   TAVILY_API_KEY=your_key_here      (optional — enables live web research)
 ```
 
 ### 3. Run locally
 ```bash
-python generator.py   # generate content
+# Generate + build + publish in one command:
+python generator.py && python build.py && git add content/ docs/ && git commit -m "Regenerate content" && git push
+
+# Or step by step:
+python generator.py   # generate content (all 9 sections run in parallel)
 python build.py       # build static site
 open docs/index.html  # view in browser
 ```

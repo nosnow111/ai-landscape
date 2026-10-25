@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.0] - 2026-10-25
+### Added
+- Dark themed header with circuit-dot pattern, 🤖🌍⚡ emoji, centered layout, and compact two-line design
+- Attribution "Curated by Vlad Meyman · Ranked by Claude AI" in header and footer
+- Collapsible "How Rankings Are Calculated" methodology box on Overview tab — signal table, enterprise/aggregator note, 10–15 cutoff explanation
+- Enterprise/aggregator reach (AWS Bedrock, Azure OpenAI, Snowflake Cortex, Vertex AI) added as ranking signal to models prompt
+
+### Changed
+- Research (`research.py`) and generation (`generator.py`) parallelized with `ThreadPoolExecutor` — all 9 sections run concurrently (~5× faster)
+- GitHub Actions workflow fixed: stash generated files → pull latest → rebuild with latest template → commit → push (eliminates push conflicts when template changes mid-run)
+- `requirements.txt` loosened to minimum versions (`>=`) to avoid downgrading other tools on the machine
+- Tab bar tightened: smaller font, less padding, tighter gap so all tabs fit without scrolling
+
 ## [0.7.0] - 2026-10-24
 ### Changed
 - Smart 10–15 ranking cutoff: all ranked sections now extend beyond 10 only when adoption clusters tightly (within ~25%), cutting at natural drop-off
