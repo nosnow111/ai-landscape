@@ -1,5 +1,5 @@
 {
-  "summary": "End-to-end ML platforms unify training, fine-tuning, experiment tracking, model registry, deployment, and governance across the ML lifecycle, and in 2026 the market (valued at ~$4.39B and growing at ~45.8% CAGR) is dominated by the three hyperscaler offerings alongside Databricks. You need a full platform when you train or fine-tune custom models, require reproducibility, lineage, governance, and scalable serving infrastructure; if you only consume frontier models via inference, a hosted model API is cheaper and simpler, but once you need custom training, monitoring, cost control, and compliance at scale, a dedicated MLOps platform becomes essential.",
+  "summary": "The end-to-end ML platform landscape in 2026 is dominated by the three hyperscaler offerings (AWS SageMaker, Azure ML, and Google's Vertex AI, now folded into the Gemini Enterprise Agent Platform), with Databricks emerging as a cross-cloud 'Data Intelligence Platform' rival. GigaOm's enterprise readiness benchmark scores Azure ML highest (2.95/3), followed by SageMaker (2.83/3) and Vertex AI (2.12/3), while the broader MLOps market ($4.39B in 2026, projected to reach $89.91B by 2034 at 45.8% CAGR) also includes specialized players like DataRobot, H2O.ai, Weights & Biases, Dataiku, and Domino Data Lab. You need a full platform when you must train/fine-tune custom models, track experiments, govern the full lifecycle, and deploy at scale with compliance; if you only need inference on a frontier model, a hosted model API is far simpler and cheaper.",
   "platforms": [
     {
       "name": "Microsoft Azure Machine Learning",
@@ -14,13 +14,12 @@
         "pipelines",
         "deployment",
         "governance",
-        "responsible AI",
-        "AutoML"
+        "responsible AI tooling"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Pay-as-you-go based on compute (VM/GPU hours), storage, and managed endpoints; no platform license fee. Enterprise agreements available.",
-      "best_for": "Enterprises already in the Microsoft ecosystem needing strong governance and lifecycle management (top GigaOm enterprise-readiness score 2.95/3).",
+      "pricing": "Pay-as-you-go based on underlying compute (VM/GPU hours), storage, and managed endpoints; no separate platform fee. Enterprise agreements available.",
+      "best_for": "Enterprises already in the Microsoft ecosystem needing strong governance, lifecycle management, and the highest enterprise-readiness score (GigaOm 2.95/3).",
       "url": "https://azure.microsoft.com/en-us/products/machine-learning",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
@@ -38,40 +37,37 @@
         "pipelines",
         "deployment",
         "model monitoring",
-        "feature store",
-        "AutoML",
-        "governance"
+        "feature store"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Pay-as-you-go per-second billing for compute (training/inference instances), plus storage and endpoint hosting; no upfront license.",
-      "best_for": "AWS-native teams needing robust production deployment, modular tooling, and deep ecosystem integration (GigaOm 2.83/3, leads in production deployment).",
+      "pricing": "Pay-as-you-go per second for instances (notebooks, training, inference endpoints), plus storage and data processing; no upfront cost. Savings plans available.",
+      "best_for": "AWS-native teams wanting a modular 'ML workshop' with leading production deployment capabilities and deep S3/IAM integration (GigaOm 2.83/3).",
       "url": "https://aws.amazon.com/sagemaker/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Databricks (MLflow + Mosaic AI)",
+      "name": "Databricks (Mosaic AI + MLflow)",
       "vendor": "Databricks",
       "rank": 3,
       "cloud": "Multi-cloud (AWS, Azure, GCP)",
       "capabilities": [
         "training",
         "fine-tuning",
-        "experiment tracking",
+        "experiment tracking (MLflow)",
         "model registry",
         "pipelines",
         "deployment",
         "data engineering",
-        "lakehouse",
-        "GenAI/LLMOps",
-        "agents",
-        "governance"
+        "lakehouse analytics",
+        "GenAI/agents",
+        "governance (Unity Catalog)"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Consumption-based (DBUs) on top of underlying cloud compute; tiered by workload type. No fixed license.",
-      "best_for": "Data-centric organizations wanting unified data, analytics, ML, and AI on a lakehouse architecture, multi-cloud flexibility.",
+      "pricing": "Consumption-based DBU (Databricks Unit) pricing on top of cloud compute; tiered by workload type. Enterprise commit contracts available.",
+      "best_for": "Organizations wanting a unified data + AI 'Data Intelligence Platform' across multiple clouds, with lakehouse/Delta workloads and MLflow-centered ML lifecycle.",
       "url": "https://www.databricks.com/product/machine-learning",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
@@ -80,22 +76,21 @@
       "name": "Google Vertex AI (Gemini Enterprise Agent Platform)",
       "vendor": "Google Cloud",
       "rank": 4,
-      "cloud": "Google Cloud",
+      "cloud": "Google Cloud (GCP)",
       "capabilities": [
         "training",
         "fine-tuning",
         "experiment tracking",
         "feature store",
-        "pipelines",
+        "pipeline orchestration",
         "deployment",
-        "GenAI workflows",
-        "agents",
-        "AutoML"
+        "managed GenAI workflows",
+        "agent building"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Pay-as-you-go for compute, training, prediction, and pipeline usage; managed GenAI services priced per token/usage.",
-      "best_for": "GCP-native teams wanting tightly integrated feature store, opinionated pipelines, and managed GenAI/agent workflows (GigaOm 2.12/3, gaps in governance).",
+      "pricing": "Pay-as-you-go for training/prediction compute, pipelines, and feature store; frontier model usage billed per token/character. No platform fee.",
+      "best_for": "GCP-centric teams needing tightly integrated feature store, opinionated pipelines, and managed Gemini/GenAI and agent workflows (GigaOm 2.12/3, governance gaps noted).",
       "url": "https://cloud.google.com/vertex-ai",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
@@ -103,22 +98,22 @@
     {
       "name": "DataRobot",
       "vendor": "DataRobot",
+      "vendor_note": "",
       "rank": 5,
-      "cloud": "Multi-cloud / SaaS / on-prem",
+      "cloud": "Multi-cloud / SaaS and self-managed",
       "capabilities": [
-        "AutoML",
+        "automated ML (AutoML)",
         "training",
-        "fine-tuning",
-        "experiment tracking",
         "deployment",
         "model monitoring",
         "governance",
-        "LLMOps"
+        "MLOps",
+        "GenAI/LLMOps"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Enterprise subscription/license (quote-based); tiered by users and deployment scale.",
-      "best_for": "Enterprises wanting automated ML and managed infrastructure without heavy MLOps engineering overhead.",
+      "pricing": "Enterprise subscription/license (custom quote); consumption-based options for some deployments.",
+      "best_for": "Enterprises that want managed AutoML and governance without building MLOps engineering overhead in-house.",
       "url": "https://www.datarobot.com/",
       "sonnet_rank": 5,
       "rank_agreement": "strong"
@@ -127,43 +122,42 @@
       "name": "Dataiku",
       "vendor": "Dataiku",
       "rank": 6,
-      "cloud": "Multi-cloud / on-prem",
+      "cloud": "Multi-cloud / SaaS and self-managed",
       "capabilities": [
-        "data prep",
+        "data preparation",
         "AutoML",
         "training",
         "experiment tracking",
         "deployment",
-        "collaboration",
         "governance",
+        "collaboration",
         "GenAI"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Enterprise subscription/license (quote-based), free edition available.",
-      "best_for": "Cross-functional teams (analysts + data scientists) wanting a collaborative, visual end-to-end platform with governance.",
+      "pricing": "Enterprise subscription licensing (custom quote); free edition available for small teams.",
+      "best_for": "Cross-functional teams (data scientists + analysts) wanting a collaborative, visual end-to-end data science and ML platform.",
       "url": "https://www.dataiku.com/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
       "name": "Weights & Biases (CoreWeave)",
-      "vendor": "CoreWeave",
+      "vendor": "CoreWeave (Weights & Biases)",
       "rank": 7,
-      "cloud": "SaaS / multi-cloud / self-hosted",
+      "cloud": "Cloud-agnostic SaaS / self-hosted",
       "capabilities": [
         "experiment tracking",
-        "hyperparameter tuning",
+        "hyperparameter tuning (Sweeps)",
         "model registry",
         "artifact versioning",
-        "LLMOps",
-        "evaluation",
-        "collaboration"
+        "LLMOps/evaluation",
+        "collaboration dashboards"
       ],
       "supports_training": false,
       "supports_deployment": false,
-      "pricing": "Freemium for individuals; team/enterprise subscription per user with usage-based tiers.",
-      "best_for": "ML research and engineering teams needing best-in-class experiment tracking, reproducibility, and LLM evaluation layered on any training stack.",
+      "pricing": "Free tier for individuals; team and enterprise subscription plans priced per seat/usage.",
+      "best_for": "ML/research teams needing best-in-class experiment tracking, reproducibility, and model evaluation layered on top of any training infrastructure.",
       "url": "https://wandb.ai/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
@@ -172,20 +166,19 @@
       "name": "H2O.ai",
       "vendor": "H2O.ai",
       "rank": 8,
-      "cloud": "Multi-cloud / on-prem / SaaS",
+      "cloud": "Multi-cloud / self-managed",
       "capabilities": [
-        "AutoML",
+        "AutoML (Driverless AI)",
         "training",
-        "fine-tuning",
         "deployment",
         "model monitoring",
-        "GenAI/LLM Studio",
+        "GenAI (h2oGPT/LLM Studio)",
         "explainability"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Open-source core (free); enterprise subscription for Driverless AI and managed cloud (quote-based).",
-      "best_for": "Teams wanting open-source-rooted AutoML plus enterprise GenAI tooling and strong explainability.",
+      "pricing": "Open-source core (H2O-3) free; enterprise products (Driverless AI, H2O AI Cloud) via subscription/custom quote.",
+      "best_for": "Teams wanting strong AutoML and open-source flexibility plus enterprise GenAI tooling.",
       "url": "https://h2o.ai/",
       "sonnet_rank": 6,
       "rank_agreement": "minor"
@@ -194,62 +187,62 @@
       "name": "Domino Data Lab",
       "vendor": "Domino Data Lab",
       "rank": 9,
-      "cloud": "Multi-cloud / on-prem / hybrid",
+      "cloud": "Multi-cloud / hybrid / on-prem",
       "capabilities": [
-        "training",
         "experiment tracking",
-        "model registry",
-        "deployment",
+        "training",
         "reproducibility",
+        "deployment",
         "governance",
-        "compute orchestration"
+        "compute orchestration",
+        "collaboration"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Enterprise subscription/license (quote-based), consumption tiers for compute.",
-      "best_for": "Regulated enterprises (finance, pharma, life sciences) needing reproducibility, governance, and hybrid/on-prem compute control.",
+      "pricing": "Enterprise subscription licensing (custom quote).",
+      "best_for": "Regulated enterprises (finance, pharma, life sciences) needing reproducible, governed data science across hybrid/on-prem infrastructure.",
       "url": "https://domino.ai/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
       "name": "MLflow",
-      "vendor": "Linux Foundation / Databricks",
+      "vendor": "Open source (Linux Foundation / Databricks)",
       "rank": 10,
-      "cloud": "Open-source (any cloud / self-hosted)",
+      "cloud": "Cloud-agnostic / self-hosted",
       "capabilities": [
         "experiment tracking",
         "model registry",
         "model packaging",
         "deployment",
-        "LLM evaluation",
+        "LLMOps (evaluation, tracing in 3.x)",
         "pipelines"
       ],
       "supports_training": false,
       "supports_deployment": true,
-      "pricing": "Free and open-source; cost is self-hosting infrastructure or bundled via Databricks.",
-      "best_for": "Teams with DevOps skills wanting an open-source, framework-agnostic backbone for tracking, registry, and deployment.",
+      "pricing": "Free and open source; managed versions available via Databricks and cloud vendors.",
+      "best_for": "Teams with DevOps skills wanting an open, vendor-neutral standard for experiment tracking and model lifecycle management.",
       "url": "https://mlflow.org/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "sonnet_rank": 10,
+      "rank_agreement": "strong"
     },
     {
       "name": "Kubeflow",
-      "vendor": "Cloud Native Computing Foundation",
+      "vendor": "Open source (CNCF)",
       "rank": 11,
-      "cloud": "Open-source (Kubernetes, any cloud)",
+      "cloud": "Kubernetes (any cloud / on-prem)",
       "capabilities": [
+        "pipeline orchestration",
         "training",
-        "pipelines",
-        "hyperparameter tuning",
-        "deployment (KServe)",
+        "hyperparameter tuning (Katib)",
+        "serving (KServe)",
         "notebooks",
-        "orchestration"
+        "distributed training"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Free and open-source; cost is Kubernetes infrastructure and engineering overhead.",
-      "best_for": "Kubernetes-native teams with strong DevOps capability wanting portable, scalable ML pipelines without vendor lock-in.",
+      "pricing": "Free and open source; infrastructure costs only.",
+      "best_for": "Kubernetes-native teams with strong DevOps capability wanting portable, open MLOps without vendor lock-in.",
       "url": "https://www.kubeflow.org/",
       "sonnet_rank": 9,
       "rank_agreement": "minor"
@@ -258,36 +251,34 @@
       "name": "Modal",
       "vendor": "Modal Labs",
       "rank": 12,
-      "cloud": "Serverless (runs on multi-cloud GPU backends)",
+      "cloud": "Serverless (runs on managed cloud GPUs)",
       "capabilities": [
-        "training",
+        "serverless training",
         "fine-tuning",
         "batch inference",
         "deployment",
-        "serverless GPU compute",
-        "scaling"
+        "GPU autoscaling",
+        "job scheduling"
       ],
       "supports_training": true,
       "supports_deployment": true,
-      "pricing": "Usage-based per-second billing for CPU/GPU compute; no fixed platform fee, free starter credits.",
-      "best_for": "Developers and teams wanting serverless, code-first GPU compute for training and deploying models and AI apps without managing infrastructure.",
+      "pricing": "Usage-based per-second billing for CPU/GPU compute; generous free credits for new users.",
+      "best_for": "Developers and startups wanting fast, serverless GPU compute for training/fine-tuning and deploying models without managing infrastructure.",
       "url": "https://modal.com/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "sonnet_rank": 8,
+      "rank_agreement": "disagree"
     }
   ],
   "_meta": {
     "title": "ML Training & Deployment Platforms",
-    "generated_at": "2026-10-25T19:12:57.953004+00:00"
+    "generated_at": "2026-10-25T19:16:13.920793+00:00"
   },
   "notable_sonnet_additions": [
     "AWS SageMaker",
+    "Google Gemini Enterprise",
     "Azure Machine Learning",
-    "Google Gemini Enterprise Agent Platform",
     "Databricks",
-    "Weights & Biases",
-    "Custom Industrial Agent Platform",
-    "BentoML"
+    "Weights & Biases"
   ],
   "cross_checked": true,
   "sources": [
