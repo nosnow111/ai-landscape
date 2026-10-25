@@ -1,229 +1,242 @@
 {
-  "summary": "The 2026 LLM landscape is dominated by a handful of frontier proprietary models\u2014OpenAI's GPT series, Google Gemini, and Anthropic Claude\u2014which together capture the vast majority of consumer web traffic and enterprise API spend. However, real-world developer adoption is increasingly shaped by cloud aggregators (AWS Bedrock, Azure OpenAI, Google Vertex AI, Snowflake Cortex, IBM watsonx), which boost enterprise reach for models like Claude, Llama, and Mistral well beyond their direct-API footprint. Open-weight models (Llama, Qwen, DeepSeek, Mistral) continue to close the benchmark gap and lead HuggingFace downloads, making the practical adoption picture far more distributed than consumer market-share data alone suggests.",
+  "summary": "The 2026 LLM landscape is dominated by a handful of frontier proprietary families \u2014 OpenAI's GPT, Google's Gemini, and Anthropic's Claude \u2014 which together capture the majority of consumer traffic and enterprise API spend. Open-weight models led by Meta's Llama, Alibaba's Qwen, and DeepSeek have achieved near-frontier performance and drive massive HuggingFace download volumes and self-hosted deployments. Crucially, real-world enterprise adoption increasingly flows through cloud aggregators (AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, IBM watsonx), which amplifies the reach of models available across multiple platforms well beyond their direct-API numbers.",
   "models": [
     {
-      "name": "GPT-5 / GPT-5.x (incl. GPT-4o legacy)",
+      "name": "GPT-5 / GPT-4o (GPT series)",
       "vendor": "OpenAI",
       "rank": 1,
-      "popularity_notes": "ChatGPT held ~54-55% of worldwide AI chatbot web traffic in 2026 and OpenAI models remain the default on Azure OpenAI Service, giving them the single largest combined consumer + enterprise footprint.",
-      "context_window": "400K tokens",
-      "cost_input": "$1.25",
-      "cost_output": "$10.00",
+      "popularity_notes": "ChatGPT held ~54-55% of worldwide AI chatbot web traffic in 2026 and GPT leads OpenRouter and developer surveys; available via direct API and Azure OpenAI, giving it enormous enterprise reach.",
+      "context_window": "128K-400K tokens (model dependent)",
+      "cost_input": "$2.50 per 1M tokens",
+      "cost_output": "$10.00 per 1M tokens",
       "open_source": false,
       "strengths": [
-        "Best-in-class general reasoning",
-        "Massive developer ecosystem and tooling",
-        "Strong multimodal and tool-use",
-        "Deep Azure integration"
+        "Best-in-class multi-step reasoning",
+        "Huge developer ecosystem and tooling",
+        "Strong multimodal capabilities",
+        "First-party Azure integration"
       ],
-      "best_for": "General-purpose applications, agents, and multi-step reasoning with broad ecosystem support",
-      "url": "https://en.wikipedia.org/wiki/GPT-5",
+      "best_for": "General-purpose reasoning, agents, and production applications requiring reliability",
+      "url": "https://openai.com",
       "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
+      "rank_agreement": "excluded"
     },
     {
-      "name": "Gemini 2.5 Pro / Gemini 3.x Pro",
+      "name": "Gemini 2.5 / 3.1 Pro (Gemini series)",
       "vendor": "Google DeepMind",
       "rank": 2,
-      "popularity_notes": "Gemini web visits grew ~450% YoY to 2.9 billion monthly in May 2026 (~26-28% chatbot share) and it is the native model on Google Vertex AI, giving it enormous enterprise aggregator reach.",
+      "popularity_notes": "Gemini's web visits grew ~450% YoY to 2.9B monthly visits and hold ~26-28% chatbot share; native availability on Google Vertex AI drives deep enterprise adoption.",
       "context_window": "1M-2M tokens",
-      "cost_input": "$1.25",
-      "cost_output": "$10.00",
+      "cost_input": "$1.25 per 1M tokens",
+      "cost_output": "$10.00 per 1M tokens",
       "open_source": false,
       "strengths": [
-        "Industry-leading context window",
-        "Strong multimodal (video, audio, image)",
-        "Tight Google Cloud / Workspace integration",
-        "Fast-growing adoption"
+        "Industry-leading context windows",
+        "Strong multimodal and video understanding",
+        "Tight Google Cloud/Workspace integration",
+        "Competitive pricing"
       ],
-      "best_for": "Long-context document and multimodal processing within the Google Cloud ecosystem",
-      "url": "https://metana.io/blog/gemini-3-vs-gemini-2-5",
+      "best_for": "Long-context document processing and Google Cloud-native enterprise deployments",
+      "url": "https://deepmind.google",
       "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
+      "rank_agreement": "excluded"
     },
     {
-      "name": "Claude Opus 5 / Claude 4.x (Sonnet & Opus)",
+      "name": "Claude Opus / Sonnet (Claude series)",
       "vendor": "Anthropic",
       "rank": 3,
-      "popularity_notes": "Anthropic leads enterprise API usage at ~40% share (Menlo Ventures) and Claude is available across AWS Bedrock, Google Vertex AI, and Snowflake Cortex, giving it the broadest enterprise aggregator reach despite only ~9% consumer web share.",
+      "popularity_notes": "Menlo Ventures put Anthropic at ~40% of enterprise API usage (highest share), with Claude web visits up ~855% YoY; available on AWS Bedrock, Google Vertex AI, and Snowflake Cortex for broad enterprise reach.",
       "context_window": "200K-1M tokens",
-      "cost_input": "$3.00",
-      "cost_output": "$15.00",
+      "cost_input": "$3.00 per 1M tokens",
+      "cost_output": "$15.00 per 1M tokens",
       "open_source": false,
       "strengths": [
-        "Top-tier coding (SWE-Bench ~80%)",
-        "Enterprise-safe alignment",
-        "Excellent long-form reasoning",
-        "Broad aggregator availability"
+        "Leading coding performance (SWE-Bench)",
+        "Strong safety alignment for enterprise",
+        "Reliable long-form reasoning",
+        "Multi-aggregator availability"
       ],
-      "best_for": "Enterprise coding assistants and safety-critical production agents",
-      "url": "https://www.newrouters.com/model/claude/claude-opus-5",
+      "best_for": "Enterprise coding assistants and safety-critical agentic workflows",
+      "url": "https://anthropic.com",
       "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
+      "rank_agreement": "excluded"
     },
     {
-      "name": "Llama 4",
+      "name": "Llama 4 (Llama series)",
       "vendor": "Meta",
       "rank": 4,
-      "popularity_notes": "Llama remains the most-downloaded open-weight family on HuggingFace and is available on AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, and IBM watsonx, making it the default self-hosted/open enterprise choice.",
-      "context_window": "Up to 10M tokens (Scout)",
-      "cost_input": "$0.20",
-      "cost_output": "$0.60",
+      "popularity_notes": "The most-downloaded open-weight family on HuggingFace and the default self-hosted choice; available across AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, and IBM watsonx \u2014 the widest aggregator footprint of any open model.",
+      "context_window": "128K-10M tokens (Scout variant)",
+      "cost_input": "$0.20 per 1M tokens (hosted avg)",
+      "cost_output": "$0.60 per 1M tokens (hosted avg)",
       "open_source": true,
       "strengths": [
-        "Fully open weights",
-        "Available on every major cloud aggregator",
-        "Strong general reasoning",
-        "Large fine-tuning ecosystem"
+        "Fully open weights for self-hosting",
+        "Massive ecosystem of fine-tunes",
+        "Broadest aggregator availability",
+        "Strong price/performance"
       ],
-      "best_for": "Self-hosted and customizable enterprise deployments requiring open weights",
-      "url": "https://www.developersdigest.tech/blog/llama-4-developers-guide",
+      "best_for": "Self-hosted, on-premise, and customizable enterprise deployments",
+      "url": "https://llama.com",
       "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
+      "rank_agreement": "excluded"
     },
     {
-      "name": "DeepSeek-V3.2 / V4",
-      "vendor": "DeepSeek",
-      "rank": 5,
-      "popularity_notes": "DeepSeek captured ~4% of consumer chatbot traffic and its MIT-licensed open models match frontier coding benchmarks at a fraction of serving cost, driving heavy developer adoption via OpenRouter and self-hosting.",
-      "context_window": "128K-1M tokens",
-      "cost_input": "$0.28",
-      "cost_output": "$0.42",
-      "open_source": true,
-      "strengths": [
-        "Exceptional cost-efficiency",
-        "Strong reasoning and coding",
-        "Permissive MIT license",
-        "Popular on OpenRouter"
-      ],
-      "best_for": "Cost-sensitive high-volume reasoning and coding workloads",
-      "url": "https://api-docs.deepseek.com/news/news251201/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
-    },
-    {
-      "name": "Qwen3 (incl. Qwen3-235B, Qwen-Max)",
+      "name": "Qwen3 (Qwen series)",
       "vendor": "Alibaba",
-      "rank": 6,
-      "popularity_notes": "The Qwen family has been adopted by over 90,000 enterprises and dominates HuggingFace open-weight downloads, especially for multilingual and on-premise coding use cases.",
+      "rank": 5,
+      "popularity_notes": "Adopted by over 90,000 enterprises and a top HuggingFace download leader; redefined open-weights with 1T+ parameter variants and strong multilingual/coding performance.",
       "context_window": "128K-1M tokens",
-      "cost_input": "$0.40",
-      "cost_output": "$1.20",
+      "cost_input": "$0.30 per 1M tokens (hosted avg)",
+      "cost_output": "$0.90 per 1M tokens (hosted avg)",
       "open_source": true,
       "strengths": [
-        "Leading multilingual support",
+        "Best-in-class multilingual support",
+        "Strong real-world coding",
         "Wide range of model sizes",
-        "Strong real-world coding performance",
-        "Large open-weight download volume"
+        "Permissive licensing"
       ],
-      "best_for": "Multilingual applications and self-hosted open-weight deployments",
+      "best_for": "Multilingual applications and cost-sensitive open-weight deployments",
       "url": "https://qwenlm.github.io",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Grok-4",
-      "vendor": "xAI",
+      "name": "DeepSeek V3.2 / V4 (DeepSeek series)",
+      "vendor": "DeepSeek",
+      "rank": 6,
+      "popularity_notes": "Held ~4% of chatbot web traffic and remains a top OpenRouter model; MIT-licensed open weights with frontier-level reasoning at dramatically lower training/serving cost drive heavy developer adoption.",
+      "context_window": "128K-1M tokens",
+      "cost_input": "$0.27 per 1M tokens",
+      "cost_output": "$1.10 per 1M tokens",
+      "open_source": true,
+      "strengths": [
+        "Exceptional cost efficiency",
+        "Strong reasoning and coding",
+        "Permissive MIT license",
+        "Efficient MoE architecture"
+      ],
+      "best_for": "High-volume reasoning and coding workloads on a budget",
+      "url": "https://deepseek.com",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Mistral Large / Mixtral (Mistral series)",
+      "vendor": "Mistral AI",
       "rank": 7,
-      "popularity_notes": "Grok holds ~2.4% of chatbot web traffic (up YoY) with deep integration into X, and is increasingly available via API and Azure, giving it growing but still consumer-skewed adoption.",
-      "context_window": "256K tokens",
-      "cost_input": "$3.00",
-      "cost_output": "$15.00",
+      "popularity_notes": "A leading European open-weight provider available on AWS Bedrock, Azure, Google Vertex AI, and Snowflake Cortex; valued for speed, efficiency, and data-sovereignty-friendly deployment.",
+      "context_window": "128K-256K tokens",
+      "cost_input": "$2.00 per 1M tokens",
+      "cost_output": "$6.00 per 1M tokens",
+      "open_source": true,
+      "strengths": [
+        "Fast, efficient inference",
+        "Strong open-weight options",
+        "European data sovereignty",
+        "Good multilingual support"
+      ],
+      "best_for": "Latency-sensitive and EU-compliance-focused deployments",
+      "url": "https://mistral.ai",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Grok-4 (Grok series)",
+      "vendor": "xAI",
+      "rank": 8,
+      "popularity_notes": "Grok held ~2.4% of chatbot web traffic (up YoY) with deep integration into the X platform providing real-time data and a large captive user base.",
+      "context_window": "128K-256K tokens",
+      "cost_input": "$3.00 per 1M tokens",
+      "cost_output": "$15.00 per 1M tokens",
       "open_source": false,
       "strengths": [
         "Real-time data via X integration",
         "Strong reasoning",
-        "Conversational and witty",
-        "Rapid growth"
+        "Large consumer reach",
+        "Conversational personality"
       ],
-      "best_for": "Real-time information and social-media-integrated applications",
-      "url": "https://docs.aimlapi.com/api-references/text-models-llm/xai/grok-4",
+      "best_for": "Real-time information retrieval and consumer-facing chat applications",
+      "url": "https://x.ai",
       "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
+      "rank_agreement": "excluded"
     },
     {
-      "name": "Mistral Large / Mistral family",
-      "vendor": "Mistral AI",
-      "rank": 8,
-      "popularity_notes": "Mistral is a leading European open/commercial option available on AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, and IBM watsonx, giving it strong enterprise aggregator reach for efficiency-focused workloads.",
-      "context_window": "128K tokens",
-      "cost_input": "$2.00",
-      "cost_output": "$6.00",
-      "open_source": true,
-      "strengths": [
-        "Fast and efficient",
-        "Open-weight options available",
-        "Strong EU data-residency appeal",
-        "Broad cloud availability"
-      ],
-      "best_for": "Latency-sensitive and EU-compliant enterprise deployments",
-      "url": "https://mistral.ai",
-      "sonnet_rank": 9,
-      "rank_agreement": "minor"
-    },
-    {
-      "name": "GPT-oss (120b / 20b)",
-      "vendor": "OpenAI",
-      "rank": 9,
-      "popularity_notes": "OpenAI's open-weight GPT-oss models deliver strong performance at low cost and have seen rapid HuggingFace and OpenRouter adoption as a self-hostable alternative to the proprietary GPT API.",
-      "context_window": "128K tokens",
-      "cost_input": "$0.15",
-      "cost_output": "$0.60",
-      "open_source": true,
-      "strengths": [
-        "Open weights from OpenAI",
-        "Strong cost-to-performance",
-        "Self-hostable",
-        "Familiar OpenAI tooling"
-      ],
-      "best_for": "Low-cost self-hosted deployments wanting OpenAI-family compatibility",
-      "url": "https://github.com/openai/gpt-oss",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
-    },
-    {
-      "name": "Microsoft Phi-4",
+      "name": "Phi-4 (Phi series)",
       "vendor": "Microsoft",
-      "rank": 10,
-      "popularity_notes": "Phi-4 is a leading small-model choice for high-performance reasoning in constrained deployments, distributed natively through Azure AI Foundry and widely downloaded on HuggingFace.",
+      "rank": 9,
+      "popularity_notes": "A top small-model download on HuggingFace and natively promoted through Azure AI, favored for high-performance reasoning in small-scale and edge deployments.",
       "context_window": "16K-128K tokens",
-      "cost_input": "$0.10",
-      "cost_output": "$0.40",
+      "cost_input": "$0.10 per 1M tokens (hosted avg)",
+      "cost_output": "$0.30 per 1M tokens (hosted avg)",
       "open_source": true,
       "strengths": [
         "Excellent small-model reasoning",
-        "Efficient for edge/on-device",
-        "Open weights",
-        "Native Azure distribution"
+        "Low compute requirements",
+        "Edge/on-device friendly",
+        "Azure integration"
       ],
-      "best_for": "Edge and resource-constrained deployments needing strong reasoning per parameter",
-      "url": "https://ai.azure.com/catalog/models/Phi-4",
+      "best_for": "Edge, on-device, and cost-constrained reasoning tasks",
+      "url": "https://azure.microsoft.com",
       "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Microsoft Copilot (GPT-powered)",
+      "vendor": "Microsoft",
+      "rank": 10,
+      "popularity_notes": "Held ~1.3% of chatbot web traffic and reaches hundreds of millions of enterprise seats via Microsoft 365 and Azure, making it a major enterprise AI consumption channel.",
+      "context_window": "128K tokens (underlying GPT)",
+      "cost_input": "Bundled (M365 licensing)",
+      "cost_output": "Bundled (M365 licensing)",
+      "open_source": false,
+      "strengths": [
+        "Deep Microsoft 365 integration",
+        "Massive enterprise seat distribution",
+        "Enterprise security/compliance",
+        "Productivity-focused tooling"
+      ],
+      "best_for": "Enterprise productivity within the Microsoft ecosystem",
+      "url": "https://copilot.microsoft.com",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Command R+ (Command series)",
+      "vendor": "Cohere",
+      "rank": 11,
+      "popularity_notes": "Enterprise-focused model available on AWS Bedrock, Azure, Google Vertex AI, and Oracle Cloud, with adoption clustering near the lower tier through its RAG/retrieval specialization.",
+      "context_window": "128K tokens",
+      "cost_input": "$2.50 per 1M tokens",
+      "cost_output": "$10.00 per 1M tokens",
+      "open_source": false,
+      "strengths": [
+        "Best-in-class RAG and retrieval",
+        "Strong enterprise tooling",
+        "Multi-aggregator availability",
+        "Data privacy focus"
+      ],
+      "best_for": "Enterprise retrieval-augmented generation and search applications",
+      "url": "https://cohere.com",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
     }
   ],
   "_meta": {
     "title": "Major AI Models",
-    "generated_at": "2026-10-25T18:50:49.612088+00:00"
+    "generated_at": "2026-10-25T19:12:58.693418+00:00"
   },
   "notable_sonnet_additions": [
-    "GPT-5 / ChatGPT",
+    "GPT-5",
+    "Claude Opus 5",
     "Gemini 2.5 Pro",
-    "Claude Opus 5 / Claude family",
-    "Meta Llama 4",
-    "DeepSeek-V4 / DeepSeek-V4-Pro",
-    "Grok-3 / Grok family",
-    "Qwen3 / Qwen family",
-    "Microsoft Copilot / Phi-4",
-    "Perplexity AI"
+    "DeepSeek-V3",
+    "Llama 4",
+    "Qwen 3",
+    "Mistral Large",
+    "Grok-3",
+    "DeepSeek-V4-Pro",
+    "Microsoft Phi-4"
   ],
   "cross_checked": true,
   "sources": [
