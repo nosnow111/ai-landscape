@@ -77,17 +77,30 @@ Based on this research, provide:
 
 Be specific about free tier limits and pricing. Flag anything that launched or significantly changed after mid-2025."""
 
-    msg = client.messages.create(
-        model="claude-opus-4-8",
-        max_tokens=1024,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return msg.content[0].text.strip()
+    for model in ("claude-haiku-4-5-20251001", "claude-sonnet-4-6"):
+        try:
+            msg = client.messages.create(
+                model=model,
+                max_tokens=1024,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            print(f"(analyzed with {model})\n")
+            return msg.content[0].text.strip()
+        except Exception as e:
+            print(f"  {model} failed: {e}")
+    return "(Claude unavailable — read raw research above)"
 
 
 if __name__ == "__main__":
     research = gather_research()
-    print("\nAnalyzing with Claude Opus...\n")
+
+    print("\n" + "=" * 60)
+    print("RAW RESEARCH")
+    print("=" * 60)
+    print(research)
+
+    print("\n" + "=" * 60)
+    print("CLAUDE ANALYSIS")
     print("=" * 60)
     recommendation = analyze(research)
     print(recommendation)
