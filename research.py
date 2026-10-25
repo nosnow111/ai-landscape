@@ -1,13 +1,23 @@
+"""
+Web research for content generation.
+
+Provider priority:
+  1. Tavily  — best answer synthesis; uses TAVILY_API_KEY
+  2. Serper  — Google results fallback; uses SERPER_API_KEY
+  3. None    — skips research; Claude generates from training data only
+
+Set whichever key(s) you have in .env. If both are set, Tavily is tried first
+and Serper is used automatically if Tavily hits a rate limit or quota error.
+"""
+
 import os
-from tavily import TavilyClient
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 
 load_dotenv()
 
-client = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
-
-# 2 queries per section = 26/run × 30 days = ~780/month (Tavily free tier: 1,000/month)
-# Keep: named-tool comparison + adoption rankings. Drop: discovery/complete-list queries.
+# 2 queries per section = 26/run × 30 days = ~780/month
 QUERIES = {
     "code_tools": [
         "most popular AI code generation tools developer adoption 2026",
@@ -64,9 +74,19 @@ QUERIES = {
 }
 
 
-def _search_with_retry(query: str, retries: int = 3) -> dict:
-    """Tavily search with exponential backoff on 429/432 rate limit errors."""
-    import time
+# ── Tavily ─────────────────────────────────────────────────────────────────
+
+def _tavily_search(query: str, retries: int = 3) -> dict | None:
+    """Returns Tavily response dict, or None if unavailable/rate-limited."""
+    key = os.environ.get("TAVILY_API_KEY")
+    if not key:
+        return None
+    try:
+        from tavily import TavilyClient
+        client = TavilyClient(api_key=key)
+    except ImportError:
+        return None
+
     for attempt in range(retries):
         try:
             return client.search(
@@ -77,26 +97,80 @@ def _search_with_retry(query: str, retries: int = 3) -> dict:
             )
         except Exception as e:
             msg = str(e)
-            if ("429" in msg or "432" in msg) and attempt < retries - 1:
-                wait = 2 ** attempt  # 1s, 2s, 4s
-                print(f"  Rate limited — retrying '{query[:50]}...' in {wait}s")
+            if ("429" in msg or "432" in msg or "quota" in msg.lower()) and attempt < retries - 1:
+                wait = 2 ** attempt
+                print(f"  Tavily rate limited — retrying in {wait}s")
                 time.sleep(wait)
             else:
-                raise
+                return None  # quota exhausted or error — fall through to Serper
+    return None
+
+
+# ── Serper ─────────────────────────────────────────────────────────────────
+
+def _serper_search(query: str) -> dict | None:
+    """Returns normalized response dict (same shape as Tavily), or None."""
+    key = os.environ.get("SERPER_API_KEY")
+    if not key:
+        return None
+    try:
+        import requests
+        resp = requests.post(
+            "https://google.serper.dev/search",
+            headers={"X-API-KEY": key, "Content-Type": "application/json"},
+            json={"q": query, "num": 5},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        # Normalize to Tavily-like shape
+        results = []
+        for item in data.get("organic", [])[:3]:
+            results.append({
+                "url": item.get("link", ""),
+                "content": item.get("snippet", ""),
+            })
+        # Serper doesn't synthesize an answer — use the answerBox if present
+        answer = data.get("answerBox", {}).get("answer") or data.get("answerBox", {}).get("snippet", "")
+        return {"answer": answer, "results": results}
+    except Exception as e:
+        print(f"  Serper error for '{query[:50]}': {e}")
+        return None
+
+
+# ── unified search ─────────────────────────────────────────────────────────
+
+def _search(query: str) -> dict:
+    """Try Tavily first, fall back to Serper, return empty dict if both fail."""
+    result = _tavily_search(query)
+    if result is not None:
+        return result
+    result = _serper_search(query)
+    if result is not None:
+        return result
     return {}
 
 
+def _active_provider() -> str:
+    if os.environ.get("TAVILY_API_KEY"):
+        return "Tavily"
+    if os.environ.get("SERPER_API_KEY"):
+        return "Serper"
+    return "none"
+
+
+# ── section research ───────────────────────────────────────────────────────
+
 def research_section(key: str) -> tuple[str, list[str]]:
     """Returns (context_text, list_of_source_urls)"""
-    import time
     queries = QUERIES.get(key, [])
     results = []
     sources = []
     for i, query in enumerate(queries):
         if i > 0:
-            time.sleep(0.3)  # small gap between queries within a section
+            time.sleep(0.3)
         try:
-            response = _search_with_retry(query)
+            response = _search(query)
             if response.get("answer"):
                 results.append(f"Q: {query}\nA: {response['answer']}")
             for r in response.get("results", []):
@@ -113,20 +187,22 @@ def research_section(key: str) -> tuple[str, list[str]]:
 
 def research_all() -> dict:
     """Returns dict of key -> {'context': str, 'sources': list}"""
-    import time
-    from concurrent.futures import ThreadPoolExecutor, as_completed
+    provider = _active_provider()
+    if provider == "none":
+        print("  No search API key found — skipping web research.")
+        return {}
 
+    print(f"  Search provider: {provider}")
     keys = list(QUERIES.keys())
 
     def _research(args):
         key, stagger = args
         if stagger > 0:
-            time.sleep(stagger * 0.5)  # stagger section starts by 0.5s each
+            time.sleep(stagger * 0.5)
         print(f"  Researching: {key}")
         context, sources = research_section(key)
         return key, {"context": context, "sources": sources}
 
-    # Cap concurrent sections at 6 to stay within Tavily rate limits
     data = {}
     with ThreadPoolExecutor(max_workers=6) as executor:
         futures = {
