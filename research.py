@@ -77,31 +77,41 @@ QUERIES = {
 
 # ── Firecrawl ──────────────────────────────────────────────────────────────
 
-def _firecrawl_search(query: str) -> dict | None:
+def _firecrawl_search(query: str, retries: int = 3) -> dict | None:
     """Returns normalized response dict (Tavily-like shape), or None."""
     key = os.environ.get("FIRECRAWL_API_KEY")
     if not key:
         return None
-    try:
-        import requests
-        resp = requests.post(
-            "https://api.firecrawl.dev/v1/search",
-            headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
-            json={"query": query, "limit": 5},
-            timeout=15,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        results = []
-        for item in data.get("data", [])[:3]:
-            results.append({
-                "url": item.get("url", ""),
-                "content": item.get("description") or item.get("markdown", "")[:400],
-            })
-        return {"answer": "", "results": results}
-    except Exception as e:
-        print(f"  Firecrawl error for '{query[:50]}': {e}")
-        return None
+    import requests as _requests
+    for attempt in range(retries):
+        try:
+            resp = _requests.post(
+                "https://api.firecrawl.dev/v1/search",
+                headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+                json={"query": query, "limit": 5},
+                timeout=15,
+            )
+            if resp.status_code == 429:
+                wait = 2 ** attempt
+                print(f"  Firecrawl rate limited — retrying in {wait}s")
+                time.sleep(wait)
+                continue
+            resp.raise_for_status()
+            data = resp.json()
+            results = []
+            for item in data.get("data", [])[:3]:
+                results.append({
+                    "url": item.get("url", ""),
+                    "content": item.get("description") or item.get("markdown", "")[:400],
+                })
+            return {"answer": "", "results": results}
+        except Exception as e:
+            if attempt < retries - 1:
+                time.sleep(2 ** attempt)
+            else:
+                print(f"  Firecrawl error for '{query[:50]}': {e}")
+                return None
+    return None
 
 
 # ── Tavily ─────────────────────────────────────────────────────────────────

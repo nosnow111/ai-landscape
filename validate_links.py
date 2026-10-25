@@ -25,11 +25,25 @@ from dotenv import load_dotenv
 load_dotenv()
 
 CONTENT_DIR = Path(__file__).parent / "content"
+OVERRIDES_PATH = Path(__file__).parent / "url_overrides.json"
 TIMEOUT = 10
 MAX_WORKERS = 20
 ITEM_KEYS = ["tools", "models", "platforms", "databases"]
 
 _anthropic = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+
+
+def _load_overrides() -> dict:
+    if OVERRIDES_PATH.exists():
+        data = json.loads(OVERRIDES_PATH.read_text())
+        return {
+            "fixes": data.get("fixes", {}),
+            "skip": data.get("skip", {}),
+        }
+    return {"fixes": {}, "skip": {}}
+
+
+_OVERRIDES = _load_overrides()
 
 
 # ── extraction ─────────────────────────────────────────────────────────────
@@ -97,6 +111,28 @@ def validate_entry(section_key: str, item: dict) -> dict:
     name = item.get("name", "unknown")
     url = item.get("url", "")
     topic = item.get("ai_feature") or item.get("description", "")[:120] or name
+
+    # Check overrides before any HTTP request
+    if url in _OVERRIDES["fixes"]:
+        fix = _OVERRIDES["fixes"][url]
+        replacement = fix.get("replacement")
+        reason = fix.get("reason", "")
+        return {
+            "section": section_key, "name": name, "url": url,
+            "status": None, "redirected_to": None,
+            "relevant": None, "judgment": reason,
+            "flag": "⚠️  known fix (override)",
+            "suggested_url": replacement,
+        }
+    if url in _OVERRIDES["skip"]:
+        reason = _OVERRIDES["skip"][url]
+        return {
+            "section": section_key, "name": name, "url": url,
+            "status": None, "redirected_to": None,
+            "relevant": True, "judgment": reason,
+            "flag": "⏭  skipped (known issue)",
+            "suggested_url": None,
+        }
 
     status, final_url, excerpt = fetch_page(url)
 
@@ -213,21 +249,25 @@ def apply_fixes(results: list[dict], dry_run: bool = False) -> list[dict]:
     For each flagged result, search for a replacement URL and patch the JSON.
     Returns the subset of results that had a fix applied.
     """
-    flagged = [r for r in results if r["flag"] in ("⚠️  wrong page",) or r["flag"].startswith("❌")]
+    flagged = [r for r in results if r["flag"] in ("⚠️  wrong page", "⚠️  known fix (override)") or r["flag"].startswith("❌")]
     if not flagged:
         print("  Nothing to fix.")
         return []
 
+    # Override entries already have a suggested_url — skip search for them
+    needs_search = [r for r in flagged if not r.get("suggested_url") and r["flag"] != "⚠️  known fix (override)"]
+    already_fixed = [r for r in flagged if r.get("suggested_url")]
+
     print(f"\n  Searching for replacements for {len(flagged)} flagged link(s)...")
     with ThreadPoolExecutor(max_workers=8) as ex:
-        futures = {ex.submit(verify_and_fix, r): r for r in flagged}
+        futures = {ex.submit(verify_and_fix, r): r for r in needs_search}
         for future in as_completed(futures):
             r = future.result()
             status_line = r.get("fix_status", "?")
             suggestion = f"  →  {r['suggested_url']}" if r.get("suggested_url") else ""
             print(f"  [{r['section']}] {r['name']}  {status_line}{suggestion}")
 
-    fixable = [r for r in flagged if r.get("suggested_url")]
+    fixable = already_fixed + [r for r in needs_search if r.get("suggested_url")]
     if not fixable:
         print("  No verified replacements found.")
         return []
@@ -261,15 +301,21 @@ def apply_fixes(results: list[dict], dry_run: bool = False) -> list[dict]:
 # ── reporting ──────────────────────────────────────────────────────────────
 
 def print_summary(results: list[dict]):
-    ok     = [r for r in results if r["flag"] == "✅ ok"]
-    wrong  = [r for r in results if r["flag"] == "⚠️  wrong page"]
-    broken = [r for r in results if r["flag"].startswith("❌")]
+    ok      = [r for r in results if r["flag"].startswith("✅")]
+    override= [r for r in results if r["flag"] == "⚠️  known fix (override)"]
+    skipped = [r for r in results if r["flag"].startswith("⏭")]
+    wrong   = [r for r in results if r["flag"] == "⚠️  wrong page"]
+    broken  = [r for r in results if r["flag"].startswith("❌")]
 
     print(f"\n{'='*60}")
     print(f"Link validation: {len(results)} URLs checked")
-    print(f"  ✅ Valid:      {len(ok)}")
-    print(f"  ⚠️  Wrong page: {len(wrong)}")
-    print(f"  ❌ Broken:     {len(broken)}")
+    print(f"  ✅ Valid:          {len(ok)}")
+    if override:
+        print(f"  🔧 Override fix:  {len(override)}")
+    if skipped:
+        print(f"  ⏭  Known issues:  {len(skipped)}")
+    print(f"  ⚠️  Wrong page:    {len(wrong)}")
+    print(f"  ❌ Broken:        {len(broken)}")
 
     if wrong or broken:
         print("\nAction needed:")

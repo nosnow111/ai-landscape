@@ -50,6 +50,9 @@ SECTIONS = {
         "title": "Major AI Models",
         "prompt": (
             "List the TOP 10 large language models ranked strictly by real-world developer usage and adoption. "
+            "CRITICAL: only include models that are PUBLICLY RELEASED and AVAILABLE TODAY. "
+            "Do NOT include announced-but-unreleased, rumored, beta-only, or speculative models. "
+            "If a model name cannot be confirmed as publicly available via the research data above, omit it. "
             "Be completely objective and unbiased — do NOT assume any model belongs in the list. "
             "Base rankings on: API call volume, developer surveys (Stack Overflow, JetBrains), "
             "HuggingFace download stats, and public adoption data. "

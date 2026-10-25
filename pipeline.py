@@ -105,7 +105,7 @@ def stage_research() -> dict:
 
 
 def stage_generate(research_data: dict = None, force: bool = False):
-    stage_banner("generate", "Opus primary · GPT-4o cross-check — sections run in parallel")
+    stage_banner("generate", "Opus 4.8 primary · GPT-4o cross-check — sections run in parallel")
     from generator import run_generation, SECTIONS, RANKED_SECTIONS
 
     if research_data is None and RESEARCH_CACHE.exists():
@@ -132,7 +132,7 @@ def stage_generate(research_data: dict = None, force: bool = False):
 
     print(f"\n  Workers:")
     for key in todo:
-        tag = "[opus+sonnet]" if key in RANKED_SECTIONS else "[opus only] "
+        tag = "[opus+gpt4o]" if key in RANKED_SECTIONS else "[opus only] "
         print(f"    {tag}  {key}")
 
     t0 = time.time()
