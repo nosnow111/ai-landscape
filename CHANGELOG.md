@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.14.0] - 2026-10-25
+### Added
+- GPT-4o as cross-check model replacing Claude Sonnet — two different companies makes disagreements more meaningful
+- `OPENAI_API_KEY` support; falls back to Sonnet automatically if key not set
+- `_URL_RULE` constant injected into all ranked section prompts — items must have verifiable URLs or are omitted
+
+## [0.13.0] - 2026-10-25
+### Added
+- `validate_links.py` — fetches every URL across all sections, checks page relevance via Claude Haiku, auto-fixes wrong-page links via Tavily search + Claude verification
+- HTTP 403 responses treated as valid (major platforms block scrapers)
+- `validation_report.json` written after each run; included in CI commits
+
+## [0.12.0] - 2026-10-25
+### Added
+- `pipeline.py` — 4-stage orchestrator: research → generate → validate → build
+- Checkpoint files in `checkpoints/` — completed stages skipped on re-run
+- `--from=<stage>`, `--only=<stage>`, `--force` flags
+- `generator.py` accepts `research_data` parameter so pipeline can pass cached research
+- CI now calls `python pipeline.py --force` instead of separate steps
+
+## [0.11.0] - 2026-10-25
+### Added
+- Claude Opus 4.8 as primary generation model (more accurate than Sonnet)
+- Dual-model cross-check: Opus primary + Sonnet cross-check on all 9 ranked sections
+- Agreement badges on every ranked section card: ✅ Consensus / 🟡 Minor diff / 🔴 Disagree / ⚪ excluded
+- "Opus-only picks" / "GPT-4o only picks" amber callout when cross-check model surfaces tools primary missed
+- Enterprise APIs and ML Platforms sections added (2 new tabs)
+- 13 content sections total; all sections now run with agreement badge wiring
+
 ## [0.10.0] - 2026-10-25
 ### Added
 - LLM Cost & Performance Optimization section — techniques table (savings %, difficulty, providers), quick wins box, and optimization tools (GPTCache, LiteLLM, Helicone, etc.)
