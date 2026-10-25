@@ -30,8 +30,14 @@
       padding: 1.25rem;
       border: 1px solid #f1f5f9;
       transition: box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
     }
     .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .card-body { flex: 1; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .tags-capped { max-height: 3.2rem; overflow: hidden; }
     .tag {
       display: inline-block;
       background: #dbeafe;
@@ -55,6 +61,25 @@
 </head>
 {% macro agreement_badge(item) %}{% if item.get('rank_agreement') %}{% if item.rank_agreement == 'strong' %}<span class="agree-strong" title="Opus #{{ item.rank }} · GPT-4o #{{ item.sonnet_rank }}">✅ Consensus</span>{% elif item.rank_agreement == 'minor' %}<span class="agree-minor" title="Opus #{{ item.rank }} · GPT-4o #{{ item.sonnet_rank }}">🟡 Minor diff</span>{% elif item.rank_agreement == 'disagree' %}<span class="agree-disagree" title="Opus #{{ item.rank }} · GPT-4o #{{ item.sonnet_rank }}">🔴 Disagree</span>{% elif item.rank_agreement == 'excluded' %}<span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span>{% endif %}{% endif %}{% endmacro %}
 {% macro opus_additions(section) %}{% if section.get('notable_sonnet_additions') %}<div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm"><span class="font-semibold text-amber-800">🔍 GPT-4o only picks</span> <span class="text-amber-700">— GPT-4o ranked these in its top 10 but Opus did not: <strong>{{ section.notable_sonnet_additions | join(', ') }}</strong></span></div>{% endif %}{% endmacro %}
+{% macro adoption_chart(items, accent) %}
+<div class="mb-8 bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+  <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Adoption Ranking</p>
+  {% for t in items[:10] %}
+  {% set pct = [100 - (t.rank - 1) * 9, 10] | max %}
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#{{ t.rank }}</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">{{ t.name }}</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:{{ pct }}%;background:{{ accent }};">
+        {% if t.get('rank_agreement') == 'strong' %}<span style="font-size:0.5rem;color:rgba(255,255,255,0.85);">✅</span>{% endif %}
+      </div>
+    </div>
+    {% if t.get('pricing_free') %}<span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>{% endif %}
+  </div>
+  {% endfor %}
+  <p class="text-xs text-gray-300 mt-3">Bar width = relative adoption. ✅ = Opus + GPT-4o agree on rank.</p>
+</div>
+{% endmacro %}
 <body class="bg-gray-50 text-gray-800 font-sans">
 
 <!-- Header -->
@@ -72,20 +97,24 @@
 
 <!-- Tab Navigation -->
 <nav class="sticky top-0 z-10 bg-white border-b-2 border-indigo-100 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 flex flex-wrap gap-1 py-2">
+  <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center gap-1 py-2">
     <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+    <span class="text-gray-200 text-lg mx-1 select-none">│</span>
+    <span class="text-xs font-semibold text-indigo-400 px-1 select-none">🏆 Ranked</span>
     <button class="tab-btn" onclick="showTab('code-tools')">⌨️ Code</button>
     <button class="tab-btn" onclick="showTab('models')">🧠 Models</button>
-    <button class="tab-btn" onclick="showTab('repositories')">🗄️ Repos</button>
-    <button class="tab-btn" onclick="showTab('enterprise-apis')">🏢 Enterprise APIs</button>
-    <button class="tab-btn" onclick="showTab('ml-platforms')">🔧 ML Platforms</button>
-    <button class="tab-btn" onclick="showTab('databases')">🗃️ Databases</button>
-    <button class="tab-btn" onclick="showTab('observability')">📊 Observability</button>
     <button class="tab-btn" onclick="showTab('image-gen')">🖼️ Images</button>
     <button class="tab-btn" onclick="showTab('video-gen')">🎬 Video</button>
     <button class="tab-btn" onclick="showTab('web-scrapers')">🕷️ Scrapers</button>
     <button class="tab-btn" onclick="showTab('workspace')">💼 Workspace</button>
     <button class="tab-btn" onclick="showTab('fine-tuning')">🎛️ Fine-Tuning</button>
+    <button class="tab-btn" onclick="showTab('enterprise-apis')">🏢 Enterprise APIs</button>
+    <button class="tab-btn" onclick="showTab('ml-platforms')">🔧 ML Platforms</button>
+    <span class="text-gray-200 text-lg mx-1 select-none">│</span>
+    <span class="text-xs font-semibold text-gray-400 px-1 select-none">📚 Reference</span>
+    <button class="tab-btn" onclick="showTab('repositories')">🗄️ Repos</button>
+    <button class="tab-btn" onclick="showTab('databases')">🗃️ Databases</button>
+    <button class="tab-btn" onclick="showTab('observability')">📊 Observability</button>
     <button class="tab-btn" onclick="showTab('llm-optimization')">⚡ LLM Optim.</button>
   </div>
 </nav>
@@ -425,9 +454,10 @@
       <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
     </div>
     {% if sections.code_tools.get('summary') %}
-    <p class="text-gray-600 mb-6">{{ sections.code_tools.summary }}</p>
+    <p class="text-gray-600 mb-4">{{ sections.code_tools.summary }}</p>
     {% endif %}
     {% if sections.code_tools.get('tools') %}
+    {{ adoption_chart(sections.code_tools.tools, '#4f46e5') }}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {% for t in sections.code_tools.tools %}
       <div class="card">
@@ -442,9 +472,9 @@
         <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
         {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
-        {% if t.ide_support %}<p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> {{ t.ide_support | join(', ') }}</p>{% endif %}
-        <div class="mb-3">{% for s in t.strengths %}<span class="tag">{{ s }}</span>{% endfor %}</div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> {{ t.best_for }}</p>
+        {% if t.ide_support %}<p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> {{ t.ide_support | join(', ') }}</p>{% endif %}
+        <div class="mb-3 tags-capped">{% for s in t.strengths %}<span class="tag">{{ s }}</span>{% endfor %}</div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> {{ t.best_for }}</p>
       </div>
       {% endfor %}
     </div>
@@ -471,9 +501,10 @@
       <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
     </div>
     {% if sections.models.get('summary') %}
-    <p class="text-gray-600 mb-6">{{ sections.models.summary }}</p>
+    <p class="text-gray-600 mb-4">{{ sections.models.summary }}</p>
     {% endif %}
     {% if sections.models.get('models') %}
+    {{ adoption_chart(sections.models.models, '#7c3aed') }}
     <div class="overflow-x-auto rounded-xl shadow mb-8">
       <table class="min-w-full bg-white text-sm">
         <thead class="bg-indigo-50 text-indigo-800 text-xs uppercase tracking-wide">
@@ -520,9 +551,9 @@
         </div>
         <div class="mb-1">{{ agreement_badge(m) }}</div>
         <p class="text-xs text-gray-400 mb-1">{{ m.vendor }}</p>
-        {% if m.get('popularity_notes') %}<p class="text-xs text-indigo-600 mb-2 italic">{{ m.popularity_notes }}</p>{% endif %}
+        {% if m.get('popularity_notes') %}<p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">{{ m.popularity_notes }}</p>{% endif %}
         {% if m.get('url') %}<a href="{{ m.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ m.url }}</a>{% endif %}
-        <div>{% for s in m.strengths %}<span class="tag tag-purple">{{ s }}</span>{% endfor %}</div>
+        <div class="tags-capped">{% for s in m.strengths %}<span class="tag tag-purple">{{ s }}</span>{% endfor %}</div>
       </div>
       {% endfor %}
     </div>

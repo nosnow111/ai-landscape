@@ -30,8 +30,14 @@
       padding: 1.25rem;
       border: 1px solid #f1f5f9;
       transition: box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
     }
     .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .card-body { flex: 1; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .tags-capped { max-height: 3.2rem; overflow: hidden; }
     .tag {
       display: inline-block;
       background: #dbeafe;
@@ -55,6 +61,7 @@
 </head>
 
 
+
 <body class="bg-gray-50 text-gray-800 font-sans">
 
 <!-- Header -->
@@ -72,20 +79,24 @@
 
 <!-- Tab Navigation -->
 <nav class="sticky top-0 z-10 bg-white border-b-2 border-indigo-100 shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 flex flex-wrap gap-1 py-2">
+  <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center gap-1 py-2">
     <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+    <span class="text-gray-200 text-lg mx-1 select-none">│</span>
+    <span class="text-xs font-semibold text-indigo-400 px-1 select-none">🏆 Ranked</span>
     <button class="tab-btn" onclick="showTab('code-tools')">⌨️ Code</button>
     <button class="tab-btn" onclick="showTab('models')">🧠 Models</button>
-    <button class="tab-btn" onclick="showTab('repositories')">🗄️ Repos</button>
-    <button class="tab-btn" onclick="showTab('enterprise-apis')">🏢 Enterprise APIs</button>
-    <button class="tab-btn" onclick="showTab('ml-platforms')">🔧 ML Platforms</button>
-    <button class="tab-btn" onclick="showTab('databases')">🗃️ Databases</button>
-    <button class="tab-btn" onclick="showTab('observability')">📊 Observability</button>
     <button class="tab-btn" onclick="showTab('image-gen')">🖼️ Images</button>
     <button class="tab-btn" onclick="showTab('video-gen')">🎬 Video</button>
     <button class="tab-btn" onclick="showTab('web-scrapers')">🕷️ Scrapers</button>
     <button class="tab-btn" onclick="showTab('workspace')">💼 Workspace</button>
     <button class="tab-btn" onclick="showTab('fine-tuning')">🎛️ Fine-Tuning</button>
+    <button class="tab-btn" onclick="showTab('enterprise-apis')">🏢 Enterprise APIs</button>
+    <button class="tab-btn" onclick="showTab('ml-platforms')">🔧 ML Platforms</button>
+    <span class="text-gray-200 text-lg mx-1 select-none">│</span>
+    <span class="text-xs font-semibold text-gray-400 px-1 select-none">📚 Reference</span>
+    <button class="tab-btn" onclick="showTab('repositories')">🗄️ Repos</button>
+    <button class="tab-btn" onclick="showTab('databases')">🗃️ Databases</button>
+    <button class="tab-btn" onclick="showTab('observability')">📊 Observability</button>
     <button class="tab-btn" onclick="showTab('llm-optimization')">⚡ LLM Optim.</button>
   </div>
 </nav>
@@ -711,9 +722,136 @@
       <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
     </div>
     
-    <p class="text-gray-600 mb-6">The 2026 AI coding landscape is dominated by agentic tools that plan, edit, and execute across multi-file codebases rather than simple autocomplete. GitHub Copilot retains the broadest overall install base due to deep enterprise and IDE integration, while Claude Code has surged to become the most-used tool among professional developers for hard, autonomous tasks, and Cursor remains the default AI-native IDE for everyday shipping. Adoption is extremely high—roughly 90% of professional developers now use AI coding agents at least weekly.</p>
+    <p class="text-gray-600 mb-4">The 2026 AI coding landscape is dominated by agentic tools that plan, edit, and execute across multi-file codebases rather than simple autocomplete. GitHub Copilot retains the broadest overall install base due to deep enterprise and IDE integration, while Claude Code has surged to become the most-used tool among professional developers for hard, autonomous tasks, and Cursor remains the default AI-native IDE for everyday shipping. Adoption is extremely high—roughly 90% of professional developers now use AI coding agents at least weekly.</p>
     
     
+    
+<div class="mb-8 bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+  <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Adoption Ranking</p>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#1</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">GitHub Copilot</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:100%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    <span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#2</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Claude Code</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:91%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#3</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Cursor</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:82%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    <span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#4</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">OpenAI Codex</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:73%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#5</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Windsurf</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:64%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    <span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#6</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Devin</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:55%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#7</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">JetBrains AI Assistant</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:46%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    <span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#8</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Gemini Code Assist</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:37%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    <span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#9</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Tabnine</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:28%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    <span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#10</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Amazon Q Developer</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:19%;background:#4f46e5;">
+        
+      </div>
+    </div>
+    <span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>
+  </div>
+  
+  <p class="text-xs text-gray-300 mt-3">Bar width = relative adoption. ✅ = Opus + GPT-4o agree on rank.</p>
+</div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       
       <div class="card">
@@ -728,9 +866,9 @@
         <p class="text-xs text-gray-400 mb-1">GitHub (Microsoft)</p>
         <a href="https://github.com/features/copilot" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://github.com/features/copilot</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Pro $10/mo, Business $19/user/mo, Enterprise $39/user/mo</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, Visual Studio, JetBrains IDEs, Neovim, Xcode</p>
-        <div class="mb-3"><span class="tag">Largest overall install base</span><span class="tag">Deep IDE and GitHub ecosystem integration</span><span class="tag">Agent Mode for multi-step tasks</span><span class="tag">Enterprise governance and compliance</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Pragmatic default for teams already in the Microsoft/GitHub ecosystem</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> VS Code, Visual Studio, JetBrains IDEs, Neovim, Xcode</p>
+        <div class="mb-3 tags-capped"><span class="tag">Largest overall install base</span><span class="tag">Deep IDE and GitHub ecosystem integration</span><span class="tag">Agent Mode for multi-step tasks</span><span class="tag">Enterprise governance and compliance</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Pragmatic default for teams already in the Microsoft/GitHub ecosystem</p>
       </div>
       
       <div class="card">
@@ -745,9 +883,9 @@
         <p class="text-xs text-gray-400 mb-1">Anthropic</p>
         <a href="https://www.anthropic.com/claude-code" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.anthropic.com/claude-code</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Included with Claude Pro $20/mo and Max $100-200/mo; API usage-based pricing</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> Terminal/CLI, VS Code extension, JetBrains extension</p>
-        <div class="mb-3"><span class="tag">Strongest coding reasoning brain</span><span class="tag">Terminal-native autonomous agent</span><span class="tag">Large context window</span><span class="tag">Runs shell commands and edits files autonomously</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Genuinely hard, large-scale autonomous coding and refactoring tasks</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> Terminal/CLI, VS Code extension, JetBrains extension</p>
+        <div class="mb-3 tags-capped"><span class="tag">Strongest coding reasoning brain</span><span class="tag">Terminal-native autonomous agent</span><span class="tag">Large context window</span><span class="tag">Runs shell commands and edits files autonomously</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Genuinely hard, large-scale autonomous coding and refactoring tasks</p>
       </div>
       
       <div class="card">
@@ -762,9 +900,9 @@
         <p class="text-xs text-gray-400 mb-1">Anysphere</p>
         <a href="https://cursor.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://cursor.com</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Pro $20/mo, Business $40/user/mo</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> Cursor (standalone VS Code fork)</p>
-        <div class="mb-3"><span class="tag">AI-native IDE built on VS Code</span><span class="tag">Best-in-class multi-file intelligence</span><span class="tag">Inline diff approvals</span><span class="tag">Fast everyday shipping workflow</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Developers wanting an AI-first IDE for daily feature development</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> Cursor (standalone VS Code fork)</p>
+        <div class="mb-3 tags-capped"><span class="tag">AI-native IDE built on VS Code</span><span class="tag">Best-in-class multi-file intelligence</span><span class="tag">Inline diff approvals</span><span class="tag">Fast everyday shipping workflow</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Developers wanting an AI-first IDE for daily feature development</p>
       </div>
       
       <div class="card">
@@ -779,9 +917,9 @@
         <p class="text-xs text-gray-400 mb-1">OpenAI</p>
         <a href="https://openai.com/codex/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://openai.com/codex/</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Included with ChatGPT Plus $20/mo, Pro $200/mo; API usage-based</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> CLI, VS Code extension, Web</p>
-        <div class="mb-3"><span class="tag">Cloud-based agentic coding agent</span><span class="tag">Parallel task execution</span><span class="tag">Strong integration with ChatGPT and GPT models</span><span class="tag">Autonomous PR generation</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Delegating parallel coding tasks to a cloud software engineering agent</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> CLI, VS Code extension, Web</p>
+        <div class="mb-3 tags-capped"><span class="tag">Cloud-based agentic coding agent</span><span class="tag">Parallel task execution</span><span class="tag">Strong integration with ChatGPT and GPT models</span><span class="tag">Autonomous PR generation</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Delegating parallel coding tasks to a cloud software engineering agent</p>
       </div>
       
       <div class="card">
@@ -796,9 +934,9 @@
         <p class="text-xs text-gray-400 mb-1">Cognition AI</p>
         <a href="https://codeium.com/windsurf" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://codeium.com/windsurf</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Pro $15/mo, Teams $30/user/mo</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> Windsurf Editor, VS Code extension, JetBrains extension</p>
-        <div class="mb-3"><span class="tag">Agentic Cascade flow</span><span class="tag">Clean AI-native editor UX</span><span class="tag">Good context awareness across codebase</span><span class="tag">Strong autocomplete heritage from Codeium</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Developers wanting an agentic IDE alternative to Cursor</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> Windsurf Editor, VS Code extension, JetBrains extension</p>
+        <div class="mb-3 tags-capped"><span class="tag">Agentic Cascade flow</span><span class="tag">Clean AI-native editor UX</span><span class="tag">Good context awareness across codebase</span><span class="tag">Strong autocomplete heritage from Codeium</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Developers wanting an agentic IDE alternative to Cursor</p>
       </div>
       
       <div class="card">
@@ -813,9 +951,9 @@
         <p class="text-xs text-gray-400 mb-1">Cognition AI</p>
         <a href="https://devin.ai" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://devin.ai</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Core from $20/mo (usage-based ACUs), Team $500/mo</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> Web, Slack, VS Code extension (Devin)</p>
-        <div class="mb-3"><span class="tag">Fully autonomous software engineer agent</span><span class="tag">Handles end-to-end tasks</span><span class="tag">Parallel cloud workspaces</span><span class="tag">Integrates with Slack and GitHub</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Offloading complete, well-scoped engineering tickets to an autonomous agent</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> Web, Slack, VS Code extension (Devin)</p>
+        <div class="mb-3 tags-capped"><span class="tag">Fully autonomous software engineer agent</span><span class="tag">Handles end-to-end tasks</span><span class="tag">Parallel cloud workspaces</span><span class="tag">Integrates with Slack and GitHub</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Offloading complete, well-scoped engineering tickets to an autonomous agent</p>
       </div>
       
       <div class="card">
@@ -830,9 +968,9 @@
         <p class="text-xs text-gray-400 mb-1">JetBrains</p>
         <a href="https://www.jetbrains.com/ai-assistant/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.jetbrains.com/ai-assistant/</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> AI Pro $10/mo, AI Ultimate $20/mo (bundled with IDE subscriptions)</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> IntelliJ IDEA, PyCharm, WebStorm, GoLand, other JetBrains IDEs</p>
-        <div class="mb-3"><span class="tag">Deep native integration with JetBrains IDEs</span><span class="tag">Context-aware refactoring</span><span class="tag">Junie agentic coding agent</span><span class="tag">Strong language-specific tooling</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> JetBrains IDE users wanting integrated AI and agentic coding</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> IntelliJ IDEA, PyCharm, WebStorm, GoLand, other JetBrains IDEs</p>
+        <div class="mb-3 tags-capped"><span class="tag">Deep native integration with JetBrains IDEs</span><span class="tag">Context-aware refactoring</span><span class="tag">Junie agentic coding agent</span><span class="tag">Strong language-specific tooling</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> JetBrains IDE users wanting integrated AI and agentic coding</p>
       </div>
       
       <div class="card">
@@ -847,9 +985,9 @@
         <p class="text-xs text-gray-400 mb-1">Google</p>
         <a href="https://cloud.google.com/products/gemini/code-assist" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://cloud.google.com/products/gemini/code-assist</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Standard $19/user/mo, Enterprise $45/user/mo</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Cloud Shell Editor</p>
-        <div class="mb-3"><span class="tag">Large context window via Gemini models</span><span class="tag">Deep Google Cloud integration</span><span class="tag">Generous free tier</span><span class="tag">Agentic capabilities and code customization</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Developers building on Google Cloud wanting integrated AI assistance</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Cloud Shell Editor</p>
+        <div class="mb-3 tags-capped"><span class="tag">Large context window via Gemini models</span><span class="tag">Deep Google Cloud integration</span><span class="tag">Generous free tier</span><span class="tag">Agentic capabilities and code customization</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Developers building on Google Cloud wanting integrated AI assistance</p>
       </div>
       
       <div class="card">
@@ -864,9 +1002,9 @@
         <p class="text-xs text-gray-400 mb-1">Tabnine</p>
         <a href="https://www.tabnine.com" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.tabnine.com</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Dev $9/mo, Enterprise custom pricing</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Visual Studio, Eclipse, Neovim</p>
-        <div class="mb-3"><span class="tag">Privacy-first with self-hosting options</span><span class="tag">Code never used for training</span><span class="tag">Custom model support</span><span class="tag">Strong enterprise compliance</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Privacy-sensitive enterprises needing self-hosted AI coding</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Visual Studio, Eclipse, Neovim</p>
+        <div class="mb-3 tags-capped"><span class="tag">Privacy-first with self-hosting options</span><span class="tag">Code never used for training</span><span class="tag">Custom model support</span><span class="tag">Strong enterprise compliance</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Privacy-sensitive enterprises needing self-hosted AI coding</p>
       </div>
       
       <div class="card">
@@ -881,9 +1019,9 @@
         <p class="text-xs text-gray-400 mb-1">Amazon Web Services</p>
         <a href="https://aws.amazon.com/q/developer/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://aws.amazon.com/q/developer/</a>
         <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> Pro $19/user/mo</p>
-        <p class="text-xs text-gray-500 mb-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Visual Studio, AWS Console, CLI</p>
-        <div class="mb-3"><span class="tag">Deep AWS service integration</span><span class="tag">Agentic code transformation and upgrades</span><span class="tag">Security scanning</span><span class="tag">Formerly CodeWhisperer</span></div>
-        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> Teams building and operating on AWS infrastructure</p>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2"><span class="font-medium">IDEs:</span> VS Code, JetBrains IDEs, Visual Studio, AWS Console, CLI</p>
+        <div class="mb-3 tags-capped"><span class="tag">Deep AWS service integration</span><span class="tag">Agentic code transformation and upgrades</span><span class="tag">Security scanning</span><span class="tag">Formerly CodeWhisperer</span></div>
+        <p class="text-sm text-gray-700 line-clamp-2"><span class="font-medium">Best for:</span> Teams building and operating on AWS infrastructure</p>
       </div>
       
     </div>
@@ -918,9 +1056,136 @@
       <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
     </div>
     
-    <p class="text-gray-600 mb-6">The LLM landscape in late 2026 is dominated by OpenAI's GPT family, which still commands the majority of consumer AI traffic and developer API volume, though its share has eroded as Google Gemini, Anthropic Claude, and open-weight challengers like Meta Llama, DeepSeek, and Alibaba Qwen gain ground. Enterprise adoption increasingly flows through cloud aggregators (AWS Bedrock, Azure OpenAI, Google Vertex AI, Snowflake Cortex, IBM watsonx), which meaningfully amplifies real-world reach for models available across multiple platforms. Open-weight models have become central to developer workflows via HuggingFace downloads and self-hosting, clustering tightly in adoption behind the proprietary leaders.</p>
+    <p class="text-gray-600 mb-4">The LLM landscape in late 2026 is dominated by OpenAI's GPT family, which still commands the majority of consumer AI traffic and developer API volume, though its share has eroded as Google Gemini, Anthropic Claude, and open-weight challengers like Meta Llama, DeepSeek, and Alibaba Qwen gain ground. Enterprise adoption increasingly flows through cloud aggregators (AWS Bedrock, Azure OpenAI, Google Vertex AI, Snowflake Cortex, IBM watsonx), which meaningfully amplifies real-world reach for models available across multiple platforms. Open-weight models have become central to developer workflows via HuggingFace downloads and self-hosting, clustering tightly in adoption behind the proprietary leaders.</p>
     
     
+    
+<div class="mb-8 bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+  <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Adoption Ranking</p>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#1</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">GPT-5</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:100%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#2</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Gemini 3 Pro</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:91%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#3</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Claude Opus 4.5</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:82%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#4</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Llama 4</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:73%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#5</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">GPT-5 mini</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:64%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#6</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">DeepSeek-V3.2</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:55%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#7</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Gemini 3 Flash</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:46%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#8</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Qwen3</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:37%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#9</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Claude Haiku 4.5</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:28%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#10</span>
+    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">Mistral Large 3</span>
+    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
+      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:19%;background:#7c3aed;">
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  <p class="text-xs text-gray-300 mt-3">Bar width = relative adoption. ✅ = Opus + GPT-4o agree on rank.</p>
+</div>
+
     <div class="overflow-x-auto rounded-xl shadow mb-8">
       <table class="min-w-full bg-white text-sm">
         <thead class="bg-indigo-50 text-indigo-800 text-xs uppercase tracking-wide">
@@ -1084,9 +1349,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">OpenAI</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">ChatGPT accounted for 55.5% of worldwide generative AI website visits (532B web visits) and OpenAI leads developer API volume, with availability through Azure OpenAI Service extending enterprise reach.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">ChatGPT accounted for 55.5% of worldwide generative AI website visits (532B web visits) and OpenAI leads developer API volume, with availability through Azure OpenAI Service extending enterprise reach.</p>
         <a href="https://platform.openai.com/docs/models" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://platform.openai.com/docs/models</a>
-        <div><span class="tag tag-purple">State-of-the-art reasoning</span><span class="tag tag-purple">Broad ecosystem and tooling</span><span class="tag tag-purple">Strong multimodal capabilities</span><span class="tag tag-purple">Massive developer familiarity</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">State-of-the-art reasoning</span><span class="tag tag-purple">Broad ecosystem and tooling</span><span class="tag tag-purple">Strong multimodal capabilities</span><span class="tag tag-purple">Massive developer familiarity</span></div>
       </div>
       
       <div class="card">
@@ -1099,9 +1364,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">Google</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">Google Gemini ranked second with 1.14 billion visits and 26.9% chatbot market share, with deep enterprise distribution via Google Vertex AI.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">Google Gemini ranked second with 1.14 billion visits and 26.9% chatbot market share, with deep enterprise distribution via Google Vertex AI.</p>
         <a href="https://ai.google.dev/gemini-api/docs/models" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://ai.google.dev/gemini-api/docs/models</a>
-        <div><span class="tag tag-purple">Very large context window</span><span class="tag tag-purple">Native multimodality</span><span class="tag tag-purple">Tight Google Cloud and Workspace integration</span><span class="tag tag-purple">Strong coding and reasoning</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Very large context window</span><span class="tag tag-purple">Native multimodality</span><span class="tag tag-purple">Tight Google Cloud and Workspace integration</span><span class="tag tag-purple">Strong coding and reasoning</span></div>
       </div>
       
       <div class="card">
@@ -1114,9 +1379,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">Anthropic</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">Claude ranked third with 968 million visits and is a developer favorite for coding, with enterprise availability across AWS Bedrock, Google Vertex AI, and Snowflake Cortex.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">Claude ranked third with 968 million visits and is a developer favorite for coding, with enterprise availability across AWS Bedrock, Google Vertex AI, and Snowflake Cortex.</p>
         <a href="https://docs.anthropic.com/en/docs/about-claude/models" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.anthropic.com/en/docs/about-claude/models</a>
-        <div><span class="tag tag-purple">Best-in-class coding performance</span><span class="tag tag-purple">Strong agentic and tool-use capabilities</span><span class="tag tag-purple">Reliable long-form reasoning</span><span class="tag tag-purple">Wide aggregator coverage</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Best-in-class coding performance</span><span class="tag tag-purple">Strong agentic and tool-use capabilities</span><span class="tag tag-purple">Reliable long-form reasoning</span><span class="tag tag-purple">Wide aggregator coverage</span></div>
       </div>
       
       <div class="card">
@@ -1129,9 +1394,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">Meta</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">Meta's Llama remains the most downloaded open-weight family on HuggingFace and is available across AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, and IBM watsonx, giving it unmatched aggregator reach among open models.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">Meta's Llama remains the most downloaded open-weight family on HuggingFace and is available across AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, and IBM watsonx, giving it unmatched aggregator reach among open models.</p>
         <a href="https://www.llama.com/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://www.llama.com/</a>
-        <div><span class="tag tag-purple">Open weights for self-hosting and fine-tuning</span><span class="tag tag-purple">Broadest aggregator availability</span><span class="tag tag-purple">Strong multimodal variants</span><span class="tag tag-purple">Large community ecosystem</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Open weights for self-hosting and fine-tuning</span><span class="tag tag-purple">Broadest aggregator availability</span><span class="tag tag-purple">Strong multimodal variants</span><span class="tag tag-purple">Large community ecosystem</span></div>
       </div>
       
       <div class="card">
@@ -1144,9 +1409,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">OpenAI</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">The cost-efficient GPT-5 tier drives very high API call volume for production workloads where cost matters, amplified by Azure OpenAI availability.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">The cost-efficient GPT-5 tier drives very high API call volume for production workloads where cost matters, amplified by Azure OpenAI availability.</p>
         <a href="https://platform.openai.com/docs/models" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://platform.openai.com/docs/models</a>
-        <div><span class="tag tag-purple">Low cost per token</span><span class="tag tag-purple">Fast response times</span><span class="tag tag-purple">Strong general capability for its tier</span><span class="tag tag-purple">High-volume production readiness</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Low cost per token</span><span class="tag tag-purple">Fast response times</span><span class="tag tag-purple">Strong general capability for its tier</span><span class="tag tag-purple">High-volume production readiness</span></div>
       </div>
       
       <div class="card">
@@ -1159,9 +1424,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">DeepSeek</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">DeepSeek was the highest-ranked Chinese AI tool with 319 million visits and its open-weight models see heavy HuggingFace downloads due to very low cost.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">DeepSeek was the highest-ranked Chinese AI tool with 319 million visits and its open-weight models see heavy HuggingFace downloads due to very low cost.</p>
         <a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://api-docs.deepseek.com/</a>
-        <div><span class="tag tag-purple">Extremely low cost</span><span class="tag tag-purple">Strong reasoning and coding performance</span><span class="tag tag-purple">Open weights</span><span class="tag tag-purple">Rapid iteration and adoption</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Extremely low cost</span><span class="tag tag-purple">Strong reasoning and coding performance</span><span class="tag tag-purple">Open weights</span><span class="tag tag-purple">Rapid iteration and adoption</span></div>
       </div>
       
       <div class="card">
@@ -1174,9 +1439,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">Google</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">The Flash tier is a high-volume workhorse for latency-sensitive applications, widely consumed via Google Vertex AI in enterprise pipelines.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">The Flash tier is a high-volume workhorse for latency-sensitive applications, widely consumed via Google Vertex AI in enterprise pipelines.</p>
         <a href="https://ai.google.dev/gemini-api/docs/models" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://ai.google.dev/gemini-api/docs/models</a>
-        <div><span class="tag tag-purple">Very fast inference</span><span class="tag tag-purple">Large context window</span><span class="tag tag-purple">Low cost</span><span class="tag tag-purple">Native multimodality</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Very fast inference</span><span class="tag tag-purple">Large context window</span><span class="tag tag-purple">Low cost</span><span class="tag tag-purple">Native multimodality</span></div>
       </div>
       
       <div class="card">
@@ -1189,9 +1454,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">Alibaba</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">Qwen is among the most downloaded open-weight families on HuggingFace and is cited as a top-9 LLM, with growing availability through cloud platforms.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">Qwen is among the most downloaded open-weight families on HuggingFace and is cited as a top-9 LLM, with growing availability through cloud platforms.</p>
         <a href="https://github.com/QwenLM/Qwen3" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://github.com/QwenLM/Qwen3</a>
-        <div><span class="tag tag-purple">Strong multilingual performance</span><span class="tag tag-purple">Wide range of model sizes</span><span class="tag tag-purple">Open weights</span><span class="tag tag-purple">Competitive coding and reasoning</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Strong multilingual performance</span><span class="tag tag-purple">Wide range of model sizes</span><span class="tag tag-purple">Open weights</span><span class="tag tag-purple">Competitive coding and reasoning</span></div>
       </div>
       
       <div class="card">
@@ -1204,9 +1469,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">Anthropic</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">The fast, affordable Claude tier sees heavy production API usage and shares Claude's broad aggregator reach across Bedrock, Vertex AI, and Snowflake Cortex.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">The fast, affordable Claude tier sees heavy production API usage and shares Claude's broad aggregator reach across Bedrock, Vertex AI, and Snowflake Cortex.</p>
         <a href="https://docs.anthropic.com/en/docs/about-claude/models" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.anthropic.com/en/docs/about-claude/models</a>
-        <div><span class="tag tag-purple">Fast and affordable</span><span class="tag tag-purple">Strong tool use for its tier</span><span class="tag tag-purple">Reliable instruction following</span><span class="tag tag-purple">Enterprise aggregator availability</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Fast and affordable</span><span class="tag tag-purple">Strong tool use for its tier</span><span class="tag tag-purple">Reliable instruction following</span><span class="tag tag-purple">Enterprise aggregator availability</span></div>
       </div>
       
       <div class="card">
@@ -1219,9 +1484,9 @@
         </div>
         <div class="mb-1"><span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span></div>
         <p class="text-xs text-gray-400 mb-1">Mistral AI</p>
-        <p class="text-xs text-indigo-600 mb-2 italic">Mistral's models have strong European enterprise adoption and are available across AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, and IBM watsonx, with open-weight variants popular on HuggingFace.</p>
+        <p class="text-xs text-indigo-600 mb-2 italic line-clamp-2">Mistral's models have strong European enterprise adoption and are available across AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, and IBM watsonx, with open-weight variants popular on HuggingFace.</p>
         <a href="https://docs.mistral.ai/getting-started/models/models_overview/" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 https://docs.mistral.ai/getting-started/models/models_overview/</a>
-        <div><span class="tag tag-purple">Strong multilingual and European-language support</span><span class="tag tag-purple">Open-weight options</span><span class="tag tag-purple">Broad aggregator availability</span><span class="tag tag-purple">Efficient performance</span></div>
+        <div class="tags-capped"><span class="tag tag-purple">Strong multilingual and European-language support</span><span class="tag tag-purple">Open-weight options</span><span class="tag tag-purple">Broad aggregator availability</span><span class="tag tag-purple">Efficient performance</span></div>
       </div>
       
     </div>
