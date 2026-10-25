@@ -355,18 +355,19 @@ def annotate_agreement(key: str, primary: dict, secondary: dict) -> dict:
     return primary
 
 
-def run_generation(sections: list = None):
+def run_generation(sections: list = None, research_data: dict = None):
     os.makedirs(CONTENT_DIR, exist_ok=True)
     targets = sections or list(SECTIONS.keys())
     print(f"[{datetime.now(timezone.utc).isoformat()}] Starting content generation...")
 
-    research_data = {}
-    if os.environ.get("TAVILY_API_KEY"):
-        print("  Running web research...")
-        from research import research_all
-        research_data = research_all()
-    else:
-        print("  No TAVILY_API_KEY found — skipping web research.")
+    if research_data is None:
+        research_data = {}
+        if os.environ.get("TAVILY_API_KEY"):
+            print("  Running web research...")
+            from research import research_all
+            research_data = research_all()
+        else:
+            print("  No TAVILY_API_KEY found — skipping web research.")
 
     def _generate_and_save(key):
         section_research = research_data.get(key, {})
