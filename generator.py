@@ -66,7 +66,9 @@ SECTIONS = {
         "title": "Model Repositories & Platforms",
         "prompt": (
             "Describe the major AI model repositories and deployment platforms: Hugging Face, "
-            "Ollama, Replicate, Together AI, Fireworks AI, and AWS Bedrock. "
+            "Ollama, Replicate, Together AI, Fireworks AI, AWS Bedrock, and AWS SageMaker. "
+            "Note the distinction: Bedrock is for consuming foundation models via API; "
+            "SageMaker is for training, fine-tuning, and deploying custom models at scale. "
             "For each cover: purpose, number of models (approx), pricing model, "
             "key features, and who it is best suited for. "
             "Return a JSON object with two keys: "

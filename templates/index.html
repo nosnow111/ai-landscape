@@ -52,21 +52,14 @@
 <body class="bg-gray-50 text-gray-800 font-sans">
 
 <!-- Header -->
-<header style="background: linear-gradient(135deg, #0f0c29 0%, #302b63 45%, #1a1a2e 100%); position: relative; overflow: hidden;" class="text-white py-3 px-6 shadow-xl">
-  <div style="position:absolute;inset:0;background-image:radial-gradient(circle, rgba(167,139,250,0.18) 1px, transparent 1px);background-size:28px 28px;pointer-events:none;"></div>
+<header style="background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%); position: relative; overflow: hidden;" class="text-white py-3 px-6 shadow-md">
+  <div style="position:absolute;inset:0;background-image:radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);background-size:28px 28px;pointer-events:none;"></div>
   <div style="position:relative;z-index:1;max-width:1280px;margin:0 auto;text-align:center;">
-    <!-- Row 1: title + emoji centered -->
-    <div class="flex items-center justify-center gap-3">
-      <h1 class="text-2xl font-bold tracking-tight">AI Landscape Dashboard</h1>
-      <span class="text-2xl leading-none" title="One API call at a time...">🤖🌍⚡</span>
-    </div>
-    <!-- Row 2: tagline -->
-    <p class="text-indigo-300 text-sm italic mt-1">"AI is taking over — one benchmark at a time"</p>
-    <!-- Row 3: meta + attribution centered -->
+    <h1 class="text-2xl font-bold tracking-tight">AI Landscape Dashboard</h1>
+    <p class="text-blue-200 text-sm italic mt-0.5">"AI is taking over — one benchmark at a time"</p>
     {% set any_meta = sections.code_tools.get('_meta') or sections.models.get('_meta') %}
-    <p class="text-indigo-400 text-xs mt-1">
-      Auto-generated · refreshed every {{ refresh_hours }}h{% if any_meta %} · Last updated: {{ any_meta.generated_at[:19] | replace('T',' ') }} UTC{% endif %}
-      · Curated by <span class="text-indigo-200 font-semibold">Vlad Meyman</span> · Ranked by <span class="text-indigo-200 font-semibold">Claude AI</span>
+    <p class="text-blue-300 text-xs mt-0.5">
+      {% if any_meta %}Last updated: {{ any_meta.generated_at[:19] | replace('T',' ') }} UTC · {% endif %}Curated by <span class="text-white font-semibold">Vlad Meyman</span> · Ranked by <span class="text-white font-semibold">Claude AI</span>
     </p>
   </div>
 </header>
