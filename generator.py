@@ -1,6 +1,7 @@
 import os
 import json
 import anthropic
+import openai as _openai
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from dotenv import load_dotenv
@@ -8,6 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+_openai_client = _openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY")) if os.environ.get("OPENAI_API_KEY") else None
 
 _RANK_RULE = (
     "Include between 10 and 15 tools. Start with the top 10 by adoption. "
@@ -320,6 +322,42 @@ def generate_section(key: str, section: dict, research_context: str = "",
     return data
 
 
+def generate_section_gpt4o(key: str, section: dict, research_context: str = "") -> dict:
+    if not _openai_client:
+        raise RuntimeError("OPENAI_API_KEY not set — cannot run GPT-4o cross-check")
+    print(f"  Generating [gpt-4o]: {section['title']}")
+    context_block = ""
+    if research_context:
+        context_block = (
+            f"## Live research data (fetched today)\n{research_context}\n\n"
+            "Use the above as your primary source for current rankings, pricing, and adoption data. "
+            "If the research mentions tools NOT listed in the prompt below that have significant adoption, "
+            "include them. Supplement with your own knowledge where research is incomplete.\n\n"
+        )
+    response = _openai_client.chat.completions.create(
+        model="gpt-4o",
+        max_tokens=8192,
+        response_format={"type": "json_object"},
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an expert analyst of the AI ecosystem. Respond with valid JSON only.",
+            },
+            {
+                "role": "user",
+                "content": f"{context_block}{section['prompt']}\n\nRespond with ONLY valid JSON, no markdown fences.",
+            },
+        ],
+    )
+    raw = response.choices[0].message.content.strip()
+    data = json.loads(raw)
+    data["_meta"] = {
+        "title": section["title"],
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
+    return data
+
+
 def annotate_agreement(key: str, primary: dict, secondary: dict) -> dict:
     """Compare primary (Opus) and secondary (Sonnet) rankings; annotate agreement level."""
     ik = _items_key(key)
@@ -375,13 +413,16 @@ def run_generation(sections: list = None, research_data: dict = None):
         sources = section_research.get("sources", []) if isinstance(section_research, dict) else []
 
         if key in RANKED_SECTIONS:
-            # Opus is primary (more accurate); Sonnet cross-checks
+            # Opus is primary; GPT-4o cross-checks (falls back to Sonnet if no OpenAI key)
             with ThreadPoolExecutor(max_workers=2) as ex:
                 f_opus = ex.submit(generate_section, key, SECTIONS[key], context, "claude-opus-4-8")
-                f_sonnet = ex.submit(generate_section, key, SECTIONS[key], context, "claude-sonnet-4-6")
+                if _openai_client:
+                    f_cross = ex.submit(generate_section_gpt4o, key, SECTIONS[key], context)
+                else:
+                    f_cross = ex.submit(generate_section, key, SECTIONS[key], context, "claude-sonnet-4-6")
                 data = f_opus.result()
-                sonnet_data = f_sonnet.result()
-            data = annotate_agreement(key, data, sonnet_data)
+                cross_data = f_cross.result()
+            data = annotate_agreement(key, data, cross_data)
         else:
             data = generate_section(key, SECTIONS[key], context)
 
