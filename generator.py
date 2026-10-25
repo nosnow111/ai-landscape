@@ -157,6 +157,24 @@ SECTIONS = {
             "capabilities (list of strings), integrations (list of strings), best_for (string), url (string))."
         ),
     },
+    "llm_optimization": {
+        "title": "LLM Cost & Performance Optimization",
+        "prompt": (
+            "Produce a practical guide to optimizing LLM usage for cost and performance at inference time "
+            "(not training/fine-tuning). Cover the most impactful techniques developers actually use. "
+            "For each technique include: name, description, typical token/cost savings (e.g. '30-60% reduction'), "
+            "difficulty (Easy/Medium/Hard), works_with (list of providers it applies to), "
+            "and a concrete example (1-2 sentences showing how to apply it). "
+            "Also include a 'tools' list of real caching/optimization tools (e.g. GPTCache, LangChain, "
+            "Helicone, Redis semantic cache, LiteLLM) with name, what it does, pricing, and url. "
+            "Return a JSON object with four keys: "
+            "'summary' (2-3 sentences on why optimization matters and typical savings achievable), "
+            "'techniques' (array of optimization techniques, each with: name, description, savings (string), "
+            "difficulty (string), works_with (list), example (string)), "
+            "'tools' (array with: name, description, pricing_free (bool), pricing_paid (string), url (string)), "
+            "'quick_wins' (list of 5 strings — the highest-impact, lowest-effort things to do first)."
+        ),
+    },
     "fine_tuning": {
         "title": "LLM Fine-Tuning Platforms",
         "prompt": (

@@ -45,6 +45,12 @@ QUERIES = {
         "Sora Runway Pika Kling Luma video AI comparison 2026",
         "AI video generation tools emerging new 2026 complete list",
     ],
+    "llm_optimization": [
+        "LLM cost optimization techniques reduce token usage 2026",
+        "prompt caching semantic caching LLM API cost reduction 2026",
+        "LLM inference optimization batching right-sizing quantization 2026",
+        "reduce OpenAI Anthropic API costs best practices 2026",
+    ],
     "fine_tuning": [
         "LLM fine-tuning platforms tools adoption 2026 developer survey",
         "OpenAI fine-tuning vs Hugging Face AutoTrain vs Together AI comparison 2026",

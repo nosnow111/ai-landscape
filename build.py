@@ -32,6 +32,7 @@ def build():
         "web_scrapers": load_content("web_scrapers"),
         "workspace": load_content("workspace"),
         "fine_tuning": load_content("fine_tuning"),
+        "llm_optimization": load_content("llm_optimization"),
     }
 
     html = template.render(sections=sections, refresh_hours=REFRESH_HOURS)
