@@ -25,8 +25,8 @@ QUERIES = {
         "GitHub Copilot vs Cursor vs Claude Code usage statistics 2026",
     ],
     "models": [
-        "most used large language models developers 2026 survey rankings",
-        "GPT-4 Claude Gemini Llama DeepSeek usage statistics market share 2026",
+        "most used large language models developers 2026 currently available not retired",
+        "GPT-5 Claude Gemini Llama DeepSeek current models available API 2026 latest versions",
     ],
     "repositories": [
         "Hugging Face model downloads statistics 2026",
