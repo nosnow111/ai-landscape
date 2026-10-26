@@ -62,22 +62,22 @@
 {% macro agreement_badge(item) %}{% if item.get('rank_agreement') %}{% if item.rank_agreement == 'strong' %}<span class="agree-strong" title="Opus #{{ item.rank }} · GPT-4o #{{ item.sonnet_rank }}">✅ Consensus</span>{% elif item.rank_agreement == 'minor' %}<span class="agree-minor" title="Opus #{{ item.rank }} · GPT-4o #{{ item.sonnet_rank }}">🟡 Minor diff</span>{% elif item.rank_agreement == 'disagree' %}<span class="agree-disagree" title="Opus #{{ item.rank }} · GPT-4o #{{ item.sonnet_rank }}">🔴 Disagree</span>{% elif item.rank_agreement == 'excluded' %}<span class="agree-excluded" title="GPT-4o did not include this in its top list">⚪ GPT-4o excluded</span>{% endif %}{% endif %}{% endmacro %}
 {% macro opus_additions(section) %}{% if section.get('notable_sonnet_additions') %}<div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm"><span class="font-semibold text-amber-800">🔍 GPT-4o only picks</span> <span class="text-amber-700">— GPT-4o ranked these in its top 10 but Opus did not: <strong>{{ section.notable_sonnet_additions | join(', ') }}</strong></span></div>{% endif %}{% endmacro %}
 {% macro adoption_chart(items, accent) %}
-<div class="mb-8 bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-  <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Adoption Ranking</p>
+<div class="mb-8 bg-white rounded-xl border border-gray-100 shadow-sm px-4 py-3">
+  <p style="font-size:0.6rem;" class="font-semibold text-gray-400 uppercase tracking-widest mb-2">Adoption Ranking</p>
   {% for t in items[:10] %}
   {% set pct = [100 - (t.rank - 1) * 9, 10] | max %}
-  <div class="flex items-center gap-3 mb-2">
-    <span class="text-xs font-bold text-gray-400 w-5 text-right shrink-0">#{{ t.rank }}</span>
-    <span class="text-xs font-semibold text-gray-700 w-36 truncate shrink-0">{{ t.name }}</span>
-    <div class="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-      <div class="h-5 rounded-full flex items-center px-2 transition-all" style="width:{{ pct }}%;background:{{ accent }};">
-        {% if t.get('rank_agreement') == 'strong' %}<span style="font-size:0.5rem;color:rgba(255,255,255,0.85);">✅</span>{% endif %}
+  <div class="flex items-center gap-2 mb-1">
+    <span style="font-size:0.6rem;" class="font-bold text-gray-400 w-4 text-right shrink-0">#{{ t.rank }}</span>
+    <span style="font-size:0.65rem;" class="font-semibold text-gray-700 w-28 truncate shrink-0">{{ t.name }}</span>
+    <div class="flex-1 bg-gray-100 rounded-full overflow-hidden" style="height:10px;">
+      <div class="rounded-full flex items-center px-1 transition-all" style="width:{{ pct }}%;background:{{ accent }};height:10px;">
+        {% if t.get('rank_agreement') == 'strong' %}<span style="font-size:0.4rem;color:rgba(255,255,255,0.85);">✅</span>{% endif %}
       </div>
     </div>
-    {% if t.get('pricing_free') %}<span style="font-size:0.6rem;background:#dcfce7;color:#166534;padding:1px 6px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>{% endif %}
+    {% if t.get('pricing_free') %}<span style="font-size:0.55rem;background:#dcfce7;color:#166534;padding:1px 5px;border-radius:4px;font-weight:600;white-space:nowrap;" class="shrink-0">Free</span>{% endif %}
   </div>
   {% endfor %}
-  <p class="text-xs text-gray-300 mt-3">Bar width = relative adoption. ✅ = Opus + GPT-4o agree on rank.</p>
+  <p style="font-size:0.6rem;" class="text-gray-300 mt-2">Bar width = relative adoption. ✅ = Opus + GPT-4o agree on rank.</p>
 </div>
 {% endmacro %}
 <body class="bg-gray-50 text-gray-800 font-sans">
