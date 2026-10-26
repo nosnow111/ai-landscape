@@ -50,6 +50,7 @@ Each section maps to a JSON file in content/ and a tab in the UI:
 - `observability` — AI observability and cost monitoring tools
 - `image_gen` — Top 10 AI image generation tools ranked by adoption
 - `video_gen` — Top 10 AI video generation tools ranked by adoption
+- `mcp_tools` — Top 10 MCP tools ranked by adoption (aggregators, gateways, and individual servers)
 - `web_scrapers` — Top 10 AI web scraping and browser automation tools
 - `workspace` — Top 10 AI productivity and workspace tools ranked by adoption
 - `fine_tuning` — Top 10 LLM fine-tuning platforms ranked by adoption; includes when-to-fine-tune guidance
