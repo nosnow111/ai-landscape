@@ -116,6 +116,7 @@
       <button class="tab-btn" onclick="showTab('image-gen')">🖼️ Images</button>
       <button class="tab-btn" onclick="showTab('video-gen')">🎬 Video</button>
       <button class="tab-btn" onclick="showTab('web-scrapers')">🕷️ Scrapers</button>
+      <button class="tab-btn" onclick="showTab('mcp-tools')">🔌 MCP</button>
       <button class="tab-btn" onclick="showTab('workspace')">💼 Workspace</button>
       <button class="tab-btn" onclick="showTab('fine-tuning')">🎛️ Fine-Tuning</button>
       <button class="tab-btn" onclick="showTab('enterprise-apis')">🏢 Enterprise APIs</button>
@@ -230,6 +231,24 @@
           {% endfor %}
         {% else %}<div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>{% endif %}
         <div onclick="showTab('web-scrapers')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
+      </div>
+
+      <!-- MCP Tools column -->
+      <div>
+        <div onclick="showTab('mcp-tools')" class="cursor-pointer text-white font-bold text-sm px-3 py-3 rounded-t-xl flex items-center gap-2 hover:opacity-90" style="background:#7c3aed;">🔌 MCP Tools</div>
+        {% if sections.mcp_tools.get('tools') %}
+          {% for t in sections.mcp_tools.tools[:4] %}
+          <div onclick="showTab('mcp-tools')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-violet-50 transition-colors {% if loop.last %}rounded-b-xl{% endif %}">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-xs font-bold text-gray-800">{{ t.name }}</p>
+              {% if t.get('rank') %}<span style="background:#ede9fe;color:#6d28d9;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:9999px;">#{{ t.rank }}</span>{% endif %}
+            </div>
+            <p class="text-xs text-gray-500">{{ t.get('type', '') }}</p>
+            {% if t.pricing_free %}<span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Free tier</span>{% endif %}
+          </div>
+          {% endfor %}
+        {% else %}<div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>{% endif %}
+        <div onclick="showTab('mcp-tools')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
       </div>
 
       <!-- Workspace column -->
@@ -931,6 +950,58 @@
       <ul class="space-y-1">{% for s in sections.web_scrapers.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}</ul>
     </div>
     {% endif %}
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- MCP TOOLS TAB -->
+  <div id="tab-mcp-tools" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold text-violet-700">🔌 MCP Tools & Servers — Top 10 by Adoption</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.mcp_tools.get('summary') %}
+    <p class="text-gray-600 mb-4">{{ sections.mcp_tools.summary }}</p>
+    {% endif %}
+    {% if sections.mcp_tools.get('ecosystem_note') %}
+    <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 mb-6">
+      <p class="text-sm text-violet-800">📡 {{ sections.mcp_tools.ecosystem_note }}</p>
+    </div>
+    {% endif %}
+    {% if sections.mcp_tools.get('tools') %}
+    {{ adoption_chart(sections.mcp_tools.tools, '#7c3aed') }}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for t in sections.mcp_tools.tools %}
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <div class="flex items-center gap-2">
+            {% if t.get('rank') %}<span style="background:#7c3aed;color:white;font-size:0.7rem;font-weight:700;border-radius:9999px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">#{{ t.rank }}</span>{% endif %}
+            <div>
+              <p class="font-bold text-gray-800 text-sm">{{ t.name }}</p>
+              <p class="text-xs text-gray-500">{{ t.vendor }}</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-1">
+            {{ agreement_badge(t) }}
+            {% if t.get('type') %}<span style="background:#ede9fe;color:#6d28d9;font-size:0.6rem;padding:1px 6px;border-radius:4px;font-weight:600;">{{ t.type }}</span>{% endif %}
+          </div>
+        </div>
+        {% if t.get('connects_to') %}<p class="text-xs text-gray-600 mb-2 line-clamp-2">{{ t.connects_to }}</p>{% endif %}
+        {% if t.get('strengths') %}
+        <div class="flex flex-wrap gap-1 mb-2 tags-capped">
+          {% for s in t.strengths %}<span style="background:#f3f4f6;color:#374151;font-size:0.6rem;padding:2px 6px;border-radius:4px;">{{ s }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        {% if t.get('best_for') %}<p class="text-xs text-indigo-600 font-medium line-clamp-2">Best for: {{ t.best_for }}</p>{% endif %}
+        <div class="mt-auto pt-2 flex items-center gap-2">
+          {% if t.pricing_free %}<span style="background:#dcfce7;color:#166534;font-size:0.65rem;padding:2px 7px;border-radius:4px;font-weight:600;">Free tier</span>{% endif %}
+          {% if t.get('pricing_paid') %}<span class="text-xs text-gray-400">{{ t.pricing_paid }}</span>{% endif %}
+          {% if t.get('url') %}<a href="{{ t.url }}" target="_blank" class="ml-auto text-xs text-indigo-500 hover:underline">↗ Site</a>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
     {% else %}
     <p class="text-gray-400 italic">Content not yet generated.</p>
     {% endif %}

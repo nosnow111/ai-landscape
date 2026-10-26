@@ -64,6 +64,10 @@ QUERIES = {
         "LLM fine-tuning platforms tools adoption 2026 developer survey",
         "OpenAI fine-tuning vs Hugging Face AutoTrain vs Together AI comparison 2026",
     ],
+    "mcp_tools": [
+        "most popular MCP servers aggregators developer adoption 2026",
+        "Composio Smithery agentgateway Playwright MCP GitHub MCP usage statistics 2026",
+    ],
     "web_scrapers": [
         "top AI web scraping browser automation tools developers 2026",
         "Firecrawl Apify AgentQL Browserbase adoption 2026",

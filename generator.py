@@ -260,6 +260,27 @@ SECTIONS = {
             "features (list of strings), best_for (string), url (string))."
         ),
     },
+    "mcp_tools": {
+        "title": "MCP Tools & Servers",
+        "prompt": (
+            "List the TOP 10 MCP (Model Context Protocol) tools ranked by developer adoption. "
+            "Cover the full ecosystem in one ranked list: aggregator platforms (Composio, Smithery, mcp.so), "
+            "MCP gateways/proxies (agentgateway, Cloudflare MCP, Kong MCP), and the most-installed "
+            "individual MCP servers (Playwright MCP, GitHub MCP, Figma MCP, Docker MCP, etc.). "
+            "Rank strictly by real-world developer adoption: installs, GitHub stars, search volume, survey data. "
+            "For each tool cover: vendor, type (aggregator / gateway / server), what it connects to or enables, "
+            "pricing (free tier + paid), key strengths, best use case, url. "
+            f"{_RANK_RULE} {_URL_RULE} "
+            "Return a JSON object with three keys: "
+            "'summary' (2-3 sentence overview of the MCP ecosystem and why it matters for AI agents), "
+            "'ecosystem_note' (1 sentence explaining aggregators vs gateways vs individual servers), and "
+            "'tools' (array SORTED by adoption rank, where each item has: "
+            "name, vendor, rank (int), type (string: aggregator|gateway|server), "
+            "connects_to (string — what integrations or capabilities it unlocks), "
+            "pricing_free (bool), pricing_paid (string), "
+            "strengths (list of strings), best_for (string), url (string))."
+        ),
+    },
     "web_scrapers": {
         "title": "AI Web Scrapers & Browser Automation",
         "prompt": (
@@ -285,6 +306,7 @@ CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
 RANKED_SECTIONS = {
     "code_tools", "models", "image_gen", "video_gen",
     "web_scrapers", "workspace", "fine_tuning", "ml_platforms", "enterprise_apis",
+    "mcp_tools",
 }
 
 # Key of the items array within each section's JSON

@@ -31,6 +31,7 @@ def build():
         "observability": load_content("observability"),
         "image_gen": load_content("image_gen"),
         "video_gen": load_content("video_gen"),
+        "mcp_tools": load_content("mcp_tools"),
         "web_scrapers": load_content("web_scrapers"),
         "workspace": load_content("workspace"),
         "fine_tuning": load_content("fine_tuning"),
