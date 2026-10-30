@@ -212,6 +212,12 @@ def build_standalone():
             tag.replace_with(BeautifulSoup(f"<script>{tailwind_js}</script>", "html.parser"))
         elif "googletagmanager" in src or "gtag(" in (tag.string or "") or "dataLayer" in (tag.string or ""):
             tag.decompose()
+    # Reroute dashboard/news links to live site instead of local files
+    for a in soup.find_all("a", href=True):
+        if a["href"] == "index.html":
+            a["href"] = "https://nosnow111.github.io/ai-landscape/"
+        elif a["href"] == "news.html":
+            a["href"] = "https://nosnow111.github.io/ai-landscape/news.html"
     pres_out = os.path.join(DOCS_DIR, "about-standalone.html")
     with open(pres_out, "w") as f:
         f.write(str(soup))
