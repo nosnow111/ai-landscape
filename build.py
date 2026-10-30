@@ -55,6 +55,12 @@ def build():
         f.write(news_html)
     print(f"Built {news_out}")
 
+    try:
+        from build_standalone import build_standalone
+        build_standalone()
+    except Exception as e:
+        print(f"  Standalone build skipped: {e}")
+
 
 if __name__ == "__main__":
     build()
