@@ -316,9 +316,9 @@ SECTIONS = {
         "prompt": (
             "You are a senior tech journalist at a major publication. Using the live research data provided "
             "above, compile up to 20 of the most significant and recent AI news stories from the past 7 days. "
-            "RECENCY RULE: only include stories dated within the last 7 days. If fewer than 5 recent stories "
-            "appear in the research data, supplement with your knowledge of well-known recent events — but "
-            "still only within the past 7 days. Do NOT include stories older than 7 days. "
+            "RECENCY RULE: target stories from the past 7 days. If the research data contains fewer than 10 "
+            "stories from the past 7 days, extend to the past 14 days to reach 10–20 items. "
+            "Always sort most recent first. Do NOT include stories older than 14 days. "
             "SOURCE QUALITY: use two tiers of acceptable sources. "
             "Tier 1 — major tech/business publications (preferred for all story types): "
             "Reuters, Bloomberg, The Verge, TechCrunch, Wired, Ars Technica, MIT Technology Review, "
