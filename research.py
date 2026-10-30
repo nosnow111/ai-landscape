@@ -76,6 +76,14 @@ QUERIES = {
         "most popular AI productivity workspace tools 2026 adoption",
         "NotebookLM Gemini Notebook Microsoft Copilot M365 Notion AI usage 2026",
     ],
+    "ai_news": [
+        "latest AI news this week major announcements 2026",
+        "AI company news funding regulation enterprise October 2026",
+    ],
+    "emerging_trends": [
+        "emerging AI trends 2026 gaining momentum",
+        "AI reasoning models agents inference compute multimodal trends 2026",
+    ],
 }
 
 

@@ -19,7 +19,6 @@ def load_content(key):
 def build():
     os.makedirs(DOCS_DIR, exist_ok=True)
     env = Environment(loader=FileSystemLoader("templates"))
-    template = env.get_template("index.html")
 
     sections = {
         "code_tools": load_content("code_tools"),
@@ -36,13 +35,25 @@ def build():
         "workspace": load_content("workspace"),
         "fine_tuning": load_content("fine_tuning"),
         "llm_optimization": load_content("llm_optimization"),
+        "emerging_trends": load_content("emerging_trends"),
+        "ai_news": load_content("ai_news"),
     }
 
-    html = template.render(sections=sections, refresh_hours=REFRESH_HOURS)
+    html = env.get_template("index.html").render(
+        sections=sections, refresh_hours=REFRESH_HOURS
+    )
     out = os.path.join(DOCS_DIR, "index.html")
     with open(out, "w") as f:
         f.write(html)
     print(f"Built {out}")
+
+    news_html = env.get_template("news.html").render(
+        ai_news=sections["ai_news"], refresh_hours=REFRESH_HOURS
+    )
+    news_out = os.path.join(DOCS_DIR, "news.html")
+    with open(news_out, "w") as f:
+        f.write(news_html)
+    print(f"Built {news_out}")
 
 
 if __name__ == "__main__":

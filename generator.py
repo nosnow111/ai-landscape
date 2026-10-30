@@ -298,6 +298,47 @@ SECTIONS = {
             "ai_features (list of strings), strengths (list of strings), best_for (string), url (string))."
         ),
     },
+    "ai_news": {
+        "title": "AI News",
+        "prompt": (
+            "You are a tech journalist. Using the live research data provided above, compile up to 20 of the "
+            "most significant and recent AI news stories. Focus on: major model releases, company announcements, "
+            "funding rounds, regulatory developments, enterprise adoption milestones, and notable AI incidents. "
+            "Examples of the kind of stories to include: Anthropic IPO plans, Microsoft restricting employee use "
+            "of competing AI tools, new model launches, major partnerships, AI regulation news. "
+            "For each story provide: headline (concise, factual, ≤12 words), summary (2 sentences max), "
+            "source (publication name), date (YYYY-MM-DD, use today's date if unknown), and url. "
+            f"{_URL_RULE} "
+            "Return a JSON object with two keys: "
+            "'items' (array of up to 20 news items, most recent first, each with: "
+            "headline (string), summary (string), source (string), date (string YYYY-MM-DD), url (string)) and "
+            "'as_of' (string — today's date YYYY-MM-DD)."
+        ),
+    },
+    "emerging_trends": {
+        "title": "Emerging AI Trends",
+        "prompt": (
+            "List the TOP 10 emerging trends and technologies in AI ranked by momentum and near-term impact. "
+            "Focus on trends that are gaining rapid adoption or reshaping how AI is built and used — "
+            "for example: reasoning models (chain-of-thought, o3, R1), agentic/multi-agent systems, "
+            "AI coding agents, inference-time compute scaling, multimodal models, computer use/UI agents, "
+            "voice AI, AI in edge devices, model distillation, small language models (SLMs), "
+            "AI-generated synthetic training data, LLM fine-tuning going mainstream, "
+            "open-source model parity with closed models. "
+            "Rank by current momentum: how fast the trend is growing, how many major players are investing in it, "
+            "and how quickly it is moving from research to production. "
+            "For each trend cover: a clear name, description (2-3 sentences), maturity stage "
+            "(Emerging / Growing / Mainstream), key examples (companies, models, or tools driving it), "
+            "why it matters (1 sentence on the real-world impact), and a representative URL "
+            "(e.g. a leading paper, product, or news article). "
+            f"{_RANK_RULE} {_URL_RULE} "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of where AI is heading in the next 12 months) and "
+            "'trends' (array SORTED by momentum rank, where each item has: "
+            "name (string), rank (int), description (string), maturity (string), "
+            "examples (list of strings), why_it_matters (string), url (string))."
+        ),
+    },
 }
 
 CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
@@ -306,11 +347,16 @@ CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
 RANKED_SECTIONS = {
     "code_tools", "models", "image_gen", "video_gen",
     "web_scrapers", "workspace", "fine_tuning", "ml_platforms", "enterprise_apis",
-    "mcp_tools",
+    "mcp_tools", "emerging_trends",
 }
 
 # Key of the items array within each section's JSON
-_ITEMS_KEY = {"models": "models", "enterprise_apis": "platforms", "ml_platforms": "platforms"}
+_ITEMS_KEY = {
+    "models": "models",
+    "enterprise_apis": "platforms",
+    "ml_platforms": "platforms",
+    "emerging_trends": "trends",
+}
 
 
 def _items_key(key: str) -> str:

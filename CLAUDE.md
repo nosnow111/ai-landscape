@@ -57,6 +57,8 @@ Each section maps to a JSON file in content/ and a tab in the UI:
 - `llm_optimization` — LLM cost & performance optimization techniques, quick wins, and tooling
 - `enterprise_apis` — Top enterprise AI API aggregators (Bedrock, Azure OpenAI, Vertex AI, etc.)
 - `ml_platforms` — Top ML training & deployment platforms (SageMaker, Vertex AI, Databricks, etc.)
+- `ai_news` — Up to 20 recent AI news items (headline, summary, source, date, url); powers the top-of-page news strip and `docs/news.html`
+- `emerging_trends` — Top 10 emerging AI technologies/trends ranked by momentum (reasoning models, agents, etc.)
 
 ## Adding a new section
 1. Add an entry to `SECTIONS` dict in `generator.py` with a prompt and title
@@ -103,6 +105,8 @@ Each section fires 2 queries per run (26 total, ~780/month). Provider priority: 
 - Enterprise/aggregator reach (AWS Bedrock, Azure OpenAI, Snowflake Cortex, Google Vertex AI) is weighted as a positive ranking signal in the models prompt — enterprise traffic via aggregators is invisible in public API stats but represents real adoption
 - Research and generation both parallelized with `ThreadPoolExecutor` — all 13 sections run concurrently (~5× faster than sequential)
 - Workflow stashes generated files before `git pull --rebase` to avoid "unstaged changes" error, then rebuilds with latest template before committing
+- **News strip**: dark blue bar between the sticky nav and main content; shows 7 most recent headlines with source + date; links to `docs/news.html` for all 20. Rendered only when `ai_news.json` has items.
+- **News full page** (`docs/news.html`): standalone page built by `build.py`; shows all 20 items with full summaries, source links, and back-to-dashboard nav.
 - Header attribution: "Curated by Vlad Meyman · Ranked by Claude AI"
 - Overview tab includes a collapsible "How Rankings Are Calculated" methodology box explaining signals, aggregator note, and the 10–15 cutoff rule
 - **Dual-model cross-check**: Claude Opus 4.8 is primary (most accurate); GPT-4o cross-checks all 9 ranked sections. Each tool shows ✅ Consensus / 🟡 Minor diff / 🔴 Disagree / ⚪ GPT-4o excluded badge. Opus + GPT-4o chosen over two Anthropic models because different training data makes disagreements more meaningful.
