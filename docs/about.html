@@ -214,13 +214,21 @@
       </div>
     </div>
     <div class="rounded-xl p-4" style="background:#1e293b;border:1px solid #334155;">
-      <p class="text-gray-400 text-xs font-mono mb-2 text-indigo-400">Useful pipeline flags</p>
+      <p class="text-gray-400 text-xs font-mono mb-2 text-indigo-400">Run on GitHub (updates live site automatically)</p>
+      <div class="space-y-1 font-mono text-xs mb-4">
+        <p><span class="text-yellow-400">gh workflow run refresh.yml</span> <span class="text-gray-500"># full run — research → generate → validate → build</span></p>
+        <p><span class="text-yellow-400">gh workflow run refresh.yml -f from=generate</span> <span class="text-gray-500"># skip research, regenerate onward</span></p>
+        <p><span class="text-yellow-400">gh workflow run refresh.yml -f only=build</span> <span class="text-gray-500"># rebuild HTML only, no API calls</span></p>
+      </div>
+      <p class="text-gray-400 text-xs font-mono mb-2 text-indigo-400">Run locally (requires API keys in .env)</p>
       <div class="space-y-1 font-mono text-xs">
         <p><span class="text-green-400">python pipeline.py</span> <span class="text-gray-500"># resume from last checkpoint</span></p>
         <p><span class="text-green-400">python pipeline.py --force</span> <span class="text-gray-500"># re-run everything</span></p>
-        <p><span class="text-green-400">python pipeline.py --from=generate</span> <span class="text-gray-500"># skip research, regenerate</span></p>
+        <p><span class="text-green-400">python pipeline.py --from=generate</span> <span class="text-gray-500"># skip research, regenerate onward</span></p>
         <p><span class="text-green-400">python pipeline.py --only=build</span> <span class="text-gray-500"># rebuild HTML only</span></p>
         <p><span class="text-green-400">python validate_links.py --fix</span> <span class="text-gray-500"># validate + auto-fix URLs</span></p>
+        <p class="text-gray-600 text-xs mt-2"># after local run, commit and push to update live site:</p>
+        <p><span class="text-green-400">git add content/ docs/ validation_report.json &amp;&amp; git commit -m "Manual refresh: $(date -u)" &amp;&amp; git push</span></p>
       </div>
     </div>
   </div>

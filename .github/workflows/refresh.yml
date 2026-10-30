@@ -3,7 +3,30 @@ name: Refresh AI Landscape
 on:
   schedule:
     - cron: "0 0 * * *"   # daily at midnight UTC
-  workflow_dispatch:        # allow manual trigger from GitHub UI
+  workflow_dispatch:        # allow manual trigger from GitHub UI or CLI
+    inputs:
+      from:
+        description: "Restart pipeline from this stage onward (research, generate, validate, build)"
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - research
+          - generate
+          - validate
+          - build
+      only:
+        description: "Run exactly one stage (research, generate, validate, build)"
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - research
+          - generate
+          - validate
+          - build
 
 jobs:
   refresh:
@@ -28,7 +51,14 @@ jobs:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
-        run: python pipeline.py --force
+        run: |
+          if [ -n "${{ inputs.only }}" ]; then
+            python pipeline.py --only=${{ inputs.only }}
+          elif [ -n "${{ inputs.from }}" ]; then
+            python pipeline.py --from=${{ inputs.from }}
+          else
+            python pipeline.py --force
+          fi
 
       - name: Commit and push
         run: |
