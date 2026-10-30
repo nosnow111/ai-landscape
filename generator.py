@@ -3,7 +3,7 @@ import json
 import anthropic
 import openai as _openai
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -316,10 +316,13 @@ SECTIONS = {
     "ai_news": {
         "title": "AI News",
         "prompt": (
+            f"TODAY IS {datetime.now(timezone.utc).strftime('%Y-%m-%d')}. "
             "You are a senior tech journalist at a major publication. Using the live research data provided "
             "above, compile up to 20 of the most significant and recent AI news stories from the past 7 days. "
             "RECENCY RULE: target stories from the past 7 days. If the research data contains fewer than 10 "
             "stories from the past 7 days, extend to the past 14 days to reach 10–20 items. "
+            f"HARD CUTOFF: do NOT include any story with a date before "
+            f"{(datetime.now(timezone.utc) - timedelta(days=14)).strftime('%Y-%m-%d')}. "
             "Always sort most recent first. Do NOT include stories older than 14 days. "
             "SOURCE QUALITY: use two tiers of acceptable sources. "
             "Tier 1 — major tech/business publications (preferred for all story types): "
@@ -560,6 +563,14 @@ def run_generation(sections: list = None, research_data: dict = None):
             data = annotate_agreement(key, data, cross_data)
         else:
             data = generate_section(key, SECTIONS[key], context)
+
+        if key == "ai_news" and "items" in data:
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=14)).strftime("%Y-%m-%d")
+            before = len(data["items"])
+            data["items"] = [item for item in data["items"] if item.get("date", "") >= cutoff]
+            dropped = before - len(data["items"])
+            if dropped:
+                print(f"  [ai_news] dropped {dropped} item(s) older than {cutoff}")
 
         if sources:
             data["sources"] = sources
