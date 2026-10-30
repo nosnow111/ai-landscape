@@ -204,23 +204,26 @@ def build_standalone():
         f.write(html)
     print(f"  Built {out} ({os.path.getsize(out) // 1024} KB)")
 
-    # Standalone presentation only — about.html with Tailwind inlined
-    soup = BeautifulSoup(presentation_html, "html.parser")
-    for tag in soup.find_all("script"):
-        src = tag.get("src", "")
-        if "tailwindcss" in src:
-            tag.replace_with(BeautifulSoup(f"<script>{tailwind_js}</script>", "html.parser"))
-        elif "googletagmanager" in src or "gtag(" in (tag.string or "") or "dataLayer" in (tag.string or ""):
-            tag.decompose()
-    # Reroute dashboard/news links to live site instead of local files
-    for a in soup.find_all("a", href=True):
-        if a["href"] == "index.html":
-            a["href"] = "https://nosnow111.github.io/ai-landscape/"
-        elif a["href"] == "news.html":
-            a["href"] = "https://nosnow111.github.io/ai-landscape/news.html"
+    # Standalone presentation — same as standalone.html but starts on Presentation view
+    pres_standalone = html.replace(
+        '<div id="view-dashboard" class="view active">',
+        '<div id="view-dashboard" class="view">'
+    ).replace(
+        '<div id="view-presentation" class="view">',
+        '<div id="view-presentation" class="view active">'
+    ).replace(
+        '<button class="top-nav-btn active" onclick="showView(\'dashboard\')">📊 Dashboard</button>',
+        '<button class="top-nav-btn" onclick="showView(\'dashboard\')">📊 Dashboard</button>'
+    ).replace(
+        '<button class="top-nav-btn" onclick="showView(\'presentation\')">📋 About</button>',
+        '<button class="top-nav-btn active" onclick="showView(\'presentation\')">📋 About</button>'
+    ).replace(
+        "<title>AI Landscape Dashboard · Standalone</title>",
+        "<title>AI Landscape · Presentation</title>"
+    )
     pres_out = os.path.join(DOCS_DIR, "about-standalone.html")
     with open(pres_out, "w") as f:
-        f.write(str(soup))
+        f.write(pres_standalone)
     print(f"  Built {pres_out} ({os.path.getsize(pres_out) // 1024} KB)")
 
 
