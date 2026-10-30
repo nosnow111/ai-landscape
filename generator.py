@@ -19,11 +19,15 @@ _RANK_RULE = (
 )
 
 _URL_RULE = (
-    "URL REQUIREMENT: every item's 'url' field MUST be a real, currently accessible webpage — "
-    "the official product or documentation page for that exact tool or model version. "
+    "URL REQUIREMENT: every item's 'url' field MUST be the official product or documentation page "
+    "for that exact tool — hosted on the tool's own domain (e.g. cursor.com, github.com/org/repo, "
+    "docs.anthropic.com). "
+    "Do NOT use URLs from comparison articles, roundup blogs, press release aggregators, or "
+    "third-party review sites (e.g. g2.com, capterra.com, technologymatch.com, kingdee.com, "
+    "shivojha.com, techradar.com) even if those pages appear in the research data. "
     "Do NOT invent, guess, or hallucinate URLs. "
-    "If you cannot provide a verified URL for an item, omit that item entirely. "
-    "Use the live research data provided above to confirm correct URLs."
+    "If you cannot identify the official URL for an item, omit that item entirely. "
+    "Use the live research data to verify correct official URLs."
 )
 
 SECTIONS = {
@@ -558,8 +562,15 @@ def run_generation(sections: list = None, research_data: dict = None):
                     f_cross = ex.submit(generate_section_gpt4o, key, SECTIONS[key], context)
                 else:
                     f_cross = ex.submit(generate_section, key, SECTIONS[key], context, "claude-sonnet-4-6")
-                data = f_opus.result()
+                opus_err = None
+                try:
+                    data = f_opus.result()
+                except Exception as e:
+                    opus_err = e
                 cross_data = f_cross.result()
+                if opus_err is not None:
+                    print(f"  [{key}] Opus failed ({opus_err}) — using GPT-4o result as primary")
+                    data = cross_data
             data = annotate_agreement(key, data, cross_data)
         else:
             data = generate_section(key, SECTIONS[key], context)
