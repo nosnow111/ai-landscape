@@ -1,257 +1,251 @@
 {
-  "summary": "The Model Context Protocol (MCP), introduced by Anthropic, has become the de facto standard for connecting AI agents to external tools, data, and APIs through a uniform interface. By 2026 the ecosystem has matured into three layers\u2014aggregator platforms that bundle hundreds of integrations, gateways/proxies that secure and route MCP traffic, and individual servers that expose a single service\u2014with remote OAuth-secured hosted endpoints now the default deployment model. This matters because MCP lets any AI assistant (Claude, Cursor, ChatGPT, Copilot) read resources and invoke tools without bespoke glue code, dramatically accelerating agentic workflows.",
-  "ecosystem_note": "Aggregators expose many integrations behind one MCP endpoint, gateways/proxies sit in front of MCP servers to add auth, routing, and observability, and individual servers each connect an AI agent to a single tool or service.",
+  "summary": "The Model Context Protocol (MCP) has become the default standard for connecting AI agents to external tools and data sources, with 2026 seeing explosive adoption across developer tooling. The ecosystem spans aggregator platforms that bundle thousands of tools, gateways that handle auth and routing at enterprise scale, and individual MCP servers for specific services like GitHub, browsers, and design tools. MCP matters because it lets AI agents move beyond passive chat into taking real actions\u2014editing repos, querying databases, and automating workflows\u2014through a single interoperable interface.",
+  "ecosystem_note": "Aggregators (Composio, Smithery) are marketplaces that expose many tools through one managed endpoint, gateways (agentgateway, Cloudflare, Kong) are infrastructure that centralizes auth, discovery, and routing across servers, while individual servers (GitHub MCP, Playwright MCP) each connect an agent to one specific service or capability.",
   "tools": [
     {
       "name": "GitHub MCP Server",
-      "vendor": "GitHub (Microsoft)",
+      "vendor": "GitHub",
       "rank": 1,
       "type": "server",
-      "connects_to": "GitHub repos, issues, pull requests, Actions, code search and automation",
+      "connects_to": "GitHub repositories, issues, pull requests, Actions, code search, and repo automation",
       "pricing_free": true,
-      "pricing_paid": "Included with GitHub plans; Team/Enterprise pricing from ~$4/user/mo",
+      "pricing_paid": "Included with GitHub plans; usage follows GitHub Free/Team/Enterprise tiers",
       "strengths": [
-        "Official, OAuth-secured remote endpoint",
-        "Deep repo and workflow automation",
-        "Massive install base across Cursor, Copilot, Claude"
+        "Official GitHub-maintained server",
+        "Deep repo and PR automation",
+        "Works across Cursor, Claude, Copilot, and most clients"
       ],
-      "best_for": "Automating code review, repo management, and CI/CD from an AI agent",
+      "best_for": "Automating repository workflows, code review, and issue management from AI agents",
       "url": "https://github.com/github/github-mcp-server",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Playwright MCP Server",
+      "name": "Playwright MCP",
       "vendor": "Microsoft",
       "rank": 2,
       "type": "server",
-      "connects_to": "Browser automation, web navigation, scraping, and end-to-end testing",
+      "connects_to": "Browser automation, web scraping, E2E testing, and page interaction via accessibility tree",
       "pricing_free": true,
-      "pricing_paid": "Free and open source (MIT)",
+      "pricing_paid": "Free and open source",
       "strengths": [
-        "Lets agents drive real browsers",
-        "Accessibility-tree based, fast and reliable",
-        "Backed by Microsoft and widely installed"
+        "Reliable structured browser control without screenshots",
+        "Backed by Microsoft/Playwright",
+        "Ideal for agentic web tasks and testing"
       ],
-      "best_for": "Giving AI agents the ability to browse, test, and interact with web apps",
+      "best_for": "Giving agents the ability to navigate, test, and extract data from live websites",
       "url": "https://github.com/microsoft/playwright-mcp",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "sonnet_rank": 10,
+      "rank_agreement": "disagree"
     },
     {
-      "name": "Composio (Rube MCP)",
-      "vendor": "Composio",
+      "name": "Filesystem MCP",
+      "vendor": "Anthropic",
       "rank": 3,
-      "type": "aggregator",
-      "connects_to": "250+ apps including Gmail, Slack, Jira, Notion, Linear, GitHub via a single MCP endpoint",
-      "pricing_free": true,
-      "pricing_paid": "Paid plans scale by usage/seats, roughly from ~$29/mo",
-      "strengths": [
-        "Managed auth for hundreds of tools",
-        "Single endpoint unlocks the whole ecosystem",
-        "Strong Cursor and agent framework support"
-      ],
-      "best_for": "Teams wanting one managed gateway to hundreds of SaaS integrations",
-      "url": "https://composio.dev",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "Cloudflare MCP / Remote MCP",
-      "vendor": "Cloudflare",
-      "rank": 4,
-      "type": "gateway",
-      "connects_to": "Hosting and securing remote MCP servers with OAuth, Workers, and edge deployment",
-      "pricing_free": true,
-      "pricing_paid": "Workers paid plans from $5/mo plus usage",
-      "strengths": [
-        "Easy remote MCP deployment with OAuth",
-        "Global edge network and durable objects",
-        "First-class remote MCP tooling"
-      ],
-      "best_for": "Deploying secure, scalable remote MCP servers at the edge",
-      "url": "https://developers.cloudflare.com/agents/model-context-protocol/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "Supabase MCP Server",
-      "vendor": "Supabase",
-      "rank": 5,
       "type": "server",
-      "connects_to": "Postgres databases, auth, storage, and edge functions for querying and schema management",
+      "connects_to": "Local file read/write, directory navigation, and file editing on the developer's machine",
       "pricing_free": true,
-      "pricing_paid": "Pro plan from $25/mo",
+      "pricing_paid": "Free and open source",
       "strengths": [
-        "Official OAuth-secured endpoint",
-        "Direct database querying for agents",
-        "Popular with AI-native app builders"
+        "Reference implementation from Anthropic",
+        "Essential for Cursor local workflows",
+        "Simple and widely bundled by default"
       ],
-      "best_for": "Letting agents read/write project databases and backend resources",
-      "url": "https://supabase.com/docs/guides/getting-started/mcp",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "Notion MCP Server",
-      "vendor": "Notion",
-      "rank": 6,
-      "type": "server",
-      "connects_to": "Notion pages, databases, and workspace content for reading and updating docs",
-      "pricing_free": true,
-      "pricing_paid": "Notion paid plans from ~$10/user/mo",
-      "strengths": [
-        "Official hosted OAuth endpoint",
-        "Rich knowledge-base access",
-        "Widely adopted for docs/wiki workflows"
-      ],
-      "best_for": "Agents that manage knowledge bases, notes, and project docs",
-      "url": "https://developers.notion.com/docs/mcp",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "Figma MCP Server",
-      "vendor": "Figma",
-      "rank": 7,
-      "type": "server",
-      "connects_to": "Figma designs, components, and dev mode data for design-to-code workflows",
-      "pricing_free": true,
-      "pricing_paid": "Figma paid seats from ~$12/editor/mo",
-      "strengths": [
-        "Official OAuth-secured endpoint",
-        "Design-to-code context for agents",
-        "Strong adoption in frontend tooling"
-      ],
-      "best_for": "Turning Figma designs into code via AI agents",
-      "url": "https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Dev-Mode-MCP-Server",
+      "best_for": "Local file access and manipulation for coding agents in editors like Cursor",
+      "url": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
       "name": "Smithery",
       "vendor": "Smithery",
-      "rank": 8,
+      "rank": 4,
       "type": "aggregator",
-      "connects_to": "Registry and hosting of thousands of MCP servers with one-click install and discovery",
+      "connects_to": "Thousands of hosted MCP servers and tools with managed auth, credentials, and sessions",
       "pricing_free": true,
-      "pricing_paid": "Usage-based hosting tiers",
+      "pricing_paid": "Usage-based and team plans for hosted/managed deployments",
       "strengths": [
-        "Largest MCP server registry",
-        "One-click deploy and discovery",
-        "Central hub for finding servers"
+        "Largest hosted MCP registry",
+        "Handles auth and sessions automatically",
+        "One-click deploy and discovery"
       ],
-      "best_for": "Discovering, installing, and hosting MCP servers quickly",
-      "url": "https://smithery.ai",
+      "best_for": "Quickly connecting agents to many tools without managing infrastructure",
+      "url": "https://smithery.ai/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Stripe MCP Server",
-      "vendor": "Stripe",
+      "name": "Composio",
+      "vendor": "Composio",
+      "rank": 5,
+      "type": "aggregator",
+      "connects_to": "250+ apps including Slack, GitHub, Gmail, Notion, Linear with managed OAuth and auth",
+      "pricing_free": true,
+      "pricing_paid": "Paid tiers for higher usage, teams, and enterprise auth management",
+      "strengths": [
+        "Broad SaaS integration catalog",
+        "Robust managed authentication",
+        "Strong framework and agent SDK support"
+      ],
+      "best_for": "Building production agents that need authenticated access to many SaaS tools",
+      "url": "https://composio.dev/",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Figma MCP",
+      "vendor": "Figma",
+      "rank": 6,
+      "type": "server",
+      "connects_to": "Figma design files, components, and design-to-code context for frontend generation",
+      "pricing_free": true,
+      "pricing_paid": "Tied to Figma plan tiers; Dev Mode features require paid seats",
+      "strengths": [
+        "Official design-to-code bridge",
+        "Popular for frontend AI workflows",
+        "Pulls accurate design context into agents"
+      ],
+      "best_for": "Converting Figma designs into code with AI assistance in Cursor and similar tools",
+      "url": "https://www.figma.com/blog/introducing-figmas-dev-mode-mcp-server/",
+      "sonnet_rank": 2,
+      "rank_agreement": "disagree"
+    },
+    {
+      "name": "Supabase MCP",
+      "vendor": "Supabase",
+      "rank": 7,
+      "type": "server",
+      "connects_to": "Supabase Postgres databases, tables, migrations, and project management",
+      "pricing_free": true,
+      "pricing_paid": "Follows Supabase Free/Pro/Team/Enterprise plans",
+      "strengths": [
+        "Official database MCP",
+        "Lets agents query and manage schemas",
+        "Popular in full-stack AI workflows"
+      ],
+      "best_for": "Letting agents interact with and manage Postgres databases and backend data",
+      "url": "https://github.com/supabase-community/supabase-mcp",
+      "sonnet_rank": 5,
+      "rank_agreement": "minor"
+    },
+    {
+      "name": "Cloudflare MCP Server",
+      "vendor": "Cloudflare",
+      "rank": 8,
+      "type": "gateway",
+      "connects_to": "Remote MCP hosting, Workers, auth/OAuth, and deployment of MCP servers at the edge",
+      "pricing_free": true,
+      "pricing_paid": "Workers paid plans and usage-based pricing for production deployments",
+      "strengths": [
+        "First-class remote MCP hosting with OAuth",
+        "Edge scalability",
+        "Strong tooling for building and deploying servers"
+      ],
+      "best_for": "Deploying and hosting remote MCP servers securely at scale",
+      "url": "https://developers.cloudflare.com/agents/model-context-protocol/",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Notion MCP",
+      "vendor": "Notion",
       "rank": 9,
       "type": "server",
-      "connects_to": "Payments, customers, invoices, subscriptions, and billing operations",
+      "connects_to": "Notion pages, databases, and workspace content for reading and writing docs",
       "pricing_free": true,
-      "pricing_paid": "Pay-per-transaction (2.9% + 30\u00a2 typical)",
+      "pricing_paid": "Follows Notion Free/Plus/Business/Enterprise plans",
       "strengths": [
-        "Official OAuth-secured endpoint",
-        "Agentic payment and billing automation",
-        "Trusted financial integration"
+        "Official Notion integration",
+        "Great for knowledge and docs workflows",
+        "Widely adopted for agent memory and notes"
       ],
-      "best_for": "Agents handling payments, billing, and financial data",
-      "url": "https://docs.stripe.com/mcp",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "best_for": "Letting agents read and manage documentation and knowledge bases in Notion",
+      "url": "https://github.com/makenotion/notion-mcp-server",
+      "sonnet_rank": 4,
+      "rank_agreement": "disagree"
     },
     {
-      "name": "mcp.so",
-      "vendor": "mcp.so community",
+      "name": "Docker MCP",
+      "vendor": "Docker",
       "rank": 10,
-      "type": "aggregator",
-      "connects_to": "Directory of thousands of MCP servers and clients for discovery and comparison",
+      "type": "server",
+      "connects_to": "Container management, image builds, and a curated catalog of MCP servers via Docker MCP Toolkit",
       "pricing_free": true,
-      "pricing_paid": "Free directory",
+      "pricing_paid": "Docker Pro/Team/Business plans for advanced features",
       "strengths": [
-        "Comprehensive community directory",
-        "High search traffic and discovery",
-        "Covers both servers and clients"
+        "Secure containerized MCP execution",
+        "Official MCP Catalog and Toolkit",
+        "Simplifies running servers in isolation"
       ],
-      "best_for": "Browsing and comparing the full MCP server ecosystem",
-      "url": "https://mcp.so",
+      "best_for": "Running MCP servers safely in containers and managing containerized infrastructure",
+      "url": "https://docs.docker.com/ai/mcp-catalog-and-toolkit/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Slack MCP Server (korotovsky)",
-      "vendor": "korotovsky (community)",
+      "name": "Sentry MCP",
+      "vendor": "Sentry",
       "rank": 11,
       "type": "server",
-      "connects_to": "Slack channels, messages, and workspace data for reading and posting",
+      "connects_to": "Error tracking, issues, performance monitoring, and debugging context from Sentry",
       "pricing_free": true,
-      "pricing_paid": "Free and open source",
+      "pricing_paid": "Follows Sentry Developer/Team/Business plans",
       "strengths": [
-        "Most widely adopted Slack MCP (~1,800 stars)",
-        "Actively maintained in 2026",
-        "No-admin token setup options"
+        "Official observability MCP",
+        "Pulls real error context into agents",
+        "Strong for AI-assisted debugging"
       ],
-      "best_for": "Agents that read and post to Slack for team communication",
-      "url": "https://github.com/korotovsky/slack-mcp-server",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "best_for": "Giving agents live error and monitoring data to diagnose and fix bugs",
+      "url": "https://docs.sentry.io/product/sentry-mcp/",
+      "sonnet_rank": 8,
+      "rank_agreement": "disagree"
     },
     {
-      "name": "Sentry MCP Server",
-      "vendor": "Sentry",
+      "name": "Stripe MCP",
+      "vendor": "Stripe",
       "rank": 12,
       "type": "server",
-      "connects_to": "Error monitoring, issues, traces, and performance data for debugging",
+      "connects_to": "Payments, customers, invoices, subscriptions, and Stripe API operations",
       "pricing_free": true,
-      "pricing_paid": "Team plan from ~$26/mo",
+      "pricing_paid": "Free to use; standard Stripe transaction fees apply",
       "strengths": [
-        "Official hosted MCP endpoint",
-        "Pulls error context directly into agents",
-        "Strong developer adoption for debugging"
+        "Official payments MCP",
+        "Lets agents query and manage billing",
+        "Well-documented and secure"
       ],
-      "best_for": "Agents that triage and debug production errors",
-      "url": "https://docs.sentry.io/product/sentry-mcp/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "best_for": "Automating payment and billing operations through AI agents",
+      "url": "https://docs.stripe.com/mcp",
+      "sonnet_rank": 6,
+      "rank_agreement": "disagree"
     },
     {
-      "name": "Linear MCP Server",
-      "vendor": "Linear",
+      "name": "Slack MCP Server",
+      "vendor": "korotovsky (community)",
       "rank": 13,
       "type": "server",
-      "connects_to": "Linear issues, projects, and cycles for planning and tracking",
+      "connects_to": "Slack channels, messages, search, and workspace interactions",
       "pricing_free": true,
-      "pricing_paid": "Paid plans from ~$8/user/mo",
+      "pricing_paid": "Free and open source; Slack workspace plan applies",
       "strengths": [
-        "Official OAuth-secured endpoint",
-        "Clean issue/project automation",
-        "Popular with modern engineering teams"
+        "Most widely adopted community Slack MCP (~1,800 GitHub stars)",
+        "Actively maintained in 2026",
+        "Works without full admin app approval"
       ],
-      "best_for": "Agents that manage sprints, issues, and roadmaps",
-      "url": "https://linear.app/docs/mcp",
+      "best_for": "Letting agents read and post in Slack for team communication workflows",
+      "url": "https://github.com/korotovsky/slack-mcp-server",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     }
   ],
   "_meta": {
     "title": "MCP Tools & Servers",
-    "generated_at": "2026-10-30T16:53:28.754282+00:00"
+    "generated_at": "2026-10-30T17:02:10.980312+00:00"
   },
   "notable_sonnet_additions": [
     "GitHub MCP",
-    "Playwright MCP",
-    "Figma MCP",
     "Vercel MCP",
-    "Supabase MCP",
     "Apollo MCP",
-    "Notion MCP",
-    "Stripe MCP",
-    "Docker MCP",
-    "Linear MCP"
+    "Intercom MCP"
   ],
   "cross_checked": true,
   "sources": [
@@ -259,7 +253,7 @@
     "https://www.reddit.com/r/mcp/comments/1vsuinw/compiled_a_list_of_mcp_servers_q3_2026/",
     "https://www.totalum.app/blog/best-mcp-servers-2026",
     "https://composio.dev/content/best-mcp-servers-for-cursor-in-2026",
-    "https://composio.dev/content/13-mcp-servers-every-developer-should-know",
-    "https://github.com/padmarajnidagundi/Playwright-AI-Agent-POM-MCP-Server"
+    "https://github.com/agentic-community/mcp-gateway-registry",
+    "https://smithery.ai/"
   ]
 }
