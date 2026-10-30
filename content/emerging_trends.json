@@ -1,216 +1,198 @@
 {
-  "summary": "Over the next 12 months, AI's center of gravity is shifting from raw model scaling toward reasoning-focused post-training and inference-time compute, making models that think before they answer the new frontier. Agentic and multi-agent systems are moving rapidly from demos into production, powered by better tool integration, while open-source models increasingly rival closed ones. Expect AI to become a true collaborative partner across coding, operations, and autonomous systems, with efficiency, security, and specialized smaller models shaping real-world deployment.",
+  "summary": "AI in the next 12 months is shifting decisively from raw model scaling toward reasoning-focused systems that 'think harder' at inference time and act autonomously as agents. Expect agentic software development, multi-agent orchestration, and AI for scientific discovery to move rapidly from research into production, while open-source models continue closing the gap with closed frontier systems. Efficiency plays\u2014small models, distillation, and edge deployment\u2014will broaden where and how AI runs.",
   "trends": [
     {
-      "name": "Reasoning Models (Chain-of-Thought, Inference-Time Scaling)",
+      "name": "Reasoning Models (Chain-of-Thought / Test-Time Reasoning)",
       "rank": 1,
-      "description": "Models are increasingly trained via reasoning-focused post-training and allocate more compute at inference time to 'think' through problems step by step. This shift from raw pretraining scale to test-time reasoning has become the dominant paradigm for frontier model improvement. Chain-of-thought and reflective techniques let models self-correct and tackle complex multi-step tasks.",
-      "maturity": "Growing",
+      "description": "Models that explicitly reason step-by-step before answering, trained with reasoning-focused post-training rather than just pretraining scale. This has become the dominant frontier paradigm, with major labs competing on math, coding, and multi-step problem solving.",
+      "maturity": "Mainstream",
       "examples": [
         "OpenAI o3",
         "DeepSeek R1",
-        "Google Gemini 2.5 Thinking",
+        "Google Gemini 2.5 (thinking)",
         "Anthropic Claude extended thinking"
       ],
-      "why_it_matters": "Reasoning models dramatically improve reliability on math, coding, and complex analysis, enabling AI to handle tasks that previously required human experts.",
+      "why_it_matters": "Reasoning models dramatically improve reliability on complex, multi-step tasks, making AI viable for high-stakes technical and scientific work.",
       "url": "https://openai.com/index/introducing-o3-and-o4-mini/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Agentic and Multi-Agent Systems",
+      "name": "Inference-Time Compute Scaling",
       "rank": 2,
-      "description": "AI agents that plan, use tools, and execute multi-step workflows autonomously are moving to the forefront of enterprise and consumer applications. Multi-agent architectures coordinate specialized agents to accomplish complex goals with minimal human oversight. Industry analysts widely frame 2026 as the year agents 'take the lead.'",
+      "description": "Instead of only scaling training, labs allocate more compute during inference to let models 'think harder' on tough problems. This technique underpins the gains seen in reasoning models and is reshaping how performance is purchased and deployed.",
       "maturity": "Growing",
       "examples": [
-        "OpenAI Operator",
-        "Anthropic Claude Agents",
-        "Microsoft Copilot Agents",
-        "LangGraph",
-        "CrewAI"
+        "OpenAI o-series",
+        "DeepSeek R1",
+        "test-time search/sampling techniques"
       ],
-      "why_it_matters": "Agents automate end-to-end business processes, shifting AI from a question-answering tool to an autonomous worker that completes real tasks.",
+      "why_it_matters": "It unlocks major quality gains without retraining, giving users a dial to trade cost for accuracy on demand.",
+      "url": "https://huggingface.co/blog/aufklarer/ai-trends-2026-test-time-reasoning-reflective-agen",
+      "sonnet_rank": 3,
+      "rank_agreement": "minor"
+    },
+    {
+      "name": "Agentic & Multi-Agent Systems",
+      "rank": 3,
+      "description": "AI systems that plan, use tools, and take multi-step actions autonomously, increasingly coordinated as teams of specialized agents. Better tool integration and reasoning post-training are pushing agents from demos into real workflows.",
+      "maturity": "Growing",
+      "examples": [
+        "OpenAI Agents SDK",
+        "LangGraph",
+        "CrewAI",
+        "Microsoft AutoGen"
+      ],
+      "why_it_matters": "Agents automate entire workflows rather than single tasks, changing how businesses operate across functions.",
       "url": "https://www.anthropic.com/news/building-effective-agents",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "AI Coding Agents",
-      "rank": 3,
-      "description": "Autonomous and semi-autonomous coding tools now write, debug, and refactor entire codebases rather than just autocompleting lines. These agents integrate deeply with developer workflows, running tests and iterating on tasks independently. Adoption among developers and enterprises is accelerating rapidly.",
-      "maturity": "Mainstream",
-      "examples": [
-        "GitHub Copilot",
-        "Cursor",
-        "Anthropic Claude Code",
-        "OpenAI Codex",
-        "Devin by Cognition"
-      ],
-      "why_it_matters": "Coding agents are measurably boosting developer productivity and reshaping how software is built, from prototype to production.",
-      "url": "https://www.anthropic.com/claude-code",
-      "sonnet_rank": 8,
-      "rank_agreement": "disagree"
-    },
-    {
-      "name": "Better Tool Integration and Model Context Protocol",
+      "name": "AI Coding Agents / Agentic Software Development",
       "rank": 4,
-      "description": "Standardized ways for models to connect to external tools, data, and APIs are enabling far more capable and reliable agents. Protocols like MCP are being adopted across major AI platforms to give models secure, consistent access to live systems. This infrastructure layer is what makes agentic AI practical in production.",
+      "description": "Autonomous coding agents that write, test, debug, and refactor code across whole repositories, newly highlighted as a top tech trend. They are moving beyond autocomplete toward delegated engineering tasks.",
       "maturity": "Growing",
       "examples": [
-        "Anthropic Model Context Protocol (MCP)",
-        "OpenAI function calling",
-        "Google A2A protocol"
+        "Cursor",
+        "GitHub Copilot (agent mode)",
+        "Claude Code",
+        "Devin",
+        "OpenAI Codex"
       ],
-      "why_it_matters": "Robust tool integration turns isolated models into connected systems that can act on real data, a prerequisite for trustworthy enterprise AI.",
-      "url": "https://modelcontextprotocol.io/",
+      "why_it_matters": "They are measurably accelerating software development and reshaping the engineering role itself.",
+      "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-top-trends-in-tech",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Multimodal Models",
+      "name": "AI for Scientific Discovery & Engineering",
       "rank": 5,
-      "description": "Models that natively process and generate across text, images, audio, and video are becoming the default rather than the exception. Multimodal agents combine chain-of-thought reasoning with the ability to perceive and act across different data types. This unlocks richer, more human-like interactions and applications.",
-      "maturity": "Mainstream",
+      "description": "A newly highlighted trend applying AI to accelerate research in biology, materials, chemistry, and engineering design. Reasoning and agentic capabilities are making AI a genuine collaborator in discovery rather than just an analysis tool.",
+      "maturity": "Emerging",
       "examples": [
-        "Google Gemini 2.5",
-        "OpenAI GPT-4o",
-        "Anthropic Claude",
-        "Meta Llama 4"
+        "Google DeepMind AlphaFold/AlphaProteo",
+        "Microsoft MatterGen",
+        "FutureHouse"
       ],
-      "why_it_matters": "Multimodal AI enables applications that see, hear, and respond across media, powering everything from robotics to accessibility tools.",
-      "url": "https://deepmind.google/technologies/gemini/",
-      "sonnet_rank": 4,
-      "rank_agreement": "minor"
-    },
-    {
-      "name": "Open-Source Model Parity with Closed Models",
-      "rank": 6,
-      "description": "Open-weight models are rapidly closing the performance gap with proprietary frontier systems, especially in reasoning and coding. Releases like DeepSeek R1 demonstrated that competitive reasoning capability can be achieved and shared openly at lower cost. This is driving broad adoption among enterprises seeking control and customization.",
-      "maturity": "Growing",
-      "examples": [
-        "DeepSeek R1",
-        "Meta Llama 4",
-        "Alibaba Qwen",
-        "Mistral"
-      ],
-      "why_it_matters": "Open-source parity democratizes access to frontier AI and pressures closed providers on pricing and transparency.",
-      "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1",
-      "sonnet_rank": 9,
-      "rank_agreement": "disagree"
+      "why_it_matters": "It compresses research timelines in medicine and materials, potentially unlocking breakthroughs worth trillions.",
+      "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-top-trends-in-tech",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
     },
     {
       "name": "Computer Use / UI Agents",
-      "rank": 7,
-      "description": "AI systems that can operate graphical user interfaces by viewing screens, moving cursors, and clicking like a human are emerging quickly. These agents navigate arbitrary software and websites without custom integrations. Major labs have shipped early production versions of this capability.",
+      "rank": 6,
+      "description": "Models that operate graphical interfaces directly\u2014clicking, typing, and navigating software like a human user. This extends agents to any application without needing custom APIs.",
       "maturity": "Emerging",
       "examples": [
         "Anthropic Computer Use",
         "OpenAI Operator",
         "Google Project Mariner"
       ],
-      "why_it_matters": "UI agents can automate any software task a human can perform, vastly expanding what AI can do without API access.",
+      "why_it_matters": "It lets AI automate legacy and third-party software with no integration work, vastly widening the automation surface.",
       "url": "https://www.anthropic.com/news/3-5-models-and-computer-use",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "AI Infrastructure and Inference Efficiency",
-      "rank": 8,
-      "description": "As inference-time compute grows, optimizing the efficiency of serving and running models has become a top priority. Innovations in hardware, quantization, and serving stacks aim to lower cost and energy per query. This is a central theme in 2026 trend forecasts focused on infrastructure momentum.",
+      "name": "Open-Source Model Parity with Closed Models",
+      "rank": 7,
+      "description": "Open-weight models are increasingly matching closed frontier systems on reasoning, coding, and general benchmarks. This is reshaping deployment economics and sovereignty choices for enterprises.",
       "maturity": "Growing",
       "examples": [
-        "NVIDIA Blackwell",
-        "Groq",
-        "vLLM",
-        "Google TPU v7"
+        "DeepSeek R1",
+        "Meta Llama",
+        "Alibaba Qwen",
+        "Mistral"
       ],
-      "why_it_matters": "Efficient inference is what makes reasoning-heavy and agentic AI economically viable at scale.",
-      "url": "https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/",
+      "why_it_matters": "Enterprises gain frontier-class capability they can self-host, cutting cost and improving data control.",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Small Language Models (SLMs) and Edge AI",
+      "name": "Multimodal Models",
+      "rank": 8,
+      "description": "Models that natively process and generate across text, images, audio, and video in a unified system. Native multimodality is now standard for flagship models and is expanding into real-time interaction.",
+      "maturity": "Mainstream",
+      "examples": [
+        "Google Gemini 2.5",
+        "OpenAI GPT-4o",
+        "Anthropic Claude (vision)"
+      ],
+      "why_it_matters": "Unified multimodal understanding enables richer, more natural applications from document analysis to live assistance.",
+      "url": "https://deepmind.google/technologies/gemini/",
+      "sonnet_rank": 5,
+      "rank_agreement": "disagree"
+    },
+    {
+      "name": "Small Language Models (SLMs) & Distillation",
       "rank": 9,
-      "description": "Compact, specialized models are increasingly deployed on devices and at the edge for low-latency, private, and cost-efficient inference. Distillation from larger models enables small models to retain strong capabilities for targeted tasks. This complements the cloud-based frontier model ecosystem.",
+      "description": "Compact, efficient models distilled from larger ones that deliver strong performance at a fraction of the cost and latency. Distillation of reasoning capabilities into small models is a major area of growth.",
       "maturity": "Growing",
       "examples": [
-        "Microsoft Phi-4",
-        "Google Gemma 3",
-        "Apple Intelligence on-device models",
-        "Meta Llama 3.2"
+        "Microsoft Phi",
+        "Google Gemma",
+        "Meta Llama small variants",
+        "distilled DeepSeek R1"
       ],
-      "why_it_matters": "SLMs bring capable AI to phones, cars, and IoT devices while cutting cost and preserving user privacy.",
+      "why_it_matters": "They make capable AI affordable to run at scale and on constrained hardware.",
       "url": "https://azure.microsoft.com/en-us/products/phi",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Voice AI and Real-Time Conversational Agents",
+      "name": "Voice AI & Real-Time Conversational Agents",
       "rank": 10,
-      "description": "Low-latency, natural-sounding voice interfaces are becoming production-ready and integrated into agents and consumer products. Advances in speech-to-speech models enable fluid, interruptible conversation. Adoption is spreading across customer service, assistants, and accessibility.",
+      "description": "Low-latency, natural speech-to-speech systems enabling fluid real-time conversation with AI. Advances in streaming multimodal models are making voice interfaces production-ready.",
       "maturity": "Growing",
       "examples": [
         "OpenAI Realtime API",
-        "ElevenLabs",
         "Google Gemini Live",
-        "Amazon Nova Sonic"
+        "ElevenLabs"
       ],
-      "why_it_matters": "Natural voice interaction makes AI accessible to everyone and transforms hands-free and customer-facing applications.",
+      "why_it_matters": "Natural voice interaction expands AI into customer service, accessibility, and hands-free use at scale.",
       "url": "https://platform.openai.com/docs/guides/realtime",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Autonomous Mobility and Physical AI",
+      "name": "AI at the Edge / On-Device AI",
       "rank": 11,
-      "description": "AI is increasingly driving autonomous vehicles, robotics, and logistics systems, with forecasts citing it as a force reshaping cities. Robotaxis and autonomous delivery are scaling in multiple markets, while robotics foundation models advance rapidly. This moves AI from screens into the physical world.",
+      "description": "Running capable models locally on phones, laptops, and embedded devices for privacy, latency, and offline use. Smaller efficient models and hardware acceleration are driving rapid adoption.",
       "maturity": "Growing",
       "examples": [
-        "Waymo",
-        "Tesla FSD",
-        "NVIDIA Isaac",
-        "Figure robotics"
+        "Apple Intelligence",
+        "Qualcomm AI Engine",
+        "Google Gemini Nano",
+        "Microsoft Copilot+ PCs"
       ],
-      "why_it_matters": "Physical AI promises to transform transportation, logistics, and labor-intensive industries over the coming years.",
-      "url": "https://waymo.com/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "Synthetic Training Data",
-      "rank": 12,
-      "description": "As high-quality human data grows scarce, AI-generated synthetic data is increasingly used to train and fine-tune models, especially for reasoning. Model-generated reasoning traces and curated synthetic datasets power post-training pipelines. This technique is central to the reasoning-model boom.",
-      "maturity": "Growing",
-      "examples": [
-        "NVIDIA Nemotron",
-        "Anthropic constitutional/synthetic data methods",
-        "Gretel"
-      ],
-      "why_it_matters": "Synthetic data overcomes data bottlenecks and enables targeted improvement of model reasoning and safety.",
-      "url": "https://www.nvidia.com/en-us/ai-data-science/foundation-models/nemotron/",
+      "why_it_matters": "On-device AI brings private, instant intelligence to billions of consumer devices without cloud dependence.",
+      "url": "https://www.apple.com/apple-intelligence/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     }
   ],
   "_meta": {
     "title": "Emerging AI Trends",
-    "generated_at": "2026-10-30T14:11:58.054635+00:00"
+    "generated_at": "2026-10-30T14:41:36.604602+00:00"
   },
   "notable_sonnet_additions": [
     "Reasoning Models",
-    "Agentic/Multi-agent Systems",
-    "Inference-time Compute Scaling",
+    "Agentic Software Development",
+    "AI for Scientific Discovery and Engineering",
     "AI in Edge Devices",
-    "AI-generated Synthetic Training Data",
-    "LLM Fine-tuning Going Mainstream",
-    "Voice AI"
+    "LLM Fine-Tuning Going Mainstream",
+    "Small Language Models (SLMs)",
+    "AI Coding Agents",
+    "Model Distillation"
   ],
   "cross_checked": true,
   "sources": [
     "https://www.ibm.com/think/news/ai-tech-trends-predictions-2026",
-    "https://dobetter.esade.edu/en/technology-trends-2026",
-    "https://news.microsoft.com/source/features/ai/whats-next-in-ai-7-trends-to-watch-in-2026/",
+    "https://hai.stanford.edu/ai-index/2026-ai-index-report",
+    "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-top-trends-in-tech",
     "https://huggingface.co/blog/aufklarer/ai-trends-2026-test-time-reasoning-reflective-agen",
     "https://twimlai.com/podcast/twimlai/ai-trends-2026-openclaw-agents-reasoning-llms",
     "https://www.youtube.com/watch?v=f9jwTSfIPuM"
