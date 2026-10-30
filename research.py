@@ -77,8 +77,8 @@ QUERIES = {
         "NotebookLM Gemini Notebook Microsoft Copilot M365 Notion AI usage 2026",
     ],
     "ai_news": [
-        "site:techcrunch.com OR site:theverge.com OR site:reuters.com OR site:bloomberg.com AI news this week 2026",
-        "AI model release funding regulation acquisition announcement past 7 days 2026",
+        "site:techcrunch.com OR site:theverge.com OR site:reuters.com OR site:bloomberg.com OR site:wired.com AI news this week 2026",
+        "site:anthropic.com OR site:openai.com OR site:deepmind.google OR site:ai.meta.com OR site:mistral.ai AI announcement release past 7 days 2026",
     ],
     "emerging_trends": [
         "emerging AI trends 2026 gaining momentum",
