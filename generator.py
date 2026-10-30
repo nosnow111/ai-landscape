@@ -578,10 +578,21 @@ def run_generation(sections: list = None, research_data: dict = None):
         if key == "ai_news" and "items" in data:
             cutoff = (datetime.now(timezone.utc) - timedelta(days=14)).strftime("%Y-%m-%d")
             before = len(data["items"])
-            data["items"] = [item for item in data["items"] if item.get("date", "") >= cutoff]
-            dropped = before - len(data["items"])
-            if dropped:
-                print(f"  [ai_news] dropped {dropped} item(s) older than {cutoff}")
+            filtered = [item for item in data["items"] if item.get("date", "") >= cutoff]
+            if len(filtered) >= 5:
+                data["items"] = filtered
+                dropped = before - len(filtered)
+                if dropped:
+                    print(f"  [ai_news] dropped {dropped} item(s) older than {cutoff}")
+            else:
+                # Research was likely empty — keep all items rather than showing nothing
+                print(f"  [ai_news] only {len(filtered)} item(s) pass 14-day filter — keeping all {before} (research may be stale)")
+
+            # Don't overwrite existing file if new generation produced 0 items
+            existing_path = os.path.join(CONTENT_DIR, "ai_news.json")
+            if not data.get("items") and os.path.exists(existing_path):
+                print("  [ai_news] 0 items generated — keeping existing ai_news.json")
+                return
 
         if sources:
             data["sources"] = sources
