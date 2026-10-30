@@ -188,8 +188,10 @@ SECTIONS = {
         "title": "AI Video Generation",
         "prompt": (
             "List the TOP 10 AI video and movie generation tools ranked by actual user adoption as of your knowledge cutoff. "
-            "Be objective — include tools like Sora (OpenAI), Runway ML, Pika Labs, Kling AI, Luma Dream Machine, "
-            "HeyGen, Synthesia, Veo (Google), Udio, and others that qualify by actual usage. "
+            "CRITICAL: only include tools that are currently available and NOT discontinued. "
+            "Do NOT include Sora — it was discontinued by OpenAI. "
+            "Be objective — include tools like Runway ML, Pika Labs, Kling AI, Luma Dream Machine, "
+            "HeyGen, Synthesia, Veo (Google), and others that qualify by actual usage. "
             "For each tool cover: vendor, pricing, key strengths, max video length/resolution, best use case, url. "
             f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
