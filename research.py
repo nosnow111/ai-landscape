@@ -201,10 +201,11 @@ def _serper_search(query: str) -> dict | None:
 # ── unified search ─────────────────────────────────────────────────────────
 
 def _search(query: str, news_mode: bool = False) -> dict:
-    """Try Firecrawl → Tavily → Serper; return empty dict if all fail."""
-    result = _firecrawl_search(query)
-    if result is not None:
-        return result
+    """Try providers in order; for news_mode skip Firecrawl (no recency filter) and go straight to Tavily."""
+    if not news_mode:
+        result = _firecrawl_search(query)
+        if result is not None:
+            return result
     result = _tavily_search(query, news_mode=news_mode)
     if result is not None:
         return result
