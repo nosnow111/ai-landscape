@@ -150,12 +150,13 @@ def _tavily_search(query: str, retries: int = 3, news_mode: bool = False) -> dic
             kwargs = dict(
                 query=query,
                 search_depth="advanced" if news_mode else "basic",
-                max_results=5 if news_mode else 3,
+                max_results=3,
                 include_answer=True,
             )
             if news_mode:
                 kwargs["topic"] = "news"
-                kwargs["days"] = 7
+                kwargs["days"] = 14
+                kwargs["max_results"] = 10
             return client.search(**kwargs)
         except Exception as e:
             msg = str(e)
@@ -201,7 +202,7 @@ def _serper_search(query: str) -> dict | None:
 # ── unified search ─────────────────────────────────────────────────────────
 
 def _search(query: str, news_mode: bool = False) -> dict:
-    """Try providers in order; for news_mode skip Firecrawl (no recency filter) and go straight to Tavily."""
+    """Try providers in order; for news_mode skip Firecrawl and Serper (no recency filter on either)."""
     if not news_mode:
         result = _firecrawl_search(query)
         if result is not None:
@@ -209,9 +210,10 @@ def _search(query: str, news_mode: bool = False) -> dict:
     result = _tavily_search(query, news_mode=news_mode)
     if result is not None:
         return result
-    result = _serper_search(query)
-    if result is not None:
-        return result
+    if not news_mode:
+        result = _serper_search(query)
+        if result is not None:
+            return result
     return {}
 
 
