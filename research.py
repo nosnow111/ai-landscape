@@ -14,11 +14,16 @@ then Tavily, then Serper. All three give the same 1,000 free queries/month or be
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# 2 queries per section = 26/run × 30 days = ~780/month
+# Current month/year injected into time-sensitive queries at module load
+_THIS_MONTH = datetime.now().strftime("%B %Y")   # e.g. "October 2026"
+_THIS_WEEK  = datetime.now().strftime("%Y-%m-%d") # e.g. "2026-10-30"
+
+# 2-3 queries per section; ai_news gets 3 = ~28/run × 30 days = ~840/month
 QUERIES = {
     "code_tools": [
         "most popular AI code generation tools developer adoption 2026",
@@ -77,8 +82,9 @@ QUERIES = {
         "NotebookLM Gemini Notebook Microsoft Copilot M365 Notion AI usage 2026",
     ],
     "ai_news": [
-        "AI news this week model release product launch funding October 2026",
-        "Anthropic OpenAI Google Meta Microsoft AI announcement October 2026",
+        f"AI news this week major announcements {_THIS_MONTH}",
+        f"Anthropic OpenAI Google Meta Microsoft AI model release announcement {_THIS_MONTH}",
+        f"AI funding regulation enterprise adoption news {_THIS_WEEK}",
     ],
     "emerging_trends": [
         "emerging AI trends 2026 gaining momentum",
@@ -128,7 +134,7 @@ def _firecrawl_search(query: str, retries: int = 3) -> dict | None:
 
 # ── Tavily ─────────────────────────────────────────────────────────────────
 
-def _tavily_search(query: str, retries: int = 3) -> dict | None:
+def _tavily_search(query: str, retries: int = 3, news_mode: bool = False) -> dict | None:
     """Returns Tavily response dict, or None if unavailable/rate-limited."""
     key = os.environ.get("TAVILY_API_KEY")
     if not key:
@@ -141,12 +147,16 @@ def _tavily_search(query: str, retries: int = 3) -> dict | None:
 
     for attempt in range(retries):
         try:
-            return client.search(
+            kwargs = dict(
                 query=query,
-                search_depth="basic",
-                max_results=3,
+                search_depth="advanced" if news_mode else "basic",
+                max_results=5 if news_mode else 3,
                 include_answer=True,
             )
+            if news_mode:
+                kwargs["topic"] = "news"
+                kwargs["days"] = 7
+            return client.search(**kwargs)
         except Exception as e:
             msg = str(e)
             if ("429" in msg or "432" in msg or "quota" in msg.lower()) and attempt < retries - 1:
@@ -190,12 +200,17 @@ def _serper_search(query: str) -> dict | None:
 
 # ── unified search ─────────────────────────────────────────────────────────
 
-def _search(query: str) -> dict:
+def _search(query: str, news_mode: bool = False) -> dict:
     """Try Firecrawl → Tavily → Serper; return empty dict if all fail."""
-    for fn in (_firecrawl_search, _tavily_search, _serper_search):
-        result = fn(query)
-        if result is not None:
-            return result
+    result = _firecrawl_search(query)
+    if result is not None:
+        return result
+    result = _tavily_search(query, news_mode=news_mode)
+    if result is not None:
+        return result
+    result = _serper_search(query)
+    if result is not None:
+        return result
     return {}
 
 
@@ -214,18 +229,19 @@ def _active_provider() -> str:
 def research_section(key: str) -> tuple[str, list[str]]:
     """Returns (context_text, list_of_source_urls)"""
     queries = QUERIES.get(key, [])
+    news_mode = (key == "ai_news")
     results = []
     sources = []
     for i, query in enumerate(queries):
         if i > 0:
             time.sleep(0.3)
         try:
-            response = _search(query)
+            response = _search(query, news_mode=news_mode)
             if response.get("answer"):
                 results.append(f"Q: {query}\nA: {response['answer']}")
             for r in response.get("results", []):
                 url = r.get("url", "")
-                snippet = r.get("content", "")[:400]
+                snippet = r.get("content", "")[:600]
                 if snippet:
                     results.append(f"Source ({url}): {snippet}")
                 if url and url not in sources:
