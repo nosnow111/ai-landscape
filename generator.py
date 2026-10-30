@@ -401,8 +401,12 @@ def _normalize(name: str) -> str:
     return re.sub(r"[^a-z0-9]", "", name.lower())
 
 
+_MAX_RETRIES = 3
+
+
 def generate_section(key: str, section: dict, research_context: str = "",
                      model: str = "claude-opus-4-8") -> dict:
+    import time
     short = model.split("-")[1]  # "sonnet" or "opus"
     print(f"  Generating [{short}]: {section['title']}")
     context_block = ""
@@ -414,29 +418,37 @@ def generate_section(key: str, section: dict, research_context: str = "",
             "include them — do not limit yourself only to the tools named in the prompt. "
             "Supplement with your own knowledge where the research is incomplete.\n\n"
         )
-    message = client.messages.create(
-        model=model,
-        max_tokens=8192,
-        messages=[
-            {
-                "role": "user",
-                "content": (
-                    f"{context_block}{section['prompt']}\n\n"
-                    "Respond with ONLY valid JSON, no markdown fences, no explanation."
-                ),
-            }
-        ],
+    prompt_text = (
+        f"{context_block}{section['prompt']}\n\n"
+        "Respond with ONLY valid JSON, no markdown fences, no explanation."
     )
-    raw = message.content[0].text.strip()
-    data = json.loads(raw)
-    data["_meta"] = {
-        "title": section["title"],
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-    }
-    return data
+    for attempt in range(_MAX_RETRIES):
+        try:
+            message = client.messages.create(
+                model=model,
+                max_tokens=8192,
+                messages=[{"role": "user", "content": prompt_text}],
+            )
+            raw = message.content[0].text.strip() if message.content else ""
+            if not raw:
+                raise ValueError("empty response from API")
+            data = json.loads(raw)
+            data["_meta"] = {
+                "title": section["title"],
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+            }
+            return data
+        except Exception as e:
+            if attempt < _MAX_RETRIES - 1:
+                wait = 2 ** attempt
+                print(f"  [{short}] {section['title']} attempt {attempt + 1} failed ({e}) — retrying in {wait}s")
+                time.sleep(wait)
+            else:
+                raise
 
 
 def generate_section_gpt4o(key: str, section: dict, research_context: str = "") -> dict:
+    import time
     if not _openai_client:
         raise RuntimeError("OPENAI_API_KEY not set — cannot run GPT-4o cross-check")
     print(f"  Generating [gpt-4o]: {section['title']}")
@@ -448,28 +460,37 @@ def generate_section_gpt4o(key: str, section: dict, research_context: str = "") 
             "If the research mentions tools NOT listed in the prompt below that have significant adoption, "
             "include them. Supplement with your own knowledge where research is incomplete.\n\n"
         )
-    response = _openai_client.chat.completions.create(
-        model="gpt-4o",
-        max_tokens=8192,
-        response_format={"type": "json_object"},
-        messages=[
-            {
-                "role": "system",
-                "content": "You are an expert analyst of the AI ecosystem. Respond with valid JSON only.",
-            },
-            {
-                "role": "user",
-                "content": f"{context_block}{section['prompt']}\n\nRespond with ONLY valid JSON, no markdown fences.",
-            },
-        ],
-    )
-    raw = response.choices[0].message.content.strip()
-    data = json.loads(raw)
-    data["_meta"] = {
-        "title": section["title"],
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-    }
-    return data
+    prompt_text = f"{context_block}{section['prompt']}\n\nRespond with ONLY valid JSON, no markdown fences."
+    for attempt in range(_MAX_RETRIES):
+        try:
+            response = _openai_client.chat.completions.create(
+                model="gpt-4o",
+                max_tokens=8192,
+                response_format={"type": "json_object"},
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are an expert analyst of the AI ecosystem. Respond with valid JSON only.",
+                    },
+                    {"role": "user", "content": prompt_text},
+                ],
+            )
+            raw = response.choices[0].message.content.strip() if response.choices else ""
+            if not raw:
+                raise ValueError("empty response from API")
+            data = json.loads(raw)
+            data["_meta"] = {
+                "title": section["title"],
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+            }
+            return data
+        except Exception as e:
+            if attempt < _MAX_RETRIES - 1:
+                wait = 2 ** attempt
+                print(f"  [gpt-4o] {section['title']} attempt {attempt + 1} failed ({e}) — retrying in {wait}s")
+                time.sleep(wait)
+            else:
+                raise
 
 
 def annotate_agreement(key: str, primary: dict, secondary: dict) -> dict:
