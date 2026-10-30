@@ -183,9 +183,11 @@ SECTIONS = {
         "title": "AI Image Generation",
         "prompt": (
             "List the TOP 10 AI image generation tools ranked by actual user adoption and usage as of your knowledge cutoff. "
+            "CRITICAL: use only real, widely-known product names. Do NOT invent internal codenames, model variants, "
+            "or unofficial nicknames (e.g. 'Nano Banana' is NOT a real product — do not use it). "
+            "Use official product names only: Midjourney, DALL-E 3, Stable Diffusion, Flux, Adobe Firefly, "
+            "Ideogram, Leonardo AI, Runway, Canva AI (Magic Media), Google Imagen, Grok Aurora, and others. "
             "Be objective — base rankings on user counts, social media activity, API usage, and developer surveys. "
-            "Include tools like Midjourney, DALL-E 3, Stable Diffusion, Flux, Adobe Firefly, Ideogram, "
-            "Leonardo AI, Runway, Canva AI, and others that qualify — rank all candidates then apply the cutoff rule below. "
             "For each tool cover: vendor, pricing (free tier + paid), key strengths, output quality, best use case, url. "
             f"{_RANK_RULE} {_URL_RULE} "
             "Return a JSON object with two keys: "
