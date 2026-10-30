@@ -202,9 +202,20 @@ def build_standalone():
     out = os.path.join(DOCS_DIR, "standalone.html")
     with open(out, "w") as f:
         f.write(html)
+    print(f"  Built {out} ({os.path.getsize(out) // 1024} KB)")
 
-    size_kb = os.path.getsize(out) // 1024
-    print(f"  Built {out} ({size_kb} KB)")
+    # Standalone presentation only — about.html with Tailwind inlined
+    soup = BeautifulSoup(presentation_html, "html.parser")
+    for tag in soup.find_all("script"):
+        src = tag.get("src", "")
+        if "tailwindcss" in src:
+            tag.replace_with(BeautifulSoup(f"<script>{tailwind_js}</script>", "html.parser"))
+        elif "googletagmanager" in src or "gtag(" in (tag.string or "") or "dataLayer" in (tag.string or ""):
+            tag.decompose()
+    pres_out = os.path.join(DOCS_DIR, "about-standalone.html")
+    with open(pres_out, "w") as f:
+        f.write(str(soup))
+    print(f"  Built {pres_out} ({os.path.getsize(pres_out) // 1024} KB)")
 
 
 if __name__ == "__main__":
