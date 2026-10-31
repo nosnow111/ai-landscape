@@ -20,6 +20,12 @@ def build():
     os.makedirs(DOCS_DIR, exist_ok=True)
     env = Environment(loader=FileSystemLoader("templates"))
 
+    def load_news_sorted(key):
+        data = load_content(key)
+        if "items" in data:
+            data["items"] = sorted(data["items"], key=lambda x: x.get("date", ""), reverse=True)
+        return data
+
     sections = {
         "code_tools": load_content("code_tools"),
         "models": load_content("models"),
@@ -36,7 +42,7 @@ def build():
         "fine_tuning": load_content("fine_tuning"),
         "llm_optimization": load_content("llm_optimization"),
         "emerging_trends": load_content("emerging_trends"),
-        "ai_news": load_content("ai_news"),
+        "ai_news": load_news_sorted("ai_news"),
     }
 
     html = env.get_template("index.html").render(
