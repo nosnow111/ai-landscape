@@ -321,13 +321,14 @@ SECTIONS = {
         "title": "AI News",
         "prompt": (
             f"TODAY IS {datetime.now(timezone.utc).strftime('%Y-%m-%d')}. "
-            "You are a senior tech journalist at a major publication. Using the live research data provided "
-            "above, compile up to 20 of the most significant and recent AI news stories from the past 7 days. "
-            "RECENCY RULE: target stories from the past 7 days. If the research data contains fewer than 10 "
-            "stories from the past 7 days, extend to the past 14 days to reach 10–20 items. "
-            f"HARD CUTOFF: do NOT include any story with a date before "
-            f"{(datetime.now(timezone.utc) - timedelta(days=14)).strftime('%Y-%m-%d')}. "
-            "Always sort most recent first. Do NOT include stories older than 14 days. "
+            "You are a senior tech journalist at a major publication. Compile up to 20 of the most "
+            "significant and recent AI news stories. "
+            "If live research data is provided above, use it as your primary source. "
+            "If no research data is provided, generate news from your training knowledge — use the most "
+            "recent stories you know about and do NOT return empty output. "
+            "RECENCY RULE: target stories from the past 14 days when possible. Sort most recent first. "
+            f"Prefer stories dated after {(datetime.now(timezone.utc) - timedelta(days=14)).strftime('%Y-%m-%d')} "
+            "but include older stories if needed to reach at least 7 items. "
             "SOURCE QUALITY: use two tiers of acceptable sources. "
             "Tier 1 — major tech/business publications (preferred for all story types, must be freely accessible — no paywalls): "
             "Reuters, The Verge, TechCrunch, Wired, Ars Technica, MIT Technology Review, "
@@ -573,20 +574,31 @@ def run_generation(sections: list = None, research_data: dict = None):
                     data = cross_data
             data = annotate_agreement(key, data, cross_data)
         else:
-            data = generate_section(key, SECTIONS[key], context)
+            try:
+                data = generate_section(key, SECTIONS[key], context)
+            except Exception as e:
+                if key == "ai_news":
+                    print(f"  [ai_news] Opus failed ({e}) — trying Sonnet fallback")
+                    data = generate_section(key, SECTIONS[key], context, "claude-sonnet-4-6")
+                else:
+                    raise
 
         if key == "ai_news" and "items" in data:
-            cutoff = (datetime.now(timezone.utc) - timedelta(days=14)).strftime("%Y-%m-%d")
+            cutoff_strict = (datetime.now(timezone.utc) - timedelta(days=14)).strftime("%Y-%m-%d")
+            cutoff_loose  = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%d")
             before = len(data["items"])
-            filtered = [item for item in data["items"] if item.get("date", "") >= cutoff]
-            if len(filtered) >= 5:
-                data["items"] = filtered
-                dropped = before - len(filtered)
+            strict = [item for item in data["items"] if item.get("date", "") >= cutoff_strict]
+            loose  = [item for item in data["items"] if item.get("date", "") >= cutoff_loose]
+            if len(strict) >= 5:
+                data["items"] = strict
+                dropped = before - len(strict)
                 if dropped:
-                    print(f"  [ai_news] dropped {dropped} item(s) older than {cutoff}")
+                    print(f"  [ai_news] dropped {dropped} item(s) older than {cutoff_strict}")
+            elif len(loose) >= 5:
+                data["items"] = loose
+                print(f"  [ai_news] only {len(strict)} within 14d — using 30d window ({len(loose)} items)")
             else:
-                # Research was likely empty — keep all items rather than showing nothing
-                print(f"  [ai_news] only {len(filtered)} item(s) pass 14-day filter — keeping all {before} (research may be stale)")
+                print(f"  [ai_news] keeping all {before} items (research may be stale or empty)")
 
             # Don't overwrite existing file if new generation produced 0 items
             existing_path = os.path.join(CONTENT_DIR, "ai_news.json")
