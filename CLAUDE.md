@@ -112,7 +112,12 @@ Each section fires 2 queries per run (26 total, ~780/month). Provider priority: 
 - **Dual-model cross-check**: Claude Opus 4.8 is primary (most accurate); GPT-4o cross-checks all 9 ranked sections. Each tool shows ✅ Consensus / 🟡 Minor diff / 🔴 Disagree / ⚪ GPT-4o excluded badge. Opus + GPT-4o chosen over two Anthropic models because different training data makes disagreements more meaningful.
 - **Pipeline orchestrator** (`pipeline.py`): 4-stage pipeline with checkpoint files. Stages skip automatically if already complete; `--from=<stage>` to restart from any point. Prevents wasted API calls if a run fails partway.
 - **Link validator** (`validate_links.py`): fetches every URL, checks page relevance via Claude Haiku, auto-fixes wrong-page links using Tavily search. HTTP 403s treated as valid (major platforms block scrapers). Runs after build; never blocks the commit.
-- **URL rule** (`_URL_RULE`): injected into all ranked section prompts — models must have verifiable official pages or be omitted. Prevents hallucinated URLs for unreleased models.
+- **URL rule** (`_URL_RULE`): injected into all ranked section prompts — models must have verifiable official pages or be omitted. Prevents hallucinated URLs for unreleased models. Also explicitly blocks comparison article domains (g2.com, capterra.com, technologymatch.com, kingdee.com, shivojha.com, techradar.com).
+- **News source policy**: `ai_news` uses Tier 1 free-access publications only (Reuters, TechCrunch, The Verge, Ars Technica, Wired, CNBC, VentureBeat, Fortune, Forbes, BBC, The Guardian, MIT Technology Review, Nature, Science). Paywalled outlets (WSJ, FT, Bloomberg, NYT, The Information) excluded from the prompt entirely.
+- **Tavily news mode**: `ai_news` research skips Firecrawl and Serper (no recency filter) and uses Tavily with `topic="news"`, `days=14`, `max_results=10`.
+- **ai_news post-gen filter**: items older than 14 days dropped if ≥5 remain; falls back to 30-day window; keeps all if fewer than 5 pass. `ai_news.json` never overwritten if 0 items generated.
+- **Generation fallbacks**: GPT-4o promoted to primary for ranked sections if Opus returns empty. Sonnet 4.6 fallback for `ai_news` if Opus fails.
+- **News sort**: `build.py` sorts `ai_news` items descending by date before rendering — guaranteed newest-first regardless of generator order.
 
 ## Hosting platforms evaluated (and why rejected)
 | Platform | Reason rejected |

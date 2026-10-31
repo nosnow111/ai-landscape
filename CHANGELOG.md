@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.16.0] - 2026-10-31
+### Changed
+- News items sorted newest-first in `build.py` — guaranteed regardless of generator output order
+- News sources restricted to free-access Tier 1 only (Reuters, TechCrunch, The Verge, Ars Technica, Wired, CNBC, VentureBeat, Fortune, Forbes, BBC, The Guardian, MIT Technology Review, Nature, Science); paywalled outlets (WSJ, FT, Bloomberg, NYT, The Information) excluded
+- Tavily news mode (`topic="news"`, `days=14`) used for `ai_news` research — skips Firecrawl and Serper which have no recency filter
+- 14-day post-generation recency filter: drops items older than 14 days if ≥5 remain; falls back to 30-day window; keeps all if fewer than 5 pass the loose filter
+- `ai_news.json` preserved (not overwritten) if generation produces 0 items
+- GPT-4o promoted to primary for any ranked section where Opus returns empty
+- Sonnet 4.6 fallback for `ai_news` when Opus fails
+- `_URL_RULE` strengthened to explicitly block comparison article domains (g2.com, capterra.com, technologymatch.com, kingdee.com, shivojha.com, techradar.com)
+- `url_overrides.json`: added fixes for Figma MCP (github.com/figma/mcp → help.figma.com), Stripe MCP (stripe/agent-toolkit → docs.stripe.com/mcp), RooCode domain hijack, Imagen 3 rename, and comparison article skip entries
+
 ## [0.14.0] - 2026-10-25
 ### Added
 - GPT-4o as cross-check model replacing Claude Sonnet — two different companies makes disagreements more meaningful
