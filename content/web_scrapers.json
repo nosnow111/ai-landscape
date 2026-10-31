@@ -1,86 +1,86 @@
 {
-  "summary": "AI-powered web scraping and browser automation have converged into a space where LLMs handle extraction, natural-language queries, and self-healing selectors, while headless-browser infrastructure handles dynamic, JavaScript-heavy pages. Tools now span a spectrum from no-code visual scrapers to developer-first SDKs and cloud browser platforms purpose-built for autonomous AI agents. Developer adoption clusters around open-source frameworks (Playwright, Puppeteer, Selenium) and AI-native extraction APIs (Firecrawl, Apify), with newer agent-focused infrastructure (Browserbase, AgentQL) gaining rapid traction.",
+  "summary": "AI-powered web scraping and browser automation has evolved from brittle CSS-selector scripts toward LLM-driven extraction, natural-language queries, and agent-ready infrastructure that returns clean, structured data for RAG pipelines and autonomous agents. The current landscape splits between markdown/LLM-extraction tools (Firecrawl, Diffbot), large-scale extraction platforms (Apify, Bright Data), managed headless-browser infrastructure (Browserbase), no-code scrapers (Browse.ai, Octoparse), and programmable browser frameworks (Playwright, Puppeteer, Selenium) increasingly paired with AI layers like AgentQL and Stagehand.",
   "tools": [
     {
       "name": "Playwright",
       "vendor": "Microsoft",
       "rank": 1,
       "pricing_free": true,
-      "pricing_paid": "Free and open source; costs only from cloud/browser infrastructure you run it on",
+      "pricing_paid": "Free and open-source (MIT); costs only arise from hosting/infra",
       "ai_features": [
-        "Works as the execution layer for AI agents and LLM-driven browsing",
-        "Playwright MCP server enables LLMs to drive browsers via natural language",
-        "Integrates with AI frameworks for self-healing locators and codegen"
+        "Integrates with AI agents and MCP servers for browser control",
+        "Pairs with LLMs for element location and action planning",
+        "Codegen and auto-waiting assist AI-driven test/scrape generation"
       ],
       "strengths": [
-        "Cross-browser (Chromium, Firefox, WebKit) automation",
-        "Auto-waiting and robust selectors reduce flakiness",
-        "Massive community and first-class language bindings (JS, Python, .NET, Java)"
+        "Cross-browser support (Chromium, Firefox, WebKit)",
+        "Robust auto-waiting and reliable selectors",
+        "Huge community and multi-language SDKs (JS, Python, .NET, Java)"
       ],
-      "best_for": "Dynamic pages needing clicks, form fills, and full browser interaction",
+      "best_for": "Dynamic pages requiring clicks, form fills, and full browser interaction",
       "url": "https://playwright.dev",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
       "name": "Puppeteer",
-      "vendor": "Google (Chrome DevTools team)",
+      "vendor": "Google",
       "rank": 2,
       "pricing_free": true,
-      "pricing_paid": "Free and open source; infrastructure costs only",
+      "pricing_paid": "Free and open-source (Apache 2.0)",
       "ai_features": [
-        "Commonly paired with LLMs to parse rendered DOM for extraction",
-        "Used as the browser layer in many AI scraping agents"
+        "Commonly wrapped by AI agents for headless browsing",
+        "Works with LLM-based extraction pipelines"
       ],
       "strengths": [
-        "Deep Chrome/Chromium control via DevTools Protocol",
-        "Mature, widely documented, huge npm ecosystem",
-        "Great for headless rendering and PDF/screenshot generation"
+        "Mature Chromium automation",
+        "Large ecosystem of plugins (stealth, etc.)",
+        "Fine-grained control over the browser"
       ],
-      "best_for": "Chromium-based headless automation and rendering for Node.js developers",
+      "best_for": "Chromium-based headless automation and scraping in Node.js",
       "url": "https://pptr.dev",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "sonnet_rank": 3,
+      "rank_agreement": "minor"
     },
     {
       "name": "Selenium",
       "vendor": "Selenium (open-source project / SeleniumHQ)",
       "rank": 3,
       "pricing_free": true,
-      "pricing_paid": "Free and open source; Selenium Grid/cloud providers add cost",
+      "pricing_paid": "Free and open-source (Apache 2.0); Selenium Grid self-hosted",
       "ai_features": [
-        "Integrates with AI vision and LLM tools for element identification",
-        "Ecosystem plugins add self-healing locators"
+        "Integrates with AI test-generation and self-healing locator tools",
+        "Used as execution layer for AI browsing agents"
       ],
       "strengths": [
-        "Longest-standing, broadest browser and language support",
-        "W3C WebDriver standard, enormous community",
-        "Scales via Selenium Grid"
+        "Broadest language and browser support",
+        "Industry-standard with massive community",
+        "WebDriver protocol compatibility"
       ],
-      "best_for": "Cross-browser automation and testing at enterprise scale",
+      "best_for": "Cross-browser automation and large legacy test/scraping suites",
       "url": "https://www.selenium.dev",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "sonnet_rank": 2,
+      "rank_agreement": "minor"
     },
     {
       "name": "Firecrawl",
       "vendor": "Firecrawl (Mendable)",
       "rank": 4,
       "pricing_free": true,
-      "pricing_paid": "Paid plans from ~$16/mo (Hobby) up to Standard/Growth tiers and enterprise",
+      "pricing_paid": "Free tier with limited credits; paid plans from ~$16/mo (Hobby) up to Standard/Growth tiers",
       "ai_features": [
-        "LLM-ready clean markdown/JSON output",
-        "Natural-language extraction and structured schema extraction",
-        "Lovable integration to build scraping workflows with natural language"
+        "LLM-ready markdown and structured JSON output",
+        "Natural-language extraction via /extract endpoint",
+        "Lovable integration for natural-language scraping workflows"
       ],
       "strengths": [
-        "Converts whole sites into clean, LLM-ready data",
-        "Simple API for crawl, scrape, map, and extract",
-        "Strong fit for RAG and AI pipelines"
+        "Clean, LLM-ready output out of the box",
+        "Handles crawling, scraping, and dynamic rendering",
+        "Simple API designed for AI/RAG pipelines"
       ],
       "best_for": "Feeding clean web data into LLM and RAG applications",
       "url": "https://www.firecrawl.dev",
-      "sonnet_rank": 2,
+      "sonnet_rank": 5,
       "rank_agreement": "minor"
     },
     {
@@ -88,151 +88,151 @@
       "vendor": "Apify",
       "rank": 5,
       "pricing_free": true,
-      "pricing_paid": "Free tier with $5 monthly credits; paid plans from ~$49/mo plus usage",
+      "pricing_paid": "Free tier ($5 monthly usage credit); paid plans from ~$49/mo (Starter) to Scale/Enterprise",
       "ai_features": [
-        "AI-powered Actors for extraction",
-        "Integrations with LLMs and RAG pipelines",
-        "AI crawler and content-to-dataset tooling"
+        "AI-enabled Actors for extraction",
+        "Integrations with LLMs and vector stores for RAG",
+        "LLM-assisted data parsing"
       ],
       "strengths": [
-        "Huge marketplace of prebuilt Actors",
-        "Robust scheduling, proxies, and scaling for extraction at scale",
-        "Mature platform with strong browser control"
+        "Marketplace of thousands of pre-built Actors",
+        "Scalable cloud infrastructure with proxies",
+        "Flexible, developer-oriented platform"
       ],
-      "best_for": "Large-scale, production extraction with reusable Actors",
+      "best_for": "Large-scale, customizable extraction and automation at scale",
       "url": "https://apify.com",
-      "sonnet_rank": 1,
-      "rank_agreement": "disagree"
+      "sonnet_rank": 4,
+      "rank_agreement": "minor"
     },
     {
       "name": "Browserbase",
       "vendor": "Browserbase",
       "rank": 6,
       "pricing_free": true,
-      "pricing_paid": "Free tier with limited hours; paid plans from ~$39/mo plus usage",
+      "pricing_paid": "Free tier with limited browser hours; paid plans from ~$39/mo plus usage",
       "ai_features": [
-        "Headless browser infrastructure purpose-built for AI agents",
-        "Stagehand framework for natural-language browser actions",
-        "Integrates with LLM agent frameworks"
+        "Stagehand AI framework for natural-language browser actions",
+        "LLM-driven browsing for AI agents",
+        "AI-ready session APIs"
       ],
       "strengths": [
-        "Managed, scalable cloud browsers with stealth and proxies",
-        "Session recording and live debugging",
-        "Built for production web agents"
+        "Managed headless browser infrastructure at scale",
+        "Stealth, proxies, and captcha handling",
+        "Purpose-built for AI web agents"
       ],
-      "best_for": "Running autonomous AI browser agents at scale",
+      "best_for": "Running production AI agents that need reliable managed browsers",
       "url": "https://www.browserbase.com",
-      "sonnet_rank": 9,
-      "rank_agreement": "disagree"
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
     },
     {
       "name": "Bright Data",
       "vendor": "Bright Data",
       "rank": 7,
       "pricing_free": true,
-      "pricing_paid": "Pay-as-you-go plus subscription tiers; proxies and datasets priced by usage",
+      "pricing_paid": "Free trial; pay-as-you-go and subscription plans (proxies/Web Scraper API usage-based)",
       "ai_features": [
-        "AI-powered Web Scraper APIs and auto-parsing",
-        "LLM-ready dataset delivery",
-        "MCP server for agent access to the web"
+        "AI-powered Web Scraper APIs with structured output",
+        "LLM-ready datasets and MCP server for agents",
+        "Automated unblocking powered by ML"
       ],
       "strengths": [
-        "Industry-leading proxy network and unblocking",
-        "Extraction at massive scale with high reliability",
-        "Prebuilt datasets and scraper APIs"
+        "Massive proxy network and anti-bot handling",
+        "Enterprise-grade extraction at scale",
+        "Pre-collected datasets"
       ],
-      "best_for": "Enterprise-grade extraction at scale with heavy anti-bot requirements",
+      "best_for": "Enterprise-scale extraction requiring robust proxy/unblocking",
       "url": "https://brightdata.com",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Browse AI",
-      "vendor": "Browse AI",
-      "rank": 8,
-      "pricing_free": true,
-      "pricing_paid": "Free tier; paid plans from ~$48.75/mo (billed annually) and up",
-      "ai_features": [
-        "No-code AI robots trained by example",
-        "Automatic adaptation to site layout changes",
-        "Natural-language configuration and monitoring"
-      ],
-      "strengths": [
-        "Point-and-click robot training, no code required",
-        "Scheduled monitoring and change alerts",
-        "Easy spreadsheet/API output"
-      ],
-      "best_for": "No-code recurring data extraction and website change monitoring",
-      "url": "https://www.browse.ai",
-      "sonnet_rank": 5,
-      "rank_agreement": "disagree"
-    },
-    {
       "name": "Octoparse",
       "vendor": "Octoparse",
-      "rank": 9,
+      "rank": 8,
       "pricing_free": true,
-      "pricing_paid": "Free plan; Standard ~$99/mo, Professional ~$249/mo, enterprise above",
+      "pricing_paid": "Free plan; paid from ~$99/mo (Standard) to Professional/Enterprise",
       "ai_features": [
         "AI-assisted auto-detection of data fields",
-        "Smart template and workflow generation"
+        "AI web scraping assistant for template generation"
       ],
       "strengths": [
-        "Visual, no-code point-and-click scraping",
+        "No-code visual scraping interface",
         "Cloud extraction and scheduling",
-        "Handles pagination, logins, and infinite scroll"
+        "Beginner-friendly for non-developers"
       ],
-      "best_for": "Non-developers needing visual, template-driven scraping",
+      "best_for": "No-code structured data extraction for non-developers",
       "url": "https://www.octoparse.com",
+      "sonnet_rank": 7,
+      "rank_agreement": "minor"
+    },
+    {
+      "name": "Browse.ai",
+      "vendor": "Browse.ai",
+      "rank": 9,
+      "pricing_free": true,
+      "pricing_paid": "Free plan; paid from ~$48/mo (Starter) up to Team/Company plans",
+      "ai_features": [
+        "AI-assisted robot training by demonstration",
+        "Automatic adaptation to site layout changes",
+        "Natural-language configuration"
+      ],
+      "strengths": [
+        "No-code monitoring and extraction robots",
+        "Change detection and scheduled scraping",
+        "Prebuilt integrations (Zapier, Sheets)"
+      ],
+      "best_for": "No-code website monitoring and scheduled data extraction",
+      "url": "https://www.browse.ai",
+      "sonnet_rank": 8,
+      "rank_agreement": "minor"
+    },
+    {
+      "name": "Diffbot",
+      "vendor": "Diffbot",
+      "rank": 10,
+      "pricing_free": false,
+      "pricing_paid": "14-day free trial; paid plans from ~$299/mo (Startup) upward",
+      "ai_features": [
+        "AI/ML automatic extraction APIs (Article, Product, etc.)",
+        "Knowledge Graph built from LLM/ML web understanding",
+        "Natural-language and structured query access"
+      ],
+      "strengths": [
+        "Automatic structured extraction without rules",
+        "Large-scale knowledge graph",
+        "Strong accuracy on common page types"
+      ],
+      "best_for": "Automated structured extraction and knowledge-graph data at scale",
+      "url": "https://www.diffbot.com",
       "sonnet_rank": 6,
       "rank_agreement": "disagree"
     },
     {
       "name": "AgentQL",
       "vendor": "AgentQL (Tiny Fish)",
-      "rank": 10,
-      "pricing_free": true,
-      "pricing_paid": "Free tier with monthly API credits; paid plans from ~$99/mo plus usage",
-      "ai_features": [
-        "AI query language to locate elements by natural-language intent",
-        "Self-healing selectors resilient to layout changes",
-        "Structured data extraction via semantic queries"
-      ],
-      "strengths": [
-        "Selectors defined by meaning, not brittle CSS/XPath",
-        "Works with Playwright and agent frameworks",
-        "Reduces scraper maintenance burden"
-      ],
-      "best_for": "Building resilient AI agents that query page elements semantically",
-      "url": "https://www.agentql.com",
-      "sonnet_rank": 7,
-      "rank_agreement": "disagree"
-    },
-    {
-      "name": "Diffbot",
-      "vendor": "Diffbot",
       "rank": 11,
-      "pricing_free": false,
-      "pricing_paid": "14-day trial; paid plans from ~$299/mo and up",
+      "pricing_free": true,
+      "pricing_paid": "Free tier with monthly API credits; paid usage-based plans from ~$99/mo",
       "ai_features": [
-        "Computer-vision and NLP-based automatic page extraction",
-        "Knowledge Graph of structured web entities",
-        "Automatic classification of article, product, and discussion pages"
+        "Natural-language / semantic query language for web elements",
+        "AI-powered locators resilient to layout changes",
+        "LLM-based structured data extraction"
       ],
       "strengths": [
-        "Fully automated structured extraction without rules",
-        "Massive Knowledge Graph API",
-        "Enterprise-grade accuracy"
+        "Query elements by intent rather than selectors",
+        "Works with Playwright/Puppeteer",
+        "Resilient to DOM changes"
       ],
-      "best_for": "Automated structured extraction and knowledge-graph data at enterprise scale",
-      "url": "https://www.diffbot.com",
-      "sonnet_rank": 4,
-      "rank_agreement": "disagree"
+      "best_for": "AI agents and scrapers needing durable, intent-based element selection",
+      "url": "https://www.agentql.com",
+      "sonnet_rank": 9,
+      "rank_agreement": "minor"
     }
   ],
   "_meta": {
     "title": "AI Web Scrapers & Browser Automation",
-    "generated_at": "2026-10-31T04:45:20.235504+00:00"
+    "generated_at": "2026-10-31T16:23:02.658684+00:00"
   },
   "notable_sonnet_additions": [
     "Playwright with AI",
