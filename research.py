@@ -23,7 +23,7 @@ load_dotenv()
 _THIS_MONTH = datetime.now().strftime("%B %Y")   # e.g. "October 2026"
 _THIS_WEEK  = datetime.now().strftime("%Y-%m-%d") # e.g. "2026-10-30"
 
-# Vendor blog domains — used for the extended vendor-announcement news query
+# Vendor blog domains + major news outlets — for extended vendor-announcement query
 _VENDOR_DOMAINS_EARLY = [
     "anthropic.com", "openai.com", "deepmind.google", "blog.google",
     "ai.meta.com", "blogs.microsoft.com", "mistral.ai", "x.ai",
@@ -31,6 +31,14 @@ _VENDOR_DOMAINS_EARLY = [
     "reuters.com", "apnews.com", "techcrunch.com", "theverge.com",
     "wired.com", "arstechnica.com", "venturebeat.com", "fortune.com",
     "bloomberg.com", "wsj.com", "cnbc.com", "nytimes.com",
+]
+
+# Vendor blogs only — direct pull for announcements not yet covered by news outlets
+_VENDOR_BLOGS_ONLY = [
+    "anthropic.com", "openai.com", "deepmind.google", "blog.google",
+    "ai.meta.com", "blogs.microsoft.com", "mistral.ai", "x.ai",
+    "huggingface.co", "cohere.com", "groq.com", "stability.ai",
+    "aws.amazon.com", "azure.microsoft.com", "cloud.google.com",
 ]
 
 # 2-3 queries per section; ai_news gets 3 = ~28/run × 30 days = ~840/month
@@ -96,8 +104,10 @@ QUERIES = {
         f"AI news yesterday latest {_THIS_MONTH}",
         f"Anthropic OpenAI Google Meta Microsoft AI release announcement {_THIS_WEEK}",
         f"AI funding regulation enterprise deal {_THIS_WEEK}",
-        # vendor-focused query: 30-day window + vendor blogs in include_domains
+        # vendor query via news outlets: 30-day window
         (f"Anthropic OpenAI Google Meta Microsoft xAI model launch product release update {_THIS_MONTH}", 30, _VENDOR_DOMAINS_EARLY),
+        # direct pull from vendor blogs only — bypasses news outlet coverage gaps
+        (f"new model release product update announcement {_THIS_MONTH}", 30, _VENDOR_BLOGS_ONLY),
     ],
     "emerging_trends": [
         "emerging AI trends 2026 gaining momentum",
