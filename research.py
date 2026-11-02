@@ -135,6 +135,18 @@ def _firecrawl_search(query: str, retries: int = 3) -> dict | None:
 
 # ── Tavily ─────────────────────────────────────────────────────────────────
 
+# Trusted domains for AI news — Tavily restricts its news search to these only.
+_NEWS_DOMAINS = [
+    "reuters.com", "apnews.com", "techcrunch.com", "theverge.com",
+    "wired.com", "arstechnica.com", "technologyreview.com", "venturebeat.com",
+    "fortune.com", "forbes.com", "cnbc.com", "marketwatch.com",
+    "bbc.com", "bbc.co.uk", "theguardian.com", "bloomberg.com",
+    "wsj.com", "ft.com", "nytimes.com", "businessinsider.com",
+    "washingtonpost.com", "economist.com", "nature.com", "science.org",
+    "axios.com", "theatlantic.com", "fastcompany.com",
+]
+
+
 def _tavily_search(query: str, retries: int = 3, news_mode: bool = False) -> dict | None:
     """Returns Tavily response dict, or None if unavailable/rate-limited."""
     key = os.environ.get("TAVILY_API_KEY")
@@ -158,6 +170,7 @@ def _tavily_search(query: str, retries: int = 3, news_mode: bool = False) -> dic
                 kwargs["topic"] = "news"
                 kwargs["days"] = 14
                 kwargs["max_results"] = 10
+                kwargs["include_domains"] = _NEWS_DOMAINS
             return client.search(**kwargs)
         except Exception as e:
             msg = str(e)
