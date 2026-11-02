@@ -1,124 +1,46 @@
 # Changelog
 
-## [0.17.0] - 2026-11-02
-### Changed
-- News strip shows two columns — 🌐 Industry (left) and 🏢 Vendor (right), 5 headlines each; hidden on non-Overview tabs
-- Full news summaries on news.html only; strip shows headlines + date + source
-- Each `ai_news` item tagged `category: "vendor"` or `"industry"` by the generator
-- Paywalled sources (WSJ, FT, Bloomberg, NYT, The Information) re-allowed as Tier 1
-- AP News and MarketWatch added to Tier 1 news sources
-- Tavily news search restricted to `include_domains` list of ~25 trusted publications — previously returning junk (shattered.io, tech-insider.org) instead of Reuters/Bloomberg/WSJ
-- Research queries for `ai_news` date-anchored to today for same-day/yesterday coverage
-- Auto-fixer domain blocklist rejects replacements from non-authoritative domains (mcpservers.org, gate.ai, g2.com, medium.com, reddit.com, etc.)
-- `--only=<stage>` pipeline flag now always force-runs the named stage (was silently skipping if checkpoint existed)
+## [1.0.0] - 2026-11-02
 
-## [0.16.0] - 2026-10-31
-### Changed
-- News items sorted newest-first in `build.py` — guaranteed regardless of generator output order
-- News sources restricted to free-access Tier 1 only (Reuters, TechCrunch, The Verge, Ars Technica, Wired, CNBC, VentureBeat, Fortune, Forbes, BBC, The Guardian, MIT Technology Review, Nature, Science); paywalled outlets (WSJ, FT, Bloomberg, NYT, The Information) excluded
-- Tavily news mode (`topic="news"`, `days=14`) used for `ai_news` research — skips Firecrawl and Serper which have no recency filter
-- 14-day post-generation recency filter: drops items older than 14 days if ≥5 remain; falls back to 30-day window; keeps all if fewer than 5 pass the loose filter
-- `ai_news.json` preserved (not overwritten) if generation produces 0 items
-- GPT-4o promoted to primary for any ranked section where Opus returns empty
-- Sonnet 4.6 fallback for `ai_news` when Opus fails
-- `_URL_RULE` strengthened to explicitly block comparison article domains (g2.com, capterra.com, technologymatch.com, kingdee.com, shivojha.com, techradar.com)
-- `url_overrides.json`: added fixes for Figma MCP (github.com/figma/mcp → help.figma.com), Stripe MCP (stripe/agent-toolkit → docs.stripe.com/mcp), RooCode domain hijack, Imagen 3 rename, and comparison article skip entries
+Current production state. Everything below reflects what is live today.
 
-## [0.14.0] - 2026-10-25
-### Added
-- GPT-4o as cross-check model replacing Claude Sonnet — two different companies makes disagreements more meaningful
-- `OPENAI_API_KEY` support; falls back to Sonnet automatically if key not set
-- `_URL_RULE` constant injected into all ranked section prompts — items must have verifiable URLs or are omitted
+### Content
+- 16 sections: Code Tools, Models, Image Gen, Video Gen, MCP Tools, Web Scrapers, Workspace, Fine-Tuning, Enterprise APIs, ML Platforms, Emerging Trends (ranked) + Repositories, Databases, Observability, LLM Optimization, AI News (reference/news)
+- Smart 10–15 ranking cutoff — extends past 10 only when adoption clusters tightly, stops at natural drop-off
+- Rankings grounded by live web research before every generation run
 
-## [0.13.0] - 2026-10-25
-### Added
-- `validate_links.py` — fetches every URL across all sections, checks page relevance via Claude Haiku, auto-fixes wrong-page links via Tavily search + Claude verification
-- HTTP 403 responses treated as valid (major platforms block scrapers)
-- `validation_report.json` written after each run; included in CI commits
+### Generation
+- Claude Opus 4.8 primary; GPT-4o cross-check on all ranked sections
+- Agreement badges per tool: ✅ Consensus / 🟡 Minor diff / 🔴 Disagree / ⚪ GPT-4o excluded
+- GPT-4o promoted to primary if Opus returns empty; Sonnet 4.6 fallback for `ai_news`
+- All 16 sections generated in parallel with `ThreadPoolExecutor`
 
-## [0.12.0] - 2026-10-25
-### Added
-- `pipeline.py` — 4-stage orchestrator: research → generate → validate → build
-- Checkpoint files in `checkpoints/` — completed stages skipped on re-run
-- `--from=<stage>`, `--only=<stage>`, `--force` flags
-- `generator.py` accepts `research_data` parameter so pipeline can pass cached research
-- CI now calls `python pipeline.py --force` instead of separate steps
+### Pipeline
+- 4-stage orchestrator (`pipeline.py`): research → generate → validate → build
+- Checkpoint files — completed stages skipped on re-run; `--force` / `--from=<stage>` / `--only=<stage>` flags
+- `--only=<stage>` always force-runs the named stage regardless of checkpoint
 
-## [0.11.0] - 2026-10-25
-### Added
-- Claude Opus 4.8 as primary generation model (more accurate than Sonnet)
-- Dual-model cross-check: Opus primary + Sonnet cross-check on all 9 ranked sections
-- Agreement badges on every ranked section card: ✅ Consensus / 🟡 Minor diff / 🔴 Disagree / ⚪ excluded
-- "Opus-only picks" / "GPT-4o only picks" amber callout when cross-check model surfaces tools primary missed
-- Enterprise APIs and ML Platforms sections added (2 new tabs)
-- 13 content sections total; all sections now run with agreement badge wiring
+### Research
+- Provider priority: Firecrawl → Tavily → Serper
+- `ai_news` uses Tavily news mode (`topic="news"`, `days=14`) with `include_domains` restricted to ~25 trusted publications (Reuters, AP News, WSJ, Bloomberg, CNBC, MarketWatch, TechCrunch, The Verge, Wired, etc.) — prevents junk domains from surfacing
+- Research queries date-anchored to today's date for same-day/yesterday news coverage
 
-## [0.10.0] - 2026-10-25
-### Added
-- LLM Cost & Performance Optimization section — techniques table (savings %, difficulty, providers), quick wins box, and optimization tools (GPTCache, LiteLLM, Helicone, etc.)
+### News
+- Up to 20 items per day; each tagged `category: "vendor"` or `"industry"`
+- Dashboard strip: two-column table (🌐 Industry | 🏢 Vendor), visible on Overview tab only
+- Full summaries on `news.html` only
+- Sources sorted newest-first; 14-day recency filter (falls back to 30-day if fewer than 5 pass)
+- Tier 1 sources include paywalled outlets (WSJ, FT, Bloomberg, NYT) — links provided even if behind paywall
 
-## [0.9.0] - 2026-10-25
-### Added
-- Fine-Tuning Platforms section — top 10 by adoption with "when to fine-tune vs RAG vs prompting" callout, table with supported models and local GPU requirement, and detail cards
+### Validation
+- `validate_links.py` fetches every URL, judges relevance via Claude Haiku, auto-fixes wrong-page links
+- HTTP 403s treated as valid (major platforms block scrapers)
+- `url_overrides.json`: permanent fix and skip registry for known problem URLs
+- Auto-fixer domain blocklist — rejects replacements from non-authoritative domains (mcpservers.org, gate.ai, g2.com, medium.com, reddit.com, etc.)
+- `_URL_RULE` in prompts blocks comparison article domains (g2.com, capterra.com, technologymatch.com, etc.)
 
-### Changed
-- Tab labels shortened and font/padding reduced further to fit all 12 tabs without scrolling
-
-## [0.8.0] - 2026-10-25
-### Added
-- Dark themed header with circuit-dot pattern, 🤖🌍⚡ emoji, centered layout, and compact two-line design
-- Attribution "Curated by Vlad Meyman · Ranked by Claude AI" in header and footer
-- Collapsible "How Rankings Are Calculated" methodology box on Overview tab — signal table, enterprise/aggregator note, 10–15 cutoff explanation
-- Enterprise/aggregator reach (AWS Bedrock, Azure OpenAI, Snowflake Cortex, Vertex AI) added as ranking signal to models prompt
-
-### Changed
-- Research (`research.py`) and generation (`generator.py`) parallelized with `ThreadPoolExecutor` — all 9 sections run concurrently (~5× faster)
-- GitHub Actions workflow fixed: stash generated files → pull latest → rebuild with latest template → commit → push (eliminates push conflicts when template changes mid-run)
-- `requirements.txt` loosened to minimum versions (`>=`) to avoid downgrading other tools on the machine
-- Tab bar tightened: smaller font, less padding, tighter gap so all tabs fit without scrolling
-
-## [0.7.0] - 2026-10-24
-### Changed
-- Smart 10–15 ranking cutoff: all ranked sections now extend beyond 10 only when adoption clusters tightly (within ~25%), cutting at natural drop-off
-- Expanded Tavily research: 3–5 queries per section including "complete list / alternatives / lesser known" discovery queries
-- Claude instructed to surface tools found in research even if not named in the prompt
-- Wave (wave.com, AI meeting recorder) added to workspace section
-
-## [0.6.0] - 2026-10-24
-### Added
-- AI Productivity & Workspace Tools section (NotebookLM, M365 Copilot, Notion AI, Perplexity, etc.)
-- Workspace tab, overview column, and detail panel
-- OpenAI Codex (agentic) and Devin/Devin Desktop added explicitly to code tools prompt
-- Tavily research queries for workspace section
-
-## [0.5.0] - 2026-10-24
-### Added
-- Image Generation section (top 10 by usage with Tavily research)
-- Video Generation section (top 10 by usage with Tavily research)
-- AI Web Scrapers & Browser Automation section (top 10 by usage)
-- New tab buttons, detail panels, and overview columns for each new section
-
-## [0.4.0] - 2026-10-24
-### Added
-- Tavily web search step in `research.py` — fetches live data before each Claude call
-- Source citations displayed at the bottom of each detail tab
-- Usage rankings (rank + popularity_notes) for models and code tools
-- Gemini and DeepSeek added to models section
-- Overview redesigned as colored column layout (one column per section)
-- Fixed tab button and tag styling (replaced @apply with real CSS for CDN compatibility)
-
-## [0.3.0] - 2026-10-24
-### Changed
-- Switched to static site architecture (GitHub Pages + GitHub Actions)
-- Removed Flask server dependencies
-- Added `build.py` to render static HTML from generated JSON
-- Added GitHub Actions workflow for daily content refresh at midnight UTC
-
-## [0.1.0] - 2026-10-24
-### Added
-- Initial project scaffold
-- `generator.py` — calls Claude API to generate content sections as JSON
-- `templates/index.html` — Tailwind CSS dashboard with tab navigation
-- `build.py` — Jinja2 static site builder
-- `requirements.txt`, `.env.example`
-- GitHub Pages hosting from `docs/` folder
+### Infrastructure
+- GitHub Pages (free) + GitHub Actions daily cron at midnight UTC
+- `build.py` sorts news descending by date before rendering
+- `build_standalone.py` generates offline single-file versions (`standalone.html`, `about-standalone.html`)
+- Header attribution: "Curated by Vlad Meyman · Ranked by Claude AI"
