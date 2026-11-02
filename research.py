@@ -86,6 +86,8 @@ QUERIES = {
         f"AI news yesterday latest {_THIS_MONTH}",
         f"Anthropic OpenAI Google Meta Microsoft AI release announcement {_THIS_WEEK}",
         f"AI funding regulation enterprise deal {_THIS_WEEK}",
+        # vendor-focused query with 30-day window — tuple (query, days) signals extended lookback
+        (f"Anthropic OpenAI Google Meta Microsoft xAI model launch product release update {_THIS_MONTH}", 30),
     ],
     "emerging_trends": [
         "emerging AI trends 2026 gaining momentum",
@@ -147,7 +149,7 @@ _NEWS_DOMAINS = [
 ]
 
 
-def _tavily_search(query: str, retries: int = 3, news_mode: bool = False) -> dict | None:
+def _tavily_search(query: str, retries: int = 3, news_mode: bool = False, days: int = 14) -> dict | None:
     """Returns Tavily response dict, or None if unavailable/rate-limited."""
     key = os.environ.get("TAVILY_API_KEY")
     if not key:
@@ -168,7 +170,7 @@ def _tavily_search(query: str, retries: int = 3, news_mode: bool = False) -> dic
             )
             if news_mode:
                 kwargs["topic"] = "news"
-                kwargs["days"] = 14
+                kwargs["days"] = days
                 kwargs["max_results"] = 10
                 kwargs["include_domains"] = _NEWS_DOMAINS
             return client.search(**kwargs)
@@ -215,13 +217,13 @@ def _serper_search(query: str) -> dict | None:
 
 # ── unified search ─────────────────────────────────────────────────────────
 
-def _search(query: str, news_mode: bool = False) -> dict:
+def _search(query: str, news_mode: bool = False, days: int = 14) -> dict:
     """Try providers in order; for news_mode skip Firecrawl and Serper (no recency filter on either)."""
     if not news_mode:
         result = _firecrawl_search(query)
         if result is not None:
             return result
-    result = _tavily_search(query, news_mode=news_mode)
+    result = _tavily_search(query, news_mode=news_mode, days=days)
     if result is not None:
         return result
     if not news_mode:
@@ -252,8 +254,12 @@ def research_section(key: str) -> tuple[str, list[str]]:
     for i, query in enumerate(queries):
         if i > 0:
             time.sleep(0.3)
+        # support (query, days) tuples for extended lookback on specific queries
+        days_override = 14
+        if isinstance(query, tuple):
+            query, days_override = query
         try:
-            response = _search(query, news_mode=news_mode)
+            response = _search(query, news_mode=news_mode, days=days_override)
             if response.get("answer"):
                 results.append(f"Q: {query}\nA: {response['answer']}")
             for r in response.get("results", []):
