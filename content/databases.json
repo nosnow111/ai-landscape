@@ -1,87 +1,87 @@
 {
-  "summary": "Modern databases and data platforms increasingly embed AI/ML capabilities directly where data lives, eliminating the need to move data to separate ML systems. Capabilities range from in-database model training (BigQuery ML, Redshift ML, Aurora ML) to native vector search for RAG and semantic search (Databricks, MongoDB Atlas) and fully managed LLM functions (Snowflake Cortex). Industry data suggests that by 2026 roughly 75% of enterprise AI applications will depend on vector search, with PostgreSQL and other general-purpose platforms gaining ground over purpose-built vector databases like Pinecone and Milvus.",
+  "summary": "Modern databases and data platforms have increasingly embedded AI/ML capabilities directly into the data layer, ranging from in-database model training (BigQuery ML, Redshift ML, Aurora ML) to managed LLM functions (Snowflake Cortex, PostgreSQL pgai) and native vector search for retrieval-augmented generation. Vector search has become a critical enterprise AI primitive\u2014adoption grew 377% year over year, the fastest among LLM-related technologies, and by 2026 roughly 75% of enterprise AI applications depend on vector search capabilities. The key architectural distinctions now lie in whether vector search is natively built in versus provided via extensions, and whether LLM access is managed (serverless functions) or requires external API integration.",
   "databases": [
     {
       "name": "Snowflake (Cortex AI)",
-      "ai_feature": "Snowflake Cortex AI \u2014 managed LLM and ML functions",
-      "description": "Cortex AI provides serverless SQL and Python functions for LLM tasks (summarize, translate, sentiment, complete, extract), access to hosted foundation models (e.g., Llama, Mistral, Claude via Cortex), Cortex Search for retrieval, and Cortex Analyst for natural-language querying. It also extends to Snowflake Postgres, letting developers call Cortex AI functions against Postgres-managed data.",
+      "ai_feature": "Snowflake Cortex AI (managed LLM and ML functions)",
+      "description": "Cortex AI provides serverless, SQL-callable LLM functions (COMPLETE, SUMMARIZE, TRANSLATE, SENTIMENT, EXTRACT_ANSWER, CLASSIFY) backed by hosted foundation models (e.g., Llama, Mistral, Claude, Snowflake Arctic), plus Cortex Search for retrieval and Cortex Analyst for natural-language-to-SQL. Snowflake also extends these capabilities to Snowflake Postgres, letting Postgres workloads call Cortex AI functions.",
       "vector_search": true,
-      "vector_search_notes": "Native built-in vector support via the VECTOR data type and vector similarity functions (VECTOR_COSINE_SIMILARITY, etc.), plus Cortex Search as a managed hybrid retrieval service.",
-      "llm_integration": "First-party hosted LLMs (Llama, Mistral, Claude, Snowflake Arctic) exposed through Cortex functions; no external API keys required.",
-      "pricing_notes": "Consumption-based pricing in Snowflake credits; Cortex LLM functions are billed per token/credits consumed, separate from warehouse compute.",
+      "vector_search_notes": "Native. Snowflake supports a VECTOR data type with VECTOR_COSINE_SIMILARITY / VECTOR_L2_DISTANCE functions and EMBED_TEXT for generating embeddings, and Cortex Search provides a managed hybrid (vector + keyword) retrieval service built in.",
+      "llm_integration": "Deeply integrated managed LLMs via Cortex functions; models hosted within Snowflake's governance boundary with no external API calls required. Supports Claude, Llama, Mistral, and Snowflake Arctic among others.",
+      "pricing_notes": "Consumption-based, billed in Snowflake credits by tokens processed per Cortex function; vector storage and compute billed under standard warehouse/storage pricing. No separate license for Cortex.",
       "url": "https://www.snowflake.com/en/developers/postgres/snowflake-postgres-cortex/"
     },
     {
       "name": "Google BigQuery (BigQuery ML + Vertex AI)",
-      "ai_feature": "BigQuery ML with Vertex AI and Gemini integration",
-      "description": "BigQuery ML lets users create, train, and run ML models using standard SQL (regression, classification, clustering, time series, matrix factorization) and invoke remote Vertex AI / Gemini models for generative tasks, embeddings, and inference directly in queries via ML.GENERATE_TEXT and ML.GENERATE_EMBEDDING.",
+      "ai_feature": "BigQuery ML with Vertex AI integration",
+      "description": "BigQuery ML allows creating, training, and running ML models using standard SQL (linear/logistic regression, boosted trees, k-means, time-series ARIMA, deep neural networks, AutoML). Via remote model integration with Vertex AI, it supports calling Gemini and other foundation models (ML.GENERATE_TEXT, ML.GENERATE_EMBEDDING) directly from SQL.",
       "vector_search": true,
-      "vector_search_notes": "Native vector search supported through the VECTOR_SEARCH function and CREATE VECTOR INDEX for approximate nearest-neighbor search over embeddings stored in BigQuery.",
-      "llm_integration": "Deep integration with Vertex AI and Gemini models; supports both Google-hosted foundation models and custom Vertex endpoints.",
-      "pricing_notes": "Pay-per-query (bytes processed) or capacity-based slots for BigQuery; remote model inference incurs separate Vertex AI charges.",
+      "vector_search_notes": "Native. BigQuery supports vector embeddings storage and the VECTOR_SEARCH function with vector indexes (IVF/TreeAH) for approximate nearest neighbor search, plus ML.GENERATE_EMBEDDING for embedding generation.",
+      "llm_integration": "Strong\u2014remote models connect BigQuery to Vertex AI foundation models (Gemini, text-embedding models) and custom endpoints, enabling generative AI and embeddings via SQL.",
+      "pricing_notes": "BigQuery ML priced by bytes processed (on-demand) or slot capacity (editions); generative/remote model inference and Vertex AI calls incur separate Vertex AI usage charges. Vector index storage billed as standard storage.",
       "url": "https://cloud.google.com/bigquery/docs/bqml-introduction"
     },
     {
       "name": "PostgreSQL (pgvector + pgai)",
-      "ai_feature": "pgvector extension and pgai for embeddings and LLM workflows",
-      "description": "PostgreSQL gains AI capabilities through extensions: pgvector adds vector storage and similarity search, while pgai (from Timescale) brings embedding generation and LLM calls into SQL. This makes Postgres a popular general-purpose foundation for RAG and semantic search without a dedicated vector database.",
-      "vector_search": false,
-      "vector_search_notes": "Not native to core PostgreSQL \u2014 vector search is provided by the third-party pgvector extension (HNSW and IVFFlat indexes). Marked false because it requires an extension rather than being built into vanilla Postgres.",
-      "llm_integration": "Via pgai and related extensions that call external providers (OpenAI, Cohere, Ollama, etc.) from SQL; no native hosted LLM.",
-      "pricing_notes": "Open source and free; costs depend on hosting (self-managed or managed providers like RDS, Cloud SQL, Timescale) plus any external LLM API usage.",
+      "ai_feature": "pgvector (vector storage/search) + pgai (in-database LLM/embedding functions)",
+      "description": "pgvector adds a vector data type and similarity operators to PostgreSQL, enabling semantic search and RAG. pgai (by Timescale) adds SQL functions to generate embeddings and call LLMs (OpenAI, Anthropic, Cohere, Ollama) directly, and pgvectorscale improves ANN index performance. These bring AI workflows close to operational relational data.",
+      "vector_search": true,
+      "vector_search_notes": "Native-via-core-extension. pgvector is the de facto standard extension for Postgres vector search (HNSW and IVFFlat indexes); it is an open-source extension rather than built into vanilla Postgres, but is first-class in the Postgres ecosystem and bundled by most managed providers. Marked true because it is the canonical Postgres vector capability; on some managed services (e.g., Aurora) it is an add-on extension.",
+      "llm_integration": "Via pgai extension\u2014embeddings and LLM completions can be called from SQL against external providers (OpenAI, Anthropic, Cohere) or local models via Ollama. Core Postgres itself has no built-in LLM access.",
+      "pricing_notes": "Open-source and free to use; costs are from the underlying Postgres hosting (self-managed or managed service compute/storage) plus any external LLM API charges invoked by pgai.",
       "url": "https://github.com/pgvector/pgvector"
     },
     {
       "name": "Amazon Aurora ML",
-      "ai_feature": "Aurora Machine Learning (SQL integration with SageMaker and Bedrock)",
-      "description": "Aurora ML lets you add ML-based predictions and generative AI to applications using SQL functions that call Amazon SageMaker, Amazon Bedrock, and Amazon Comprehend, enabling inference and text generation directly from Aurora MySQL/PostgreSQL queries.",
+      "ai_feature": "Aurora Machine Learning (SQL-based inference via Amazon SageMaker and Bedrock)",
+      "description": "Aurora ML lets you invoke ML models from SQL by integrating Aurora with Amazon SageMaker and Amazon Comprehend, and with Amazon Bedrock for generative AI/embeddings. Predictions are returned as part of query results, enabling inline sentiment analysis, predictions, and generative text without moving data.",
       "vector_search": false,
-      "vector_search_notes": "Aurora itself has no native vector engine; vector search on Aurora PostgreSQL is achieved via the pgvector extension, so it is not built-in native vector search.",
-      "llm_integration": "Integrates with Amazon Bedrock foundation models and SageMaker endpoints via SQL functions for generative and predictive tasks.",
-      "pricing_notes": "Standard Aurora instance/storage/IO pricing; ML inference costs are billed separately by SageMaker, Bedrock, or Comprehend.",
+      "vector_search_notes": "Not native to Aurora ML itself. Vector search on Aurora PostgreSQL is provided only through the pgvector extension (a third-party/open-source extension), so native built-in vector search is not part of Aurora ML. Enable pgvector to perform ANN similarity search.",
+      "llm_integration": "Integrates with Amazon Bedrock (foundation models for text generation and embeddings) and SageMaker-hosted models, callable directly from SQL; also Amazon Comprehend for NLP tasks.",
+      "pricing_notes": "No additional charge for the Aurora ML feature itself; you pay standard Aurora compute/storage plus the underlying SageMaker, Bedrock, or Comprehend inference usage charges.",
       "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-ml.html"
     },
     {
       "name": "Amazon Redshift ML",
-      "ai_feature": "Redshift ML (in-warehouse model training via SageMaker)",
-      "description": "Redshift ML enables analysts to create, train, and deploy ML models using standard SQL CREATE MODEL statements, with Amazon SageMaker Autopilot handling training behind the scenes. It also supports bring-your-own-model and generative AI via integration with Amazon Bedrock for LLM inference from SQL.",
+      "ai_feature": "Redshift ML (in-warehouse model training and inference via SageMaker)",
+      "description": "Redshift ML uses the CREATE MODEL SQL command to train, deploy, and run ML models powered by Amazon SageMaker Autopilot, with support for bring-your-own-model and now generative AI via Amazon Bedrock/SageMaker JumpStart LLMs. Analysts build and apply models using familiar SQL on warehouse data.",
       "vector_search": false,
-      "vector_search_notes": "No native vector index/search engine in Redshift; vector similarity must be handled externally or approximated manually, so native vector search is not supported.",
-      "llm_integration": "Integrates with Amazon Bedrock and SageMaker for generative and predictive inference invoked from SQL.",
-      "pricing_notes": "Redshift compute (RPU/node) pricing; model training and inference consume SageMaker resources billed separately.",
+      "vector_search_notes": "Not natively supported as a dedicated ANN index service within Redshift ML. Redshift has added some vector/embedding support through integrations and functions, but it does not offer a mature built-in vector index comparable to dedicated vector databases; marked false for native dedicated vector search.",
+      "llm_integration": "Supports calling LLMs (text generation, embeddings) through integration with Amazon SageMaker JumpStart and Amazon Bedrock models from SQL; core strength is predictive ML via SageMaker Autopilot.",
+      "pricing_notes": "Redshift ML uses SageMaker for training (billed separately by SageMaker); prediction functions run within Redshift compute. Standard Redshift node/RPU charges plus SageMaker training/inference costs apply.",
       "url": "https://docs.aws.amazon.com/redshift/latest/dg/machine_learning.html"
     },
     {
       "name": "Databricks (Mosaic AI + Vector Search)",
-      "ai_feature": "Mosaic AI and Databricks Vector Search on the Lakehouse",
-      "description": "Databricks Mosaic AI provides tooling to build, fine-tune, serve, and govern ML and GenAI models, including foundation model serving, agent frameworks, and MLflow lifecycle management. Databricks Vector Search is a managed vector database integrated with Unity Catalog and Delta tables for RAG.",
+      "ai_feature": "Mosaic AI (model training, serving, RAG) + Databricks Vector Search",
+      "description": "Mosaic AI provides end-to-end GenAI tooling\u2014foundation model APIs, model fine-tuning, model serving, agent/RAG frameworks, and governance via Unity Catalog. Databricks Vector Search is a managed vector database integrated with the lakehouse that auto-syncs embeddings from Delta tables for retrieval and RAG.",
       "vector_search": true,
-      "vector_search_notes": "Native built-in managed Vector Search service that automatically syncs and indexes embeddings from Delta tables with governance via Unity Catalog.",
-      "llm_integration": "Mosaic AI Model Serving hosts foundation models and custom models; integrates with external LLM providers and supports fine-tuning and agent workflows.",
-      "pricing_notes": "Consumption-based DBU pricing; Vector Search and Model Serving billed as separate serverless compute units.",
+      "vector_search_notes": "Native. Databricks Vector Search is a fully managed, built-in vector index that supports automatic embedding generation and sync from Delta tables, with hybrid keyword+vector search.",
+      "llm_integration": "Strong\u2014Foundation Model APIs serve open and proprietary models (Llama, DBRX, Claude, etc.), supports fine-tuning, external model gateways, and agent frameworks, all governed by Unity Catalog.",
+      "pricing_notes": "Consumption-based using Databricks Units (DBUs); Vector Search and Model Serving billed by compute/endpoint usage and tokens for foundation model APIs, on top of cloud infrastructure costs.",
       "url": "https://docs.databricks.com/en/generative-ai/vector-search.html"
     },
     {
       "name": "MongoDB Atlas Vector Search",
-      "ai_feature": "Atlas Vector Search for semantic search and RAG",
-      "description": "MongoDB Atlas Vector Search enables storing embeddings alongside operational documents and running approximate nearest-neighbor queries using the $vectorSearch aggregation stage, combining vector, full-text, and metadata filtering in a single query for RAG and semantic applications.",
+      "ai_feature": "Atlas Vector Search (native vector search for operational data)",
+      "description": "MongoDB Atlas Vector Search enables storing embeddings alongside operational JSON documents and performing approximate nearest neighbor (HNSW) similarity queries within the Atlas database, supporting RAG, semantic search, and hybrid search with filtering using the $vectorSearch aggregation stage.",
       "vector_search": true,
-      "vector_search_notes": "Native built-in vector search powered by HNSW indexing within Atlas; embeddings and operational data live together in the same documents with no separate vector store required.",
-      "llm_integration": "Integrates with external LLM and embedding providers (OpenAI, Anthropic, Cohere, Vertex, Bedrock) and frameworks like LangChain and LlamaIndex; no first-party hosted LLM.",
-      "pricing_notes": "Included with Atlas cluster pricing (dedicated tiers); vector search uses cluster or dedicated Search Node compute billed as part of Atlas.",
+      "vector_search_notes": "Native. Vector search is built into Atlas via dedicated vector search indexes and the $vectorSearch operator; embeddings live alongside document data, eliminating a separate vector store.",
+      "llm_integration": "No hosted LLMs of its own, but integrates tightly with external models and frameworks (OpenAI, Anthropic, LangChain, LlamaIndex, AWS Bedrock, Azure OpenAI) for embedding generation and RAG pipelines.",
+      "pricing_notes": "Available on Atlas dedicated clusters; vector search runs on Search Nodes (separately scalable, billed by node size/compute) plus standard Atlas cluster storage and compute costs.",
       "url": "https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/"
     }
   ],
   "_meta": {
     "title": "AI in Major Databases",
-    "generated_at": "2026-11-02T16:00:40.966002+00:00"
+    "generated_at": "2026-11-02T17:19:11.379676+00:00"
   },
   "sources": [
     "https://www.snowflake.com/en/developers/postgres/snowflake-postgres-cortex/",
     "https://www.snowflake.com/en/developers/postgres/ai-in-postgres/",
     "https://cloud.google.com/blog/products/databases/using-pgvector-llms-and-langchain-with-google-cloud-databases",
+    "https://arjunjaggi.com/blog/vector-database-architecture",
     "https://aciinfotech.com/blogs/vector-database-strategy-the-key-to-ai-success-in-2026",
-    "https://www.sganalytics.com/blog/top-vector-databases-enterprise-ai",
-    "https://venturebeat.com/data/six-data-shifts-that-will-shape-enterprise-ai-in-2026"
+    "https://www.sganalytics.com/blog/top-vector-databases-enterprise-ai"
   ]
 }

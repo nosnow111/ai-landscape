@@ -43,7 +43,8 @@ _AUTOFIX_BLOCKED_DOMAINS = {
     "confident-ai.com", "netalith.com", "ayautomate.com",
     "beam.ai", "tooldirectory.ai", "memeburn.com",
     "openrouter.ai", "mindstudio.ai", "docs.aimlapi.com", "aimlapi.com",
-    "aitoolgraph.com", "digitalapplied.com",
+    "aitoolgraph.com", "digitalapplied.com", "datacamp.com", "openobserve.ai",
+    "openhelm.ai",
 }
 
 _anthropic = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
