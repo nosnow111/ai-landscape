@@ -130,6 +130,7 @@
       <button class="tab-btn" onclick="showTab('databases')">🗃️ Databases</button>
       <button class="tab-btn" onclick="showTab('observability')">📊 Observability</button>
       <button class="tab-btn" onclick="showTab('llm-optimization')">⚡ LLM Optim.</button>
+      <button class="tab-btn" onclick="showTab('model-pricing')">💰 Token Prices</button>
     </div>
   </div>
 </nav>
@@ -143,8 +144,9 @@
 <div id="news-strip" style="background:#1e3a8a;" class="border-b border-blue-900">
   <div class="max-w-7xl mx-auto px-4 py-2 flex items-start gap-3">
     <span style="background:#f59e0b;color:#1e3a8a;" class="shrink-0 text-xs font-black px-2 py-0.5 rounded uppercase tracking-wide mt-1">📰 AI News</span>
+    {% if strip_vendor | length >= 3 %}
+    <!-- Two-column layout: enough vendor items -->
     <div class="flex-1 min-w-0 grid grid-cols-2 gap-x-6">
-      <!-- Industry column -->
       <div class="space-y-1">
         <div class="text-blue-400 text-xs font-bold uppercase tracking-wide mb-1">🌐 Industry</div>
         {% for item in strip_industry[:5] %}
@@ -157,7 +159,6 @@
         </div>
         {% endfor %}
       </div>
-      <!-- Vendor column -->
       <div class="space-y-1">
         <div class="text-blue-400 text-xs font-bold uppercase tracking-wide mb-1">🏢 Vendor</div>
         {% for item in strip_vendor[:5] %}
@@ -171,6 +172,25 @@
         {% endfor %}
       </div>
     </div>
+    {% else %}
+    <!-- Single-column fallback: sparse vendor news, show top 7 blended with inline badges -->
+    <div class="flex-1 min-w-0 space-y-1">
+      {% for item in sections.ai_news['items'][:7] %}
+      <div class="flex items-baseline gap-1.5 min-w-0">
+        <span class="text-blue-300 text-xs font-mono shrink-0">{{ item.date }}</span>
+        <span class="text-gray-400 text-xs">·</span>
+        {% if item.get('category') == 'vendor' %}
+        <span style="background:rgba(139,92,246,0.3);color:#c4b5fd;" class="text-xs font-bold px-1 rounded shrink-0">Vendor</span>
+        {% else %}
+        <span style="background:rgba(16,185,129,0.2);color:#6ee7b7;" class="text-xs font-bold px-1 rounded shrink-0">Industry</span>
+        {% endif %}
+        <a href="{{ item.url }}" target="_blank" rel="noopener"
+           class="text-white text-xs font-medium hover:text-yellow-300 transition-colors truncate">{{ item.headline }}</a>
+        <span class="text-blue-400 text-xs shrink-0 hidden sm:inline">— {{ item.source }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
     <a href="news.html" class="shrink-0 text-yellow-300 text-xs font-bold hover:text-yellow-100 transition-colors whitespace-nowrap mt-1">
       More →
     </a>
@@ -1326,6 +1346,61 @@
     {% endif %}
     {% else %}
     <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- ── Model Pricing ─────────────────────────────────────────────────── -->
+  <div id="tab-model-pricing" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold text-amber-700">💰 Model Token Pricing</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.model_pricing.get('summary') %}
+    <p class="text-gray-600 mb-1">{{ sections.model_pricing.summary }}</p>
+    {% endif %}
+    {% if sections.model_pricing.get('as_of') %}
+    <p class="text-xs text-gray-400 mb-4">Prices as of {{ sections.model_pricing.as_of }} · Per 1M tokens · Verify on vendor pricing pages before use</p>
+    {% endif %}
+
+    {% if sections.model_pricing.get('models') %}
+    <div class="overflow-x-auto rounded-xl shadow mb-8">
+      <table class="min-w-full bg-white text-sm">
+        <thead class="bg-amber-50 text-amber-800 text-xs uppercase tracking-wide">
+          <tr>
+            <th class="px-4 py-3 text-left">#</th>
+            <th class="px-4 py-3 text-left">Model</th>
+            <th class="px-4 py-3 text-left">Vendor</th>
+            <th class="px-4 py-3 text-left">Context</th>
+            <th class="px-4 py-3 text-right">Input / 1M</th>
+            <th class="px-4 py-3 text-right">Output / 1M</th>
+            <th class="px-4 py-3 text-right">Cached In / 1M</th>
+            <th class="px-4 py-3 text-left">Free Tier</th>
+            <th class="px-4 py-3 text-left">Notes</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for m in sections.model_pricing.models %}
+          <tr class="hover:bg-amber-50 transition-colors">
+            <td class="px-4 py-3 text-gray-400 font-bold text-xs">{{ m.rank }}</td>
+            <td class="px-4 py-3 font-semibold text-gray-900">
+              <a href="{{ m.url }}" target="_blank" rel="noopener" class="hover:text-amber-700 hover:underline">{{ m.name }}</a>
+            </td>
+            <td class="px-4 py-3 text-gray-600">{{ m.vendor }}</td>
+            <td class="px-4 py-3 text-gray-500">{{ m.context_window }}</td>
+            <td class="px-4 py-3 text-right font-mono font-semibold text-gray-800">{{ m.input_per_1m }}</td>
+            <td class="px-4 py-3 text-right font-mono font-semibold text-gray-800">{{ m.output_per_1m }}</td>
+            <td class="px-4 py-3 text-right font-mono text-gray-500">{{ m.cached_input_per_1m if m.cached_input_per_1m else '—' }}</td>
+            <td class="px-4 py-3">
+              {% if m.free_tier %}<span class="tag tag-green">Free</span>{% else %}<span class="text-gray-400 text-xs">No</span>{% endif %}
+            </td>
+            <td class="px-4 py-3 text-gray-500 text-xs">{{ m.notes }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-gray-400 italic">Pricing data will appear after the next pipeline run.</p>
     {% endif %}
   </div>
 

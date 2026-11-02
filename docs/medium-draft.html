@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medium Draft · AI Landscape Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #fff;
+      color: #242424;
+      line-height: 1.8;
+    }
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* Header */
+    .pub-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e6e6e6;
+    }
+    .avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.2rem; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .byline { font-family: 'Helvetica Neue', sans-serif; }
+    .byline .name { font-weight: 600; font-size: 0.95rem; color: #242424; }
+    .byline .meta { font-size: 0.82rem; color: #757575; margin-top: 2px; }
+
+    /* Title block */
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+      color: #111;
+    }
+    .subtitle {
+      font-size: 1.25rem;
+      color: #6b6b6b;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 32px;
+      font-family: 'Georgia', serif;
+    }
+
+    /* Divider */
+    .title-divider {
+      border: none;
+      border-top: 1px solid #e6e6e6;
+      margin: 32px 0;
+    }
+
+    /* Body */
+    p { margin-bottom: 1.4em; font-size: 1.1rem; }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 2.2em 0 0.8em;
+      color: #111;
+      letter-spacing: -0.3px;
+    }
+
+    strong { font-weight: 700; }
+
+    code {
+      font-family: 'Courier New', monospace;
+      background: #f2f2f2;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    a { color: #1a8917; text-decoration: underline; }
+
+    /* Image placeholders */
+    .img-placeholder {
+      width: 100%;
+      background: #f9f9f9;
+      border: 2px dashed #d0d0d0;
+      border-radius: 6px;
+      margin: 2em 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      text-align: center;
+      gap: 8px;
+    }
+    .img-placeholder .icon { font-size: 2rem; opacity: 0.4; }
+    .img-placeholder .label {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #555;
+    }
+    .img-placeholder .hint {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.78rem;
+      color: #999;
+    }
+    .img-tall { min-height: 260px; }
+    .img-medium { min-height: 180px; }
+    .img-short { min-height: 120px; }
+
+    figcaption {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.8rem;
+      color: #999;
+      text-align: center;
+      margin-top: -1.2em;
+      margin-bottom: 1.8em;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #e6e6e6;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.82rem;
+      color: #999;
+      text-align: center;
+    }
+
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .page { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Byline -->
+  <div class="pub-meta">
+    <div class="avatar">V</div>
+    <div class="byline">
+      <div class="name">Vlad Meyman</div>
+      <div class="meta">7 min read · November 2026 · <em>Views are my own</em></div>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <h1>I Built a Dashboard That Tracks the AI Ecosystem Daily — Here's How It Works</h1>
+  <p class="subtitle">A free, self-updating map of AI tools, models, and news — powered by Claude, GPT-4o, and GitHub Actions</p>
+
+  <!-- Hero screenshot -->
+  <div class="img-placeholder img-tall">
+    <div class="icon">🖥️</div>
+    <div class="label">Screenshot: Dashboard Overview tab</div>
+    <div class="hint">Full page with news strip visible · hide bookmarks bar · Cmd+Shift+4</div>
+  </div>
+  <figcaption>The AI Landscape Dashboard — 16 sections, regenerated every night</figcaption>
+
+  <hr class="title-divider" />
+
+  <!-- Body -->
+  <h2>The Problem With Every "Best AI Tools" List</h2>
+  <p>Every week someone publishes a new roundup of the top AI coding tools, or the best LLMs, or the hottest AI startups. By the time you read it, at least two things on the list are wrong. A tool got acquired. A model got deprecated. Something new shipped that isn't on there yet.</p>
+  <p>I got tired of it. So I built something that updates itself.</p>
+  <p><a href="https://nosnow111.github.io/ai-landscape/">AI Landscape Dashboard</a> is a static website that regenerates every night. It covers 16 sections of the AI ecosystem — code tools, models, image and video generation, MCP servers, web scrapers, workspace tools, fine-tuning platforms, enterprise APIs, ML platforms, observability, databases, LLM optimization, model repositories, emerging trends, and daily news. Every morning it reflects what was current the night before, not six months ago.</p>
+  <p>It runs entirely for free.</p>
+
+  <h2>The Pipeline</h2>
+  <p>The site isn't hand-curated. It runs a four-stage pipeline on GitHub Actions every night at midnight UTC:</p>
+  <p><strong>Stage 1 — Research.</strong> Before generating anything, the pipeline fires search queries against live web data using Firecrawl, Tavily, and Serper as fallbacks. Two queries per section, all running in parallel. This grounds the AI responses in what's actually happening now, not just training data.</p>
+  <p><strong>Stage 2 — Generate.</strong> Claude Opus 4.8 generates structured JSON for all 16 sections simultaneously. Each section gets a carefully tuned prompt — for ranked sections, Opus is instructed to rank by real-world adoption signals (GitHub stars, API call volumes, developer survey data, enterprise deployment patterns) rather than marketing visibility.</p>
+  <p><strong>Stage 3 — Validate.</strong> A link validator fetches every URL in the generated content, checks page relevance using Claude Haiku, and auto-fixes wrong-page links by searching for the correct URL and patching the JSON in place. This matters more than you'd think — models hallucinate plausible-looking URLs surprisingly often.</p>
+  <p><strong>Stage 4 — Build.</strong> A Jinja2 template renders all the JSON into a static HTML file. No server, no database, no runtime dependencies. GitHub Pages serves it directly from the repo.</p>
+  <p>The pipeline uses checkpoints between stages. If something fails partway through — a rate limit, a timeout, an API hiccup — the next run resumes from where it stopped instead of starting over and burning API credits needlessly.</p>
+
+  <!-- Pipeline diagram placeholder -->
+  <div class="img-placeholder img-short">
+    <div class="icon">🔄</div>
+    <div class="label">Diagram: Research → Generate → Validate → Build → GitHub Pages</div>
+    <div class="hint">Simple flow diagram — draw.io, Canva, or even a clean screenshot of the pipeline output</div>
+  </div>
+  <figcaption>The four-stage pipeline with checkpoints — a failed run resumes where it left off</figcaption>
+
+  <h2>The Dual-Model Cross-Check</h2>
+  <p>Here's the part I find most interesting.</p>
+  <p>For all ranked sections, GPT-4o runs a parallel cross-check against Claude Opus's output. Each tool in the ranking gets a badge: ✅ Consensus (both models agreed on placement), 🟡 Minor diff (ranked nearby but not identically), or 🔴 Disagree (one model included it, the other didn't).</p>
+  <p>The key design decision: I cross-check with GPT-4o specifically rather than a second Anthropic model. Two Claude models would share similar training data biases and tend to agree even when they shouldn't. Claude and GPT-4o have genuinely different data sources and different blind spots. When they disagree on a tool's ranking, it's usually a signal that the tool is in motion — rising fast enough that one model's training caught it and the other's didn't, or fading in a way that shows up in one dataset before the other.</p>
+  <p>The disagreements aren't noise. They're information.</p>
+
+  <!-- Consensus badges screenshot -->
+  <div class="img-placeholder img-medium">
+    <div class="icon">✅</div>
+    <div class="label">Screenshot: Code Tools or Models tab showing ✅ / 🟡 / 🔴 consensus badges</div>
+    <div class="hint">This is the most visually distinctive feature — worth a close-up crop</div>
+  </div>
+  <figcaption>Consensus badges on every ranked tool — when Claude and GPT-4o disagree, it usually means a tool is moving</figcaption>
+
+  <h2>The News Section Was Harder Than Expected</h2>
+  <p>Adding a daily news section seemed straightforward. Pull recent headlines, display them. It wasn't.</p>
+  <p>The first problem was source quality. I integrated Tavily's news search mode and assumed it would return Reuters, Bloomberg, TechCrunch — the outlets I cared about. It didn't. The actual results included a site called shattered.io (appearing four times across my queries), tech-insider.org, healthcareittoday.com, and other domains I'd never heard of. CNBC appeared once.</p>
+
+  <!-- Before/after sources -->
+  <div class="img-placeholder img-short">
+    <div class="icon">📰</div>
+    <div class="label">Before / After: Tavily results without vs with include_domains</div>
+    <div class="hint">Simple two-column table or side-by-side terminal output screenshots</div>
+  </div>
+  <figcaption>Left: what Tavily returned by default. Right: after restricting to trusted domains.</figcaption>
+
+  <p>The fix was using Tavily's <code>include_domains</code> parameter to restrict searches to a curated list of about 25 trusted publications: Reuters, AP News, WSJ, Bloomberg, FT, CNBC, MarketWatch, The Verge, TechCrunch, Wired, and so on. One parameter change, and the results went from junk to genuinely useful.</p>
+  <p>The second problem was staleness. My initial research queries used month-level date references ("AI news October 2026") which Tavily interpreted loosely. Switching to day-level anchors ("AI news today 2026-11-02 breaking announcements") pulled results from the last 24-48 hours instead of the last few weeks.</p>
+  <p>The news section now displays in two columns: Industry news (funding rounds, regulation, market moves) on the left, Vendor announcements (model releases, product launches, API updates) on the right.</p>
+
+  <!-- News page screenshot -->
+  <div class="img-placeholder img-medium">
+    <div class="icon">🗞️</div>
+    <div class="label">Screenshot: news.html two-column layout (Industry | Vendor)</div>
+    <div class="hint">Open docs/news.html locally after running --only=build</div>
+  </div>
+  <figcaption>The news page — industry and vendor stories in separate columns, sorted newest-first</figcaption>
+
+  <h2>What It Actually Costs</h2>
+  <p>The pipeline runs on GitHub Actions free tier. GitHub Pages hosting is free. The only real cost is API usage.</p>
+  <p>Claude Opus 4.8 is the most expensive part. A full nightly run with 16 sections plus GPT-4o cross-checks costs a few dollars at current pricing. Web research costs almost nothing — Firecrawl, Tavily, and Serper all have free tiers around 1,000 requests per month, and the pipeline uses roughly 33 per nightly run.</p>
+
+  <h2>Try It Yourself</h2>
+  <p>The repo is public and you can have your own live version running in about 10 minutes. You'll need API keys for Claude and Tavily — both have free tiers that comfortably cover a month of nightly runs.</p>
+
+  <p><strong>1. Fork the repo</strong><br/>
+  Go to <a href="https://github.com/nosnow111/ai-landscape">github.com/nosnow111/ai-landscape</a> and click Fork. The <code>content/</code> and <code>docs/</code> folders are already committed, so your site goes live immediately with the last generated data.</p>
+
+  <p><strong>2. Enable GitHub Pages</strong><br/>
+  In your fork: Settings → Pages → Source: Deploy from a branch → Branch: <code>main</code> / folder: <code>/docs</code> → Save. Your dashboard will be live at <code>https://&lt;your-username&gt;.github.io/ai-landscape</code> within a minute.</p>
+
+  <p><strong>3. Add two secrets</strong><br/>
+  Settings → Secrets and variables → Actions → New repository secret. You need two:<br/>
+  <code>ANTHROPIC_API_KEY</code> — from <a href="https://console.anthropic.com">console.anthropic.com</a><br/>
+  <code>TAVILY_API_KEY</code> — from <a href="https://app.tavily.com">app.tavily.com</a> (free tier is enough)<br/>
+  Optionally add <code>OPENAI_API_KEY</code> to enable the GPT-4o cross-check badges.</p>
+
+  <p><strong>4. Trigger the first run</strong><br/>
+  Actions → Refresh AI Landscape → Run workflow. It takes 2–3 minutes. After that it runs automatically every night at midnight UTC.</p>
+
+  <p>Full setup instructions and pipeline options are in the <a href="https://github.com/nosnow111/ai-landscape#readme">README</a>.</p>
+
+  <h2>What I'd Add Next</h2>
+  <p>The section list keeps growing. I've thought about AI hardware (GPU clouds, inference chips), AI safety and evals tooling, and agent frameworks as their own section.</p>
+  <p>The live dashboard is at <a href="https://nosnow111.github.io/ai-landscape/">nosnow111.github.io/ai-landscape</a>. If you notice something missing or wrong, I'd genuinely like to know. And if you're thinking about building something similar — the combination of nightly GitHub Actions, Claude for structured generation, and static hosting is a surprisingly capable stack for keeping reference content fresh.</p>
+  <p><strong>What sections would you add?</strong></p>
+
+  <div class="footer">
+    Draft · AI Landscape Dashboard · nosnow111.github.io/ai-landscape
+  </div>
+
+</div>
+</body>
+</html>

@@ -227,7 +227,8 @@ SECTIONS = {
             "NOT coding tools. Include tools like: Google NotebookLM/Gemini Notebook, "
             "Microsoft Copilot for M365, Notion AI, Perplexity AI, Google Workspace AI (Gemini in Docs/Gmail), "
             "Grammarly AI, Otter.ai, Wave (wave.com, AI note taker & meeting recorder), "
-            "Fireflies.ai, Fathom, Mem.ai, Glean, and others that qualify by actual usage. "
+            "Fireflies.ai, Fathom, Mem.ai, Glean, Grok Bot (xAI's persistent AI agent with its own cloud computer, signs into your tools and does multi-step work autonomously), "
+            "and others that qualify by actual usage. "
             "Be objective — rank by real adoption, user counts, and enterprise deployments. "
             "For each tool cover: vendor, pricing (free tier + paid), key capabilities, "
             "which apps/platforms it integrates with, best use case, and url. "
@@ -360,6 +361,33 @@ SECTIONS = {
             "headline (string), summary (string), source (string), date (string YYYY-MM-DD), "
             "url (string), category (string — 'vendor' or 'industry')) and "
             "'as_of' (string — today's date YYYY-MM-DD)."
+        ),
+    },
+    "model_pricing": {
+        "title": "Model Token Pricing",
+        "prompt": (
+            f"TODAY IS {datetime.now(timezone.utc).strftime('%Y-%m-%d')}. "
+            "Compile a current pricing reference table for the major commercial LLMs available via API. "
+            "CRITICAL: only include models that are PUBLICLY AVAILABLE TODAY with confirmed published pricing. "
+            "Do NOT include free-only models, models without API access, or models with unconfirmed pricing. "
+            "Include models from: OpenAI (GPT-4o, GPT-4o mini, o3, o4-mini), Anthropic (Claude Opus 4.8, "
+            "Claude Sonnet 4.6, Claude Haiku 4.5), Google (Gemini 2.5 Pro, Gemini 2.5 Flash), "
+            "Meta (Llama via hosted APIs — Together AI, Groq, Fireworks), Mistral (Mistral Large, Mistral Small), "
+            "xAI (Grok), Cohere (Command R+), and others with confirmed published API pricing. "
+            "Use live research data above to verify current prices — these change frequently. "
+            "For each model include: name, vendor, context_window, input_per_1m (price string e.g. '$2.50'), "
+            "output_per_1m (price string), cached_input_per_1m (if the vendor offers prompt caching discount, "
+            "otherwise null), free_tier (bool — true if a free tier or free trial exists), "
+            "notes (any important pricing nuances: batch discounts, rate limits, tiered pricing), url (pricing page). "
+            f"{_URL_RULE} "
+            "Return a JSON object with three keys: "
+            "'summary' (2-3 sentences on the current state of LLM API pricing and key trends), "
+            "'as_of' (today's date YYYY-MM-DD), and "
+            "'models' (array sorted by real-world developer adoption — most used first, same ordering "
+            "as the major LLM rankings — where each item has: "
+            "name, vendor, rank (int — adoption rank, 1=most used), context_window (string), "
+            "input_per_1m (string), output_per_1m (string), "
+            "cached_input_per_1m (string or null), free_tier (bool), notes (string), url (string))."
         ),
     },
     "emerging_trends": {

@@ -42,6 +42,7 @@ def build():
         "fine_tuning": load_content("fine_tuning"),
         "llm_optimization": load_content("llm_optimization"),
         "emerging_trends": load_content("emerging_trends"),
+        "model_pricing": load_content("model_pricing"),
         "ai_news": load_news_sorted("ai_news"),
     }
 

@@ -39,6 +39,10 @@ _AUTOFIX_BLOCKED_DOMAINS = {
     "towardsdatascience.com", "analyticsvidhya.com", "hackernoon.com",
     "infoq.com", "zdnet.com", "venturebeat.com", "techcrunch.com",
     "the-decoder.com", "aitidbits.ai",
+    "skywork.ai", "vast.ai", "tavily.com", "orq.ai",
+    "confident-ai.com", "netalith.com", "ayautomate.com",
+    "beam.ai", "tooldirectory.ai", "memeburn.com",
+    "openrouter.ai",
 }
 
 _anthropic = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
