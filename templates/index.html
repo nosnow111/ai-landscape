@@ -144,6 +144,7 @@
       <div class="flex items-baseline gap-2 min-w-0">
         <span class="text-blue-300 text-xs font-mono shrink-0">{{ item.date }}</span>
         <span class="text-gray-300 text-xs">·</span>
+        {% if item.get('category') == 'vendor' %}<span class="shrink-0 text-xs font-bold px-1 rounded" style="background:rgba(167,139,250,0.25);color:#c4b5fd;">V</span>{% elif item.get('category') == 'industry' %}<span class="shrink-0 text-xs font-bold px-1 rounded" style="background:rgba(52,211,153,0.2);color:#6ee7b7;">I</span>{% endif %}
         <a href="{{ item.url }}" target="_blank" rel="noopener"
            class="text-white text-xs font-medium hover:text-yellow-300 transition-colors truncate">{{ item.headline }}</a>
         <span class="text-blue-400 text-xs shrink-0">— {{ item.source }}</span>
