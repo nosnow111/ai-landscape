@@ -30,6 +30,17 @@ TIMEOUT = 10
 MAX_WORKERS = 20
 ITEM_KEYS = ["tools", "models", "platforms", "databases"]
 
+# Domains the auto-fixer must never accept as replacement URLs — aggregators,
+# review sites, blogs, and third-party listings are not authoritative sources.
+_AUTOFIX_BLOCKED_DOMAINS = {
+    "mcpservers.org", "gate.ai", "g2.com", "capterra.com",
+    "technologymatch.com", "kingdee.com", "shivojha.com", "techradar.com",
+    "reddit.com", "medium.com", "substack.com", "dev.to",
+    "towardsdatascience.com", "analyticsvidhya.com", "hackernoon.com",
+    "infoq.com", "zdnet.com", "venturebeat.com", "techcrunch.com",
+    "the-decoder.com", "aitidbits.ai",
+}
+
 _anthropic = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
 
@@ -226,6 +237,13 @@ def verify_and_fix(result: dict) -> dict:
     candidate = search_replacement(name, topic, section)
     if not candidate:
         result["fix_status"] = "no candidate found"
+        return result
+
+    # Reject candidates from non-authoritative domains
+    from urllib.parse import urlparse
+    candidate_domain = urlparse(candidate).netloc.lstrip("www.")
+    if any(candidate_domain == d or candidate_domain.endswith("." + d) for d in _AUTOFIX_BLOCKED_DOMAINS):
+        result["fix_status"] = f"candidate rejected (non-authoritative domain: {candidate_domain})"
         return result
 
     # Verify the candidate page is actually relevant
