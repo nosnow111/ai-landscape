@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.17.0] - 2026-11-02
+### Changed
+- News strip shows two columns — 🌐 Industry (left) and 🏢 Vendor (right), 5 headlines each; hidden on non-Overview tabs
+- Full news summaries on news.html only; strip shows headlines + date + source
+- Each `ai_news` item tagged `category: "vendor"` or `"industry"` by the generator
+- Paywalled sources (WSJ, FT, Bloomberg, NYT, The Information) re-allowed as Tier 1
+- AP News and MarketWatch added to Tier 1 news sources
+- Tavily news search restricted to `include_domains` list of ~25 trusted publications — previously returning junk (shattered.io, tech-insider.org) instead of Reuters/Bloomberg/WSJ
+- Research queries for `ai_news` date-anchored to today for same-day/yesterday coverage
+- Auto-fixer domain blocklist rejects replacements from non-authoritative domains (mcpservers.org, gate.ai, g2.com, medium.com, reddit.com, etc.)
+- `--only=<stage>` pipeline flag now always force-runs the named stage (was silently skipping if checkpoint existed)
+
 ## [0.16.0] - 2026-10-31
 ### Changed
 - News items sorted newest-first in `build.py` — guaranteed regardless of generator output order
