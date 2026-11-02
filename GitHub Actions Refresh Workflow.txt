@@ -1,0 +1,18 @@
+- Dashboard: https://nosnow111.github.io/ai-landscape/
+- News page: https://nosnow111.github.io/ai-landscape/news.html
+- Standalone (offline share): https://nosnow111.github.io/ai-landscape/standalone.html
+- About / presentation: https://nosnow111.github.io/ai-landscape/about-standalone.html
+- GitHub Actions runs: https://github.com/nosnow111/ai-landscape/actions
+
+gh workflow run refresh.yml --repo nosnow111/ai-landscape
+
+refresh.yml — workflow_dispatch now accepts two optional inputs:
+gh workflow run refresh.yml                      # full force run (default)
+gh workflow run refresh.yml -f from=generate     # skip research, run from generate onward
+gh workflow run refresh.yml -f from=validate     # re-validate + rebuild only
+gh workflow run refresh.yml -f only=build        # rebuild HTML, zero API calls
+
+docs/about.html — pipeline slide now shows both modes side by side with the commit+push step documented for local runs.
+
+python pipeline.py --from=validate && python build.py && git add content/ docs/ && git commit -m "Regenerate content" && git push
+  350  python build.py && git add docs/ && git commit -m "Rebuild with updated template" && git push
