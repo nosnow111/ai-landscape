@@ -231,7 +231,7 @@ def main():
         # Determine whether to skip this stage
         force_from_here = args.force or (
             args.from_stage and STAGES.index(stage) >= STAGES.index(args.from_stage)
-        )
+        ) or bool(args.only)
         if not force_from_here and checkpoint_complete(stage):
             cp = load_checkpoint(stage)
             print(f"\n  ⏭  {stage.upper()} — completed at {cp.get('completed_at','?')}, skipping")
