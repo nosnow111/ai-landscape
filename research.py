@@ -23,6 +23,16 @@ load_dotenv()
 _THIS_MONTH = datetime.now().strftime("%B %Y")   # e.g. "October 2026"
 _THIS_WEEK  = datetime.now().strftime("%Y-%m-%d") # e.g. "2026-10-30"
 
+# Vendor blog domains — used for the extended vendor-announcement news query
+_VENDOR_DOMAINS_EARLY = [
+    "anthropic.com", "openai.com", "deepmind.google", "blog.google",
+    "ai.meta.com", "blogs.microsoft.com", "mistral.ai", "x.ai",
+    "huggingface.co", "stability.ai", "groq.com", "cohere.com",
+    "reuters.com", "apnews.com", "techcrunch.com", "theverge.com",
+    "wired.com", "arstechnica.com", "venturebeat.com", "fortune.com",
+    "bloomberg.com", "wsj.com", "cnbc.com", "nytimes.com",
+]
+
 # 2-3 queries per section; ai_news gets 3 = ~28/run × 30 days = ~840/month
 QUERIES = {
     "code_tools": [
@@ -86,12 +96,16 @@ QUERIES = {
         f"AI news yesterday latest {_THIS_MONTH}",
         f"Anthropic OpenAI Google Meta Microsoft AI release announcement {_THIS_WEEK}",
         f"AI funding regulation enterprise deal {_THIS_WEEK}",
-        # vendor-focused query with 30-day window — tuple (query, days) signals extended lookback
-        (f"Anthropic OpenAI Google Meta Microsoft xAI model launch product release update {_THIS_MONTH}", 30),
+        # vendor-focused query: 30-day window + vendor blogs in include_domains
+        (f"Anthropic OpenAI Google Meta Microsoft xAI model launch product release update {_THIS_MONTH}", 30, _VENDOR_DOMAINS_EARLY),
     ],
     "emerging_trends": [
         "emerging AI trends 2026 gaining momentum",
         "AI reasoning models agents inference compute multimodal trends 2026",
+    ],
+    "model_pricing": [
+        f"GPT-4o Claude Gemini API pricing per million tokens {_THIS_MONTH}",
+        f"LLM API cost comparison input output tokens 2026 {_THIS_MONTH}",
     ],
 }
 
@@ -149,7 +163,9 @@ _NEWS_DOMAINS = [
 ]
 
 
-def _tavily_search(query: str, retries: int = 3, news_mode: bool = False, days: int = 14) -> dict | None:
+
+def _tavily_search(query: str, retries: int = 3, news_mode: bool = False, days: int = 14,
+                   domains_override: list | None = None) -> dict | None:
     """Returns Tavily response dict, or None if unavailable/rate-limited."""
     key = os.environ.get("TAVILY_API_KEY")
     if not key:
@@ -172,7 +188,7 @@ def _tavily_search(query: str, retries: int = 3, news_mode: bool = False, days: 
                 kwargs["topic"] = "news"
                 kwargs["days"] = days
                 kwargs["max_results"] = 10
-                kwargs["include_domains"] = _NEWS_DOMAINS
+                kwargs["include_domains"] = domains_override if domains_override is not None else _NEWS_DOMAINS
             return client.search(**kwargs)
         except Exception as e:
             msg = str(e)
@@ -217,13 +233,15 @@ def _serper_search(query: str) -> dict | None:
 
 # ── unified search ─────────────────────────────────────────────────────────
 
-def _search(query: str, news_mode: bool = False, days: int = 14) -> dict:
+def _search(query: str, news_mode: bool = False, days: int = 14,
+            domains_override: list | None = None) -> dict:
     """Try providers in order; for news_mode skip Firecrawl and Serper (no recency filter on either)."""
     if not news_mode:
         result = _firecrawl_search(query)
         if result is not None:
             return result
-    result = _tavily_search(query, news_mode=news_mode, days=days)
+    result = _tavily_search(query, news_mode=news_mode, days=days,
+                            domains_override=domains_override)
     if result is not None:
         return result
     if not news_mode:
@@ -254,12 +272,15 @@ def research_section(key: str) -> tuple[str, list[str]]:
     for i, query in enumerate(queries):
         if i > 0:
             time.sleep(0.3)
-        # support (query, days) tuples for extended lookback on specific queries
+        # support (query, days) or (query, days, domains) tuples
         days_override = 14
+        domains_override = None
         if isinstance(query, tuple):
-            query, days_override = query
+            query, days_override, *rest = query
+            domains_override = rest[0] if rest else None
         try:
-            response = _search(query, news_mode=news_mode, days=days_override)
+            response = _search(query, news_mode=news_mode, days=days_override,
+                               domains_override=domains_override)
             if response.get("answer"):
                 results.append(f"Q: {query}\nA: {response['answer']}")
             for r in response.get("results", []):

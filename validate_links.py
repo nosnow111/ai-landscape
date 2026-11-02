@@ -42,7 +42,8 @@ _AUTOFIX_BLOCKED_DOMAINS = {
     "skywork.ai", "vast.ai", "tavily.com", "orq.ai",
     "confident-ai.com", "netalith.com", "ayautomate.com",
     "beam.ai", "tooldirectory.ai", "memeburn.com",
-    "openrouter.ai",
+    "openrouter.ai", "mindstudio.ai", "docs.aimlapi.com", "aimlapi.com",
+    "aitoolgraph.com", "digitalapplied.com",
 }
 
 _anthropic = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
