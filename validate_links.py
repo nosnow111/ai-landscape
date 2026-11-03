@@ -26,28 +26,15 @@ load_dotenv()
 
 CONTENT_DIR = Path(__file__).parent / "content"
 OVERRIDES_PATH = Path(__file__).parent / "url_overrides.json"
+INCLUDE_PATH = Path(__file__).parent / "include.json"
 TIMEOUT = 10
 MAX_WORKERS = 20
 ITEM_KEYS = ["tools", "models", "platforms", "databases"]
 
-# Domains the auto-fixer must never accept as replacement URLs — aggregators,
-# review sites, blogs, and third-party listings are not authoritative sources.
-_AUTOFIX_BLOCKED_DOMAINS = {
-    "mcpservers.org", "gate.ai", "g2.com", "capterra.com",
-    "technologymatch.com", "kingdee.com", "shivojha.com", "techradar.com",
-    "reddit.com", "medium.com", "substack.com", "dev.to",
-    "towardsdatascience.com", "analyticsvidhya.com", "hackernoon.com",
-    "infoq.com", "zdnet.com", "venturebeat.com", "techcrunch.com",
-    "the-decoder.com", "aitidbits.ai",
-    "skywork.ai", "vast.ai", "tavily.com", "orq.ai",
-    "confident-ai.com", "netalith.com", "ayautomate.com",
-    "beam.ai", "tooldirectory.ai", "memeburn.com",
-    "openrouter.ai", "mindstudio.ai", "docs.aimlapi.com", "aimlapi.com",
-    "aitoolgraph.com", "digitalapplied.com", "datacamp.com", "openobserve.ai",
-    "openhelm.ai",
-    "markets.businessinsider.com", "businessinsider.com",
-    "developers.cloudflare.com",
-}
+# Whitelist of authoritative domains the auto-fixer may use as replacements.
+# Loaded from include.json — edit that file to add trusted domains.
+_include_data = json.loads(INCLUDE_PATH.read_text()) if INCLUDE_PATH.exists() else {}
+_AUTOFIX_ALLOWED_DOMAINS: set[str] = set(_include_data.get("autofix_allowed_domains", []))
 
 _anthropic = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
@@ -247,11 +234,11 @@ def verify_and_fix(result: dict) -> dict:
         result["fix_status"] = "no candidate found"
         return result
 
-    # Reject candidates from non-authoritative domains
+    # Only accept candidates from whitelisted authoritative domains
     from urllib.parse import urlparse
     candidate_domain = urlparse(candidate).netloc.lstrip("www.")
-    if any(candidate_domain == d or candidate_domain.endswith("." + d) for d in _AUTOFIX_BLOCKED_DOMAINS):
-        result["fix_status"] = f"candidate rejected (non-authoritative domain: {candidate_domain})"
+    if not any(candidate_domain == d or candidate_domain.endswith("." + d) for d in _AUTOFIX_ALLOWED_DOMAINS):
+        result["fix_status"] = f"candidate rejected (domain not in include.json whitelist: {candidate_domain})"
         return result
 
     # Verify the candidate page is actually relevant
@@ -275,13 +262,18 @@ def apply_fixes(results: list[dict], dry_run: bool = False) -> list[dict]:
     For each flagged result, search for a replacement URL and patch the JSON.
     Returns the subset of results that had a fix applied.
     """
-    flagged = [r for r in results if r["flag"] in ("⚠️  wrong page", "⚠️  known fix (override)") or r["flag"].startswith("❌")]
+    # Auto-search only for truly broken links (404s, unreachable).
+    # Wrong-page judgments are false-positives too often — handle via url_overrides.json instead.
+    # Known overrides (manually registered fixes) always apply regardless.
+    overrides = [r for r in results if r["flag"] == "⚠️  known fix (override)"]
+    broken = [r for r in results if r["flag"].startswith("❌")]
+    flagged = overrides + broken
     if not flagged:
         print("  Nothing to fix.")
         return []
 
     # Override entries already have a suggested_url — skip search for them
-    needs_search = [r for r in flagged if not r.get("suggested_url") and r["flag"] != "⚠️  known fix (override)"]
+    needs_search = [r for r in broken if not r.get("suggested_url")]
     already_fixed = [r for r in flagged if r.get("suggested_url")]
 
     print(f"\n  Searching for replacements for {len(flagged)} flagged link(s)...")
@@ -344,7 +336,7 @@ def print_summary(results: list[dict]):
     print(f"  ❌ Broken:        {len(broken)}")
 
     if wrong or broken:
-        print("\nAction needed:")
+        print("\nAction needed (add fixes/skips to url_overrides.json):")
         for r in wrong + broken:
             redirect = f"\n    redirected → {r['redirected_to']}" if r["redirected_to"] else ""
             fix = f"\n    suggested  → {r['suggested_url']}" if r.get("suggested_url") else ""
