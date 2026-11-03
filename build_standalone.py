@@ -18,6 +18,10 @@ DOCS_DIR    = os.path.join(os.path.dirname(__file__), "docs")
 TAILWIND_URL = "https://cdn.tailwindcss.com"
 TAILWIND_CACHE = "/tmp/tailwind_standalone.js"
 
+_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
+with open(_CONFIG_PATH) as _f:
+    SITE_CONFIG = json.load(_f)
+
 
 def load_content(key):
     path = os.path.join(CONTENT_DIR, f"{key}.json")
@@ -91,9 +95,9 @@ def build_standalone():
     refresh_hours = int(os.environ.get("REFRESH_INTERVAL_HOURS", 24))
 
     print("  Rendering templates...")
-    dashboard_html   = env.get_template("index.html").render(sections=sections, refresh_hours=refresh_hours)
+    dashboard_html   = env.get_template("index.html").render(sections=sections, refresh_hours=refresh_hours, config=SITE_CONFIG)
     presentation_html = open(os.path.join(DOCS_DIR, "about.html")).read()
-    news_html        = env.get_template("news.html").render(ai_news=sections["ai_news"], refresh_hours=refresh_hours)
+    news_html        = env.get_template("news.html").render(ai_news=sections["ai_news"], refresh_hours=refresh_hours, config=SITE_CONFIG)
 
     tailwind_js = fetch_tailwind()
 

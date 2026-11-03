@@ -7,6 +7,10 @@ CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
 DOCS_DIR = os.path.join(os.path.dirname(__file__), "docs")
 REFRESH_HOURS = int(os.environ.get("REFRESH_INTERVAL_HOURS", 24))
 
+_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
+with open(_CONFIG_PATH) as _f:
+    SITE_CONFIG = json.load(_f)
+
 
 def load_content(key):
     path = os.path.join(CONTENT_DIR, f"{key}.json")
@@ -47,7 +51,7 @@ def build():
     }
 
     html = env.get_template("index.html").render(
-        sections=sections, refresh_hours=REFRESH_HOURS
+        sections=sections, refresh_hours=REFRESH_HOURS, config=SITE_CONFIG
     )
     out = os.path.join(DOCS_DIR, "index.html")
     with open(out, "w") as f:
@@ -55,7 +59,7 @@ def build():
     print(f"Built {out}")
 
     news_html = env.get_template("news.html").render(
-        ai_news=sections["ai_news"], refresh_hours=REFRESH_HOURS
+        ai_news=sections["ai_news"], refresh_hours=REFRESH_HOURS, config=SITE_CONFIG
     )
     news_out = os.path.join(DOCS_DIR, "news.html")
     with open(news_out, "w") as f:
