@@ -286,7 +286,7 @@ SECTIONS = {
             "List the TOP 10 MCP (Model Context Protocol) tools ranked by developer adoption. "
             "Cover the full ecosystem in one ranked list: aggregator platforms (Composio, Smithery, mcp.so), "
             "MCP gateways/proxies (agentgateway, Cloudflare MCP, Kong MCP), and the most-installed "
-            "individual MCP servers (Playwright MCP, GitHub MCP, Figma MCP, Docker MCP, etc.). "
+            "individual MCP servers (Playwright MCP, GitHub MCP, Figma MCP, Docker MCP, n8n MCP at https://n8n.io/mcp/, etc.). "
             "Rank strictly by real-world developer adoption: installs, GitHub stars, search volume, survey data. "
             "For each tool cover: vendor, type (aggregator / gateway / server), what it connects to or enables, "
             "pricing (free tier + paid), key strengths, best use case, url. "
