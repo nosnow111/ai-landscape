@@ -4,27 +4,28 @@ A static site that auto-generates daily comparisons of the AI ecosystem using Cl
 
 **Live site:** https://nosnow111.github.io/ai-landscape
 
-## What It Covers (16 sections)
+## What It Covers (17 sections)
 
 **Ranked by adoption:**
-- **Code Generation Tools** — Claude Code, GitHub Copilot, Cursor, Codeium, etc.
+- **Code Generation Tools** — Claude Code, GitHub Copilot, Cursor, Devin Desktop, etc.
 - **Major AI Models** — GPT-4o, Claude, Gemini, Llama, Grok, DeepSeek, etc.
 - **Image Generation** — Midjourney, DALL-E, Stable Diffusion, Flux, Adobe Firefly, etc.
 - **Video Generation** — Runway, Pika, Kling, Luma, HeyGen, Synthesia, etc.
-- **MCP Tools & Servers** — Composio, Smithery, GitHub MCP, Stripe MCP, Figma MCP, etc.
-- **Web Scrapers & Automation** — Firecrawl, Apify, AgentQL, Browserbase, Playwright, etc.
-- **Workspace & Productivity** — NotebookLM, M365 Copilot, Notion AI, Perplexity, Otter.ai, etc.
+- **MCP Tools & Servers** — Composio, Smithery, GitHub MCP, Stripe MCP, Figma MCP, n8n MCP, etc.
+- **Web Scrapers & Automation** — Firecrawl, Apify, Browserbase, Playwright, etc.
+- **Workspace & Productivity** — Gemini Notebook, M365 Copilot, Notion AI, Perplexity, Otter.ai, etc.
 - **Fine-Tuning Platforms** — OpenAI fine-tuning API, Hugging Face AutoTrain, Axolotl, Unsloth, etc.
 - **Enterprise AI APIs** — AWS Bedrock, Azure OpenAI, Google Vertex AI, Snowflake Cortex, etc.
 - **ML Training & Deployment** — SageMaker, Vertex AI, Databricks, Azure ML, Modal, etc.
 - **Emerging AI Trends** — reasoning models, agents, inference scaling, multimodal, etc.
+- **Token Prices** — current input/output pricing per 1M tokens across major commercial LLMs, sorted by adoption
 
 **Reference sections:**
 - **Model Repositories** — HuggingFace, Ollama, Replicate, Together AI, Groq, etc.
 - **AI in Databases** — Snowflake Cortex, BigQuery ML, pgvector, Aurora ML, etc.
 - **Observability & Cost** — LangSmith, Helicone, Weights & Biases, Arize AI, etc.
 - **LLM Optimization** — prompt caching, semantic caching, model right-sizing, RAG vs long context, etc.
-- **Daily AI News** — headlines from Reuters, AP News, WSJ, Bloomberg, CNBC, MarketWatch and more, split into Industry and Vendor columns
+- **Daily AI News** — headlines from Reuters, AP News, WSJ, Bloomberg, CNBC and more, split into Industry and Vendor columns
 
 ## How Rankings Work
 
@@ -47,8 +48,12 @@ Using two models from different companies matters: Claude and GPT-4o have differ
 pipeline.py          # Orchestrator: research → generate → validate → build
 generator.py         # Claude Opus + GPT-4o → writes content/*.json (parallel)
 research.py          # Web search (Firecrawl → Tavily → Serper) — live grounding
-validate_links.py    # URL checker: fetches pages, judges relevance, auto-fixes
+validate_links.py    # URL checker: fetches pages, judges relevance via Haiku
 build.py             # Reads JSON → renders docs/ via Jinja2
+build_standalone.py  # Generates self-contained offline HTML versions
+config.json          # Site identity: title, author, tagline, about URL
+url_overrides.json   # Permanent fix/skip registry for known problem URLs
+include.json         # Whitelist of authoritative domains for auto-fixer
 templates/           # Tailwind CSS dashboard + news templates
 checkpoints/         # Pipeline stage checkpoints (skip completed stages on re-run)
 content/             # Auto-generated JSON (committed by Actions)
@@ -89,7 +94,7 @@ python pipeline.py --force           # ignore checkpoints, run everything fresh
 
 # Link validation only:
 python validate_links.py             # check all URLs, print report
-python validate_links.py --fix       # check + auto-fix wrong-page URLs
+python validate_links.py --fix       # auto-fix broken (404) links only
 ```
 
 ## Running Your Own Instance (Fork & Deploy)
@@ -116,17 +121,15 @@ Go to your fork → **Settings** → **Secrets and variables** → **Actions** �
 | `SERPER_API_KEY` | serper.dev | Optional |
 
 ### 4. Trigger the first run
-Go to **Actions** → **Refresh AI Landscape** → **Run workflow**. It takes 2-3 minutes. After it finishes, your site will have fresh content.
-
-From then on it runs automatically every night at midnight UTC.
+Go to **Actions** → **Refresh AI Landscape** → **Run workflow**. It takes 2-3 minutes. After that it runs automatically every night at midnight UTC.
 
 ### What it costs to run
 | Item | Cost |
 |---|---|
 | GitHub Actions + Pages | Free |
-| Tavily (research) | Free tier — 1,000 req/month; nightly run uses ~33 |
+| Tavily (research) | Free tier — 1,000 req/month; nightly run uses ~35 |
 | Firecrawl (research) | Free tier — 1,000 req/month |
 | Anthropic (Claude Opus) | ~$1–3/night depending on section count |
 | OpenAI (GPT-4o cross-check) | ~$0.50–1/night; skip by omitting `OPENAI_API_KEY` |
 
-To run more cheaply: omit `OPENAI_API_KEY` (drops cross-check badges) and use `--from=generate` locally to skip the research stage when testing.
+To run more cheaply: omit `OPENAI_API_KEY` (drops cross-check badges) and use `--only=build` locally to rebuild HTML without any API calls.
