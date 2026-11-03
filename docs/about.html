@@ -398,6 +398,12 @@
   }, { threshold: 0.5 });
 
   slides.forEach(s => observer.observe(s));
+
+  // Scroll to hash on load (e.g. about.html#slide-5)
+  if (location.hash) {
+    const target = document.querySelector(location.hash);
+    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+  }
 </script>
 </body>
 </html>
