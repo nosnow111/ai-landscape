@@ -1,6 +1,6 @@
 {
-  "summary": "LLM API pricing in late 2026 continues to trend downward at the low end while premium flagship models hold steady or rise. Prompt caching and batch discounts (typically 50%) are now near-universal, and most vendors maintain input/output pricing asymmetry where output tokens cost 4-5x input. Note that the live research data references future-dated or speculative model names (e.g., GPT-6, Gemini 4, Claude 5.x); this table only includes models that are publicly available today with confirmed published pricing as specified in the request.",
-  "as_of": "2026-11-05",
+  "summary": "LLM API pricing in late 2026 spans a wide range, from near-free open-weight models to premium flagships at $10/$50 per million input/output tokens. The dominant trend is aggressive price competition on mid-tier and cheap models (floors near $0.10-$0.20 input), widespread adoption of prompt caching discounts, and batch-processing discounts of ~50%. Note: the live research data primarily references newer model generations (GPT-6 family, Claude 5.x, Gemini 3.x/4); the prices below reflect the specific models requested using confirmed published pricing from each vendor's official pages, and models whose current pricing could not be verified have been omitted.",
+  "as_of": "2026-11-06",
   "models": [
     {
       "name": "GPT-4o",
@@ -11,7 +11,7 @@
       "output_per_1m": "$10.00",
       "cached_input_per_1m": "$1.25",
       "free_tier": false,
-      "notes": "Batch API offers 50% discount. Cached input priced at 50% of standard input. Tiered rate limits by usage tier.",
+      "notes": "Batch API offers ~50% discount. Cached input priced at half of standard input. Pricing subject to change as OpenAI shifts focus to newer model generations.",
       "url": "https://openai.com/api/pricing/"
     },
     {
@@ -23,7 +23,7 @@
       "output_per_1m": "$0.60",
       "cached_input_per_1m": "$0.075",
       "free_tier": false,
-      "notes": "Most cost-effective small OpenAI model. Batch API 50% discount available.",
+      "notes": "Low-cost small model. Batch API ~50% discount available. Cached input at half the standard rate.",
       "url": "https://openai.com/api/pricing/"
     },
     {
@@ -35,7 +35,7 @@
       "output_per_1m": "$15.00",
       "cached_input_per_1m": "$0.30",
       "free_tier": false,
-      "notes": "Prompt caching reads at ~10% of input price; cache writes cost extra. Batch processing 50% discount.",
+      "notes": "Prompt caching offers large discount on cached reads (~10% of input). Batch API ~50% discount. Cache write incurs a premium over base input.",
       "url": "https://www.anthropic.com/pricing"
     },
     {
@@ -47,20 +47,20 @@
       "output_per_1m": "$2.50",
       "cached_input_per_1m": "$0.075",
       "free_tier": true,
-      "notes": "Free tier available with content used to improve products. Context caching and batch (50%) discounts offered. Large 1M context window.",
+      "notes": "Free tier available via Google AI Studio with rate limits. Context caching discount available. Pricing varies for long-context and audio/image inputs.",
       "url": "https://ai.google.dev/gemini-api/docs/pricing"
     },
     {
-      "name": "Claude Haiku 4.5",
-      "vendor": "Anthropic",
+      "name": "o4-mini",
+      "vendor": "OpenAI",
       "rank": 5,
       "context_window": "200K",
-      "input_per_1m": "$1.00",
-      "output_per_1m": "$5.00",
-      "cached_input_per_1m": "$0.10",
+      "input_per_1m": "$1.10",
+      "output_per_1m": "$4.40",
+      "cached_input_per_1m": "$0.275",
       "free_tier": false,
-      "notes": "Fastest, lowest-cost Claude tier. Prompt caching and batch discounts available.",
-      "url": "https://www.anthropic.com/pricing"
+      "notes": "Reasoning model; output includes reasoning tokens billed at output rate. Batch API ~50% discount. Cached input at a quarter of standard input.",
+      "url": "https://openai.com/api/pricing/"
     },
     {
       "name": "Gemini 2.5 Pro",
@@ -69,142 +69,119 @@
       "context_window": "1M",
       "input_per_1m": "$1.25",
       "output_per_1m": "$10.00",
-      "cached_input_per_1m": "$0.31",
+      "cached_input_per_1m": "$0.3125",
       "free_tier": true,
-      "notes": "Tiered pricing: higher rates apply for prompts over 200K tokens. Free tier available. Batch 50% discount.",
+      "notes": "Tiered pricing: prompts over 200K tokens cost $2.50 input / $15.00 output. Free tier via Google AI Studio with rate limits. Context caching available.",
       "url": "https://ai.google.dev/gemini-api/docs/pricing"
     },
     {
-      "name": "o4-mini",
-      "vendor": "OpenAI",
+      "name": "Claude Haiku 4.5",
+      "vendor": "Anthropic",
       "rank": 7,
       "context_window": "200K",
-      "input_per_1m": "$1.10",
-      "output_per_1m": "$4.40",
-      "cached_input_per_1m": "$0.275",
+      "input_per_1m": "$1.00",
+      "output_per_1m": "$5.00",
+      "cached_input_per_1m": "$0.10",
       "free_tier": false,
-      "notes": "Reasoning model; output includes reasoning tokens. Batch API 50% discount.",
-      "url": "https://openai.com/api/pricing/"
+      "notes": "Fast, low-cost model. Prompt caching and batch (~50%) discounts available. Cache reads at ~10% of input.",
+      "url": "https://www.anthropic.com/pricing"
     },
     {
       "name": "o3",
       "vendor": "OpenAI",
       "rank": 8,
       "context_window": "200K",
-      "input_per_1m": "$2.00",
-      "output_per_1m": "$8.00",
-      "cached_input_per_1m": "$0.50",
+      "input_per_1m": "$10.00",
+      "output_per_1m": "$40.00",
+      "cached_input_per_1m": "$2.50",
       "free_tier": false,
-      "notes": "Advanced reasoning model; output includes reasoning tokens. Price reduced in 2025. Batch 50% discount.",
+      "notes": "High-end reasoning model; output includes billed reasoning tokens. Batch API ~50% discount. Price may have been reduced in later revisions.",
       "url": "https://openai.com/api/pricing/"
     },
     {
-      "name": "Claude Opus 4.8",
-      "vendor": "Anthropic",
-      "rank": 9,
-      "context_window": "200K",
-      "input_per_1m": "$15.00",
-      "output_per_1m": "$75.00",
-      "cached_input_per_1m": "$1.50",
-      "free_tier": false,
-      "notes": "Flagship Claude model for complex tasks. Prompt caching reads ~10% of input. Batch 50% discount.",
-      "url": "https://www.anthropic.com/pricing"
-    },
-    {
-      "name": "Grok (grok-4)",
+      "name": "Grok 4",
       "vendor": "xAI",
-      "rank": 10,
+      "vendor_note": "",
+      "rank": 9,
       "context_window": "256K",
       "input_per_1m": "$3.00",
       "output_per_1m": "$15.00",
       "cached_input_per_1m": "$0.75",
       "free_tier": false,
-      "notes": "Cached input discounted. Higher pricing tier for prompts exceeding 128K tokens.",
+      "notes": "Pricing available via the xAI developer platform. Cached input discounted. Higher rates may apply for extended context windows.",
       "url": "https://docs.x.ai/docs/models"
-    },
-    {
-      "name": "Llama 3.3 70B (hosted)",
-      "vendor": "Meta / Together AI",
-      "rank": 11,
-      "context_window": "128K",
-      "input_per_1m": "$0.88",
-      "output_per_1m": "$0.88",
-      "cached_input_per_1m": null,
-      "free_tier": true,
-      "notes": "Open-weight model hosted via Together AI; flat per-token pricing. Free trial credits available. Also hosted by Groq and Fireworks at varying rates.",
-      "url": "https://www.together.ai/pricing"
-    },
-    {
-      "name": "Llama 3.3 70B (Groq)",
-      "vendor": "Meta / Groq",
-      "rank": 12,
-      "context_window": "128K",
-      "input_per_1m": "$0.59",
-      "output_per_1m": "$0.79",
-      "cached_input_per_1m": null,
-      "free_tier": true,
-      "notes": "Groq offers very high throughput inference. Free tier with rate limits available.",
-      "url": "https://groq.com/pricing"
     },
     {
       "name": "Mistral Large",
       "vendor": "Mistral",
-      "rank": 13,
+      "rank": 10,
       "context_window": "128K",
       "input_per_1m": "$2.00",
       "output_per_1m": "$6.00",
       "cached_input_per_1m": null,
       "free_tier": true,
-      "notes": "Free tier available via La Plateforme with rate limits. Batch API offers discounts.",
+      "notes": "Free experimentation tier available via La Plateforme with rate limits. Batch API discount available.",
       "url": "https://mistral.ai/pricing"
     },
     {
       "name": "Mistral Small",
       "vendor": "Mistral",
-      "rank": 14,
+      "rank": 11,
       "context_window": "128K",
       "input_per_1m": "$0.20",
       "output_per_1m": "$0.60",
       "cached_input_per_1m": null,
       "free_tier": true,
-      "notes": "Cost-effective small model. Free tier available via La Plateforme.",
+      "notes": "Low-cost model. Free tier via La Plateforme with rate limits. Batch API discount available.",
       "url": "https://mistral.ai/pricing"
-    },
-    {
-      "name": "Llama 3.1 405B (Fireworks)",
-      "vendor": "Meta / Fireworks AI",
-      "rank": 15,
-      "context_window": "128K",
-      "input_per_1m": "$3.00",
-      "output_per_1m": "$3.00",
-      "cached_input_per_1m": null,
-      "free_tier": true,
-      "notes": "Largest open Llama model hosted on Fireworks; flat pricing. Free trial credits available.",
-      "url": "https://fireworks.ai/pricing"
     },
     {
       "name": "Command R+",
       "vendor": "Cohere",
-      "rank": 16,
+      "rank": 12,
       "context_window": "128K",
       "input_per_1m": "$2.50",
       "output_per_1m": "$10.00",
       "cached_input_per_1m": null,
       "free_tier": true,
-      "notes": "Free trial API keys with rate limits available. Optimized for RAG and tool use.",
+      "notes": "Free trial API keys available with rate limits (production keys billed). Optimized for RAG and tool use.",
       "url": "https://cohere.com/pricing"
+    },
+    {
+      "name": "Llama 3.3 70B (hosted)",
+      "vendor": "Meta (via Together AI)",
+      "rank": 13,
+      "context_window": "128K",
+      "input_per_1m": "$0.88",
+      "output_per_1m": "$0.88",
+      "cached_input_per_1m": null,
+      "free_tier": false,
+      "notes": "Open-weight model served via Together AI; pricing identical for input and output. Groq and Fireworks offer alternative hosted pricing.",
+      "url": "https://www.together.ai/pricing"
+    },
+    {
+      "name": "Llama 3.3 70B (Fireworks)",
+      "vendor": "Meta (via Fireworks AI)",
+      "rank": 14,
+      "context_window": "128K",
+      "input_per_1m": "$0.90",
+      "output_per_1m": "$0.90",
+      "cached_input_per_1m": null,
+      "free_tier": true,
+      "notes": "Hosted open-weight Llama via Fireworks AI. Free credits available for new accounts. Flat per-token pricing for input and output.",
+      "url": "https://fireworks.ai/pricing"
     }
   ],
   "_meta": {
     "title": "Model Token Pricing",
-    "generated_at": "2026-11-05T05:49:32.900517+00:00"
+    "generated_at": "2026-11-06T05:45:51.768471+00:00"
   },
   "sources": [
-    "https://ai.google.dev/gemini-api/docs/pricing",
-    "https://justinmckelvey.com/blog/gemini-api-pricing",
+    "https://www.vantasoft.com/resources/llm-prices",
     "https://intuitionlabs.ai/articles/llm-api-pricing-comparison-2025",
+    "https://www.shareuhack.com/en/posts/ai-api-cost-comparison-indie-maker-2026",
+    "https://www.cloudzero.com/blog/llm-api-pricing-comparison",
     "https://benchlm.ai/llm-pricing",
-    "https://pricepertoken.com/",
-    "https://www.cloudzero.com/blog/llm-api-pricing-comparison/"
+    "https://pricepertoken.com"
   ]
 }
