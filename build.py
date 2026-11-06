@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 
 CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
 DOCS_DIR = os.path.join(os.path.dirname(__file__), "docs")
+VENDOR_CACHE_PATH = os.path.join(CONTENT_DIR, "vendor_news_cache.json")
 REFRESH_HOURS = int(os.environ.get("REFRESH_INTERVAL_HOURS", 24))
 
 _CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
@@ -50,8 +51,23 @@ def build():
         "ai_news": load_news_sorted("ai_news"),
     }
 
+    # Vendor news rolling cache — if today has no vendor items, inject cached ones
+    ai_news_items = sections.get("ai_news", {}).get("items", [])
+    vendor_items = [i for i in ai_news_items if i.get("category") == "vendor"]
+    vendor_cache_date = None
+    if vendor_items:
+        with open(VENDOR_CACHE_PATH, "w") as _vf:
+            json.dump({"items": vendor_items, "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")}, _vf, indent=2)
+    elif os.path.exists(VENDOR_CACHE_PATH):
+        _cache = json.load(open(VENDOR_CACHE_PATH))
+        _cached = _cache.get("items", [])
+        vendor_cache_date = _cache.get("date")
+        if _cached:
+            sections["ai_news"]["items"] = ai_news_items + _cached
+
     html = env.get_template("index.html").render(
-        sections=sections, refresh_hours=REFRESH_HOURS, config=SITE_CONFIG
+        sections=sections, refresh_hours=REFRESH_HOURS, config=SITE_CONFIG,
+        vendor_cache_date=vendor_cache_date
     )
     out = os.path.join(DOCS_DIR, "index.html")
     with open(out, "w") as f:
