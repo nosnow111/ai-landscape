@@ -1,10 +1,10 @@
 {
-  "summary": "Fine-tuning makes sense when you need to change a model's behavior, tone, or output format consistently, or encode domain-specific patterns that no prompt can reliably reproduce, whereas RAG is better when you need access to current or proprietary knowledge that changes frequently. Prompt engineering should always be your first attempt since it is free and instant, and most teams should only move to fine-tuning after prompting and RAG hit measurable quality or latency ceilings. In 2026, coding assistants and agents have become the dominant AI use case (66%), and the fine-tuning market has consolidated around managed cloud services (OpenAI, Together AI, Bedrock, Vertex) and efficient open-source frameworks (Unsloth, Axolotl, LLaMA-Factory).",
+  "summary": "Fine-tuning makes sense when you need to change a model's behavior, tone, or output format consistently, teach it a specialized domain vocabulary, or reduce latency and cost by distilling capabilities into a smaller model. Use RAG when you need the model to access up-to-date or proprietary factual knowledge that changes frequently, and use prompt engineering first for quick iteration on behavior before investing in training. In practice, teams often combine fine-tuning for style/format with RAG for grounding in current facts.",
   "when_to_fine_tune": [
-    "Choose fine-tuning when you need consistent output structure, style, or tone that prompting cannot reliably enforce across thousands of requests.",
-    "Choose RAG over fine-tuning when the knowledge your model needs changes frequently or must cite specific, up-to-date source documents.",
-    "Choose fine-tuning to reduce latency and token cost by baking repeated instructions and few-shot examples directly into the model weights.",
-    "Choose fine-tuning for domain adaptation (legal, medical, financial) where specialized vocabulary and reasoning patterns must be deeply internalized rather than retrieved."
+    "Choose fine-tuning when you need consistent output structure, tone, or domain-specific behavior that prompting alone cannot reliably enforce across many examples.",
+    "Fine-tune to distill a large model's capability into a smaller, cheaper, lower-latency model for high-volume production workloads.",
+    "Prefer RAG over fine-tuning when the required knowledge is factual, frequently updated, or must be cited from source documents.",
+    "Start with prompt engineering and few-shot examples first; only fine-tune once you have a stable task definition and hundreds to thousands of high-quality labeled examples."
   ],
   "tools": [
     {
@@ -12,24 +12,25 @@
       "vendor": "OpenAI",
       "rank": 1,
       "pricing_free": false,
-      "pricing_paid": "Pay-per-token for training and usage; GPT-4o-mini and GPT-4.1 fine-tuning billed per 1M training tokens plus inference premium over base models",
+      "pricing_paid": "Pay-per-token for training and usage; billed on training tokens plus higher inference rates for fine-tuned models (e.g. GPT-4o mini and GPT-4.1 tiers).",
       "supported_models": [
-        "GPT-4.1",
         "GPT-4o",
-        "GPT-4o-mini",
-        "o4-mini"
+        "GPT-4o mini",
+        "GPT-4.1",
+        "GPT-4.1 mini",
+        "o-series (select)"
       ],
       "requires_local_gpu": false,
       "features": [
-        "Fully managed hosted training",
-        "Supervised fine-tuning",
-        "Direct preference optimization (DPO)",
-        "Reinforcement fine-tuning",
-        "Hosted inference with no infra management"
+        "Fully managed supervised fine-tuning",
+        "DPO preference tuning",
+        "Hosted inference and deployment",
+        "Dashboard and API workflow",
+        "Usage/eval integration"
       ],
-      "best_for": "Instruction tuning and behavior/format alignment on top-tier closed models with zero infrastructure overhead",
+      "best_for": "Instruction tuning and output-format/style control on OpenAI's hosted models",
       "url": "https://platform.openai.com/docs/guides/fine-tuning",
-      "sonnet_rank": 2,
+      "sonnet_rank": 3,
       "rank_agreement": "minor",
       "url_auto_fixed": true
     },
@@ -38,185 +39,181 @@
       "vendor": "Hugging Face",
       "rank": 2,
       "pricing_free": true,
-      "pricing_paid": "Pay for compute via Hugging Face Spaces/Inference Endpoints; local use is free",
+      "pricing_paid": "Pay for compute used (GPU hours on HF infrastructure); Inference Endpoints billed hourly by hardware tier.",
       "supported_models": [
-        "Llama 3.x",
-        "Mistral",
-        "Gemma",
+        "Llama family",
+        "Mistral/Mixtral",
         "Qwen",
-        "500,000+ open models on the Hub"
+        "Gemma",
+        "500,000+ Hub models"
       ],
       "requires_local_gpu": false,
       "features": [
         "No-code fine-tuning interface",
-        "LoRA and QLoRA support",
-        "Deploy to Inference Endpoints",
-        "Broadest model selection of any platform",
-        "Runs on HF managed infrastructure"
+        "LoRA/QLoRA and DPO via Transformers",
+        "Choice of GPU hardware (T4 to H100)",
+        "Inference Endpoints for deployment",
+        "Autoscaling and scale-to-zero"
       ],
-      "best_for": "Research and experimentation plus no-code fine-tuning across the widest range of open-source base models",
+      "best_for": "Research, experimentation, and no-code fine-tuning across the broadest model selection",
       "url": "https://huggingface.co/autotrain",
       "sonnet_rank": 1,
       "rank_agreement": "minor"
     },
     {
-      "name": "Unsloth",
-      "vendor": "Unsloth AI",
-      "rank": 3,
-      "pricing_free": true,
-      "pricing_paid": "Open source and free; Pro/Enterprise tiers for multi-GPU and managed features",
-      "supported_models": [
-        "Llama 3.x",
-        "Mistral",
-        "Gemma",
-        "Qwen",
-        "Phi",
-        "DeepSeek"
-      ],
-      "requires_local_gpu": true,
-      "features": [
-        "2x faster training with lower memory",
-        "LoRA and QLoRA optimization",
-        "Fits large models on single consumer GPUs",
-        "Free Colab notebooks",
-        "Open-source kernels"
-      ],
-      "best_for": "Cost-efficient LoRA/QLoRA fine-tuning on limited or single-GPU hardware",
-      "url": "https://github.com/unslothai/unsloth",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
       "name": "Together AI",
       "vendor": "Together AI",
-      "rank": 4,
+      "rank": 3,
       "pricing_free": false,
-      "pricing_paid": "LoRA and full-parameter SFT from $0.48 per million training tokens; H100 clusters from $3.19/hour reserved",
+      "pricing_paid": "LoRA and full-parameter SFT from $0.48 per million training tokens; reserved H100 clusters from $3.19/hour; dedicated inference priced per GPU hour.",
       "supported_models": [
-        "Llama 3.x",
-        "Mistral",
+        "Llama family",
+        "Mistral/Mixtral",
         "Qwen",
         "DeepSeek",
-        "Mixtral"
+        "Many open-weight models"
       ],
       "requires_local_gpu": false,
       "features": [
         "LoRA and full-parameter SFT",
-        "Reinforcement learning via Together Post-Training",
+        "Together Post-Training with RL and checkpoints",
         "Checkpoints deploy straight to inference",
-        "H100 clusters",
-        "Canary rollouts, shadow traffic, autoscaling"
+        "Reserved H100 GPU clusters",
+        "Canary rollouts, shadow traffic, autoscaling (July 2026)",
+        "FlashAttention-optimized inference, 99% SLA"
       ],
-      "best_for": "High-performance fine-tuning plus dedicated capacity production deployment on open models",
+      "best_for": "Production fine-tuning plus fast dedicated inference and RLHF on open models",
       "url": "https://www.together.ai/fine-tuning",
-      "sonnet_rank": 3,
+      "sonnet_rank": 2,
       "rank_agreement": "minor",
       "url_auto_fixed": true
     },
     {
       "name": "Amazon Bedrock Fine-Tuning",
       "vendor": "Amazon Web Services",
-      "rank": 5,
+      "rank": 4,
       "pricing_free": false,
-      "pricing_paid": "Pay per token for training plus provisioned throughput for custom model inference",
+      "pricing_paid": "Pay for training tokens/compute plus provisioned throughput for hosting fine-tuned models.",
       "supported_models": [
         "Anthropic Claude (select)",
-        "Amazon Nova",
+        "Amazon Nova / Titan",
         "Meta Llama",
-        "Cohere Command"
+        "Cohere"
       ],
       "requires_local_gpu": false,
       "features": [
-        "Fully managed within AWS",
-        "Custom model import",
-        "VPC isolation and enterprise security",
-        "Provisioned throughput inference",
-        "Integration with AWS data services"
+        "Managed custom model fine-tuning",
+        "Continued pre-training option",
+        "VPC and IAM security integration",
+        "Provisioned throughput deployment",
+        "No infrastructure management"
       ],
-      "best_for": "Enterprise domain adaptation with strict compliance, data residency, and AWS ecosystem integration",
-      "url": "https://aws.amazon.com/bedrock/",
+      "best_for": "Enterprise domain adaptation within an existing AWS/governance footprint",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
       "name": "Vertex AI",
       "vendor": "Google Cloud",
-      "rank": 6,
+      "rank": 5,
       "pricing_free": false,
-      "pricing_paid": "Pay per node-hour for tuning jobs plus inference billing; supervised tuning priced per token for Gemini",
+      "pricing_paid": "Pay per training node-hour / token plus prediction endpoint costs; GPU/TPU-backed.",
       "supported_models": [
-        "Gemini 1.5/2.x",
+        "Gemini family",
         "Gemma",
-        "Llama",
-        "select open models via Model Garden"
+        "Select open models (Model Garden)"
       ],
       "requires_local_gpu": false,
       "features": [
-        "Managed supervised tuning for Gemini",
-        "RLHF pipelines",
-        "Model Garden with open models",
-        "MLOps and pipelines integration",
+        "Managed supervised and RLHF tuning",
+        "Model Garden with open and proprietary models",
+        "TPU and GPU training",
+        "MLOps pipelines and evaluation",
         "Enterprise security and governance"
       ],
-      "best_for": "Enterprise instruction tuning of Gemini and open models within the Google Cloud ecosystem",
-      "url": "https://cloud.google.com/vertex-ai/docs",
-      "sonnet_rank": 5,
-      "rank_agreement": "minor",
-      "url_auto_fixed": true
+      "best_for": "Enterprise tuning of Gemini/Gemma models inside Google Cloud",
+      "url": "https://cloud.google.com/vertex-ai/generative-ai/docs/models/tune-models",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
     },
     {
-      "name": "Axolotl",
-      "vendor": "Axolotl AI (OpenAccess AI Collective)",
-      "rank": 7,
+      "name": "Unsloth",
+      "vendor": "Unsloth AI",
+      "rank": 6,
       "pricing_free": true,
-      "pricing_paid": "Free and open source; you pay only for your own compute",
+      "pricing_paid": "Open-source (Apache 2.0) free; optional paid Pro/Enterprise tiers for multi-GPU and support.",
       "supported_models": [
-        "Llama 3.x",
+        "Llama family",
         "Mistral",
-        "Mixtral",
         "Qwen",
         "Gemma",
         "Phi"
       ],
       "requires_local_gpu": true,
       "features": [
-        "Config-driven YAML fine-tuning",
-        "Full fine-tuning, LoRA, QLoRA",
-        "Multi-GPU and DeepSpeed/FSDP support",
-        "Flash Attention and sample packing",
-        "DPO and ORPO preference tuning"
+        "2x+ faster LoRA/QLoRA fine-tuning",
+        "Significantly reduced VRAM usage",
+        "Runs on a single consumer/free Colab GPU",
+        "Optimized kernels",
+        "Easy Hugging Face integration"
       ],
-      "best_for": "Flexible, reproducible production fine-tuning pipelines controlled via config files",
+      "best_for": "Fast, memory-efficient local or single-GPU fine-tuning of open models",
+      "url": "https://github.com/unslothai/unsloth",
+      "sonnet_rank": 10,
+      "rank_agreement": "disagree"
+    },
+    {
+      "name": "Axolotl",
+      "vendor": "Axolotl AI (OpenAccess AI Collective)",
+      "rank": 7,
+      "pricing_free": true,
+      "pricing_paid": "Open-source (Apache 2.0) free; you pay only for your own compute.",
+      "supported_models": [
+        "Llama family",
+        "Mistral/Mixtral",
+        "Qwen",
+        "Gemma",
+        "Many open-weight models"
+      ],
+      "requires_local_gpu": true,
+      "features": [
+        "YAML-config-driven training",
+        "Supports LoRA, QLoRA, full fine-tune, DPO/RLHF",
+        "Multi-GPU and FSDP/DeepSpeed support",
+        "Flexible dataset formats",
+        "Popular for reproducible research pipelines"
+      ],
+      "best_for": "Configurable, reproducible open-source fine-tuning for practitioners",
       "url": "https://github.com/axolotl-ai-cloud/axolotl",
-      "sonnet_rank": 9,
-      "rank_agreement": "minor"
+      "sonnet_rank": 7,
+      "rank_agreement": "strong"
     },
     {
       "name": "LLaMA-Factory",
       "vendor": "LLaMA-Factory (open source)",
       "rank": 8,
       "pricing_free": true,
-      "pricing_paid": "Free and open source; you pay only for your own compute",
+      "pricing_paid": "Open-source (Apache 2.0) free; you pay only for your own compute.",
       "supported_models": [
-        "Llama 3.x",
+        "Llama family",
         "Qwen",
         "Mistral",
         "Gemma",
         "ChatGLM",
-        "Baichuan",
         "100+ models"
       ],
       "requires_local_gpu": true,
       "features": [
         "Web UI (LlamaBoard) and CLI",
-        "LoRA, QLoRA, full fine-tuning",
-        "SFT, DPO, PPO, KTO, ORPO",
-        "Broad model family support",
-        "Low-code workflow"
+        "LoRA, QLoRA, full fine-tune, DPO, PPO, ORPO",
+        "Broad model coverage",
+        "Quantization support",
+        "Export and deployment helpers"
       ],
-      "best_for": "Unified low-code fine-tuning across a very wide range of open model families with multiple training methods",
+      "best_for": "Unified low-code fine-tuning across a very wide range of open models",
       "url": "https://github.com/hiyouga/LLaMA-Factory",
-      "sonnet_rank": 10,
+      "sonnet_rank": 9,
       "rank_agreement": "minor"
     },
     {
@@ -224,89 +221,66 @@
       "vendor": "Modal Labs",
       "rank": 9,
       "pricing_free": true,
-      "pricing_paid": "Pay-per-second serverless GPU compute; includes free monthly credits",
+      "pricing_paid": "Free starter credits; usage-based per-second GPU billing (A100/H100 tiers) afterward.",
       "supported_models": [
-        "Any open model (Llama, Mistral, Qwen, etc.) via custom code"
+        "Any open-weight model (bring your own training code)"
       ],
       "requires_local_gpu": false,
       "features": [
         "Serverless GPU compute",
-        "Bring your own training script",
-        "Autoscaling to many GPUs on demand",
-        "Pay-per-second billing",
-        "Integrates with Axolotl and custom pipelines"
+        "Per-second billing and scale-to-zero",
+        "Python-native infrastructure-as-code",
+        "Run Axolotl/Unsloth/custom loops",
+        "Fast container cold starts"
       ],
-      "best_for": "Custom, code-first fine-tuning runs that need on-demand serverless GPU scaling without managing clusters",
-      "url": "https://modal.com/",
-      "sonnet_rank": 7,
-      "rank_agreement": "minor"
+      "best_for": "Serverless, pay-per-second compute to run custom fine-tuning jobs at scale",
+      "url": "https://modal.com/docs",
+      "sonnet_rank": 6,
+      "rank_agreement": "disagree",
+      "url_auto_fixed": true
     },
     {
       "name": "Replicate",
       "vendor": "Replicate",
+      "vendor_note": "",
       "rank": 10,
       "pricing_free": false,
-      "pricing_paid": "Pay per second of training and inference compute; no upfront commitment",
+      "pricing_paid": "Usage-based: pay per training run and per-second inference by GPU type; hosted fine-tuned model endpoints.",
       "supported_models": [
-        "Llama 3.x",
+        "Llama family",
         "Flux (image)",
-        "various open LLMs and vision models"
+        "Many open-weight models"
       ],
       "requires_local_gpu": false,
       "features": [
         "Simple API-driven fine-tuning",
-        "One-command LoRA training",
-        "Hosted inference for fine-tuned models",
-        "Versioned model management",
+        "One-click deployment of fine-tuned models",
+        "Per-second GPU billing",
+        "Model sharing via Cog",
         "No infrastructure management"
       ],
-      "best_for": "Developers who want fast, API-driven LoRA fine-tuning and instant hosted deployment",
+      "best_for": "Quick, API-first fine-tuning and instant hosted deployment of open models",
       "url": "https://replicate.com/docs/guides/fine-tuning",
-      "sonnet_rank": 6,
-      "rank_agreement": "disagree"
-    },
-    {
-      "name": "Fireworks AI",
-      "vendor": "Fireworks AI",
-      "rank": 11,
-      "pricing_free": false,
-      "pricing_paid": "Serverless pay-per-token with competitive rates; LoRA fine-tuning and dedicated deployments available",
-      "supported_models": [
-        "Llama 3.x",
-        "Mistral",
-        "Qwen",
-        "DeepSeek",
-        "Mixtral"
-      ],
-      "requires_local_gpu": false,
-      "features": [
-        "OpenAI-compatible API",
-        "Serverless fine-tuning and inference",
-        "LoRA tuning",
-        "Competitive token rates",
-        "Fast production inference"
-      ],
-      "best_for": "Latency-sensitive production inference of fine-tuned open models with an OpenAI-compatible API",
-      "url": "https://fireworks.ai/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "sonnet_rank": 8,
+      "rank_agreement": "minor",
+      "url_auto_fixed": true
     }
   ],
   "_meta": {
     "title": "LLM Fine-Tuning Platforms",
-    "generated_at": "2026-11-06T05:46:04.855577+00:00"
+    "generated_at": "2026-11-07T05:17:15.471484+00:00"
   },
   "notable_sonnet_additions": [
     "Amazon Bedrock",
-    "Labellerr"
+    "Google Vertex AI"
   ],
   "cross_checked": true,
   "sources": [
-    "https://deepchecks.com/best-llm-fine-tuning-tools",
+    "https://stackoverflow.co/company/press/archive/stack-overflow-annual-developer-survey-ai-trust-conditional",
     "https://survey.stackoverflow.co/2026/ai",
-    "https://www.linkedin.com/posts/colin-eberhardt-1464b4a_state-of-ai-2026-activity-7462452954265145344-7ZxM",
+    "https://survey.stackoverflow.co/2026",
     "https://www.premai.io/blog/8-best-llm-fine-tuning-platforms-in-2026-compared",
-    "https://www.subconscious.dev/compare/together-ai-vs-hugging-face",
-    "https://www.spheron.network/blog/together-ai-alternatives"
+    "https://developer.puter.com/blog/together-ai-alternatives",
+    "https://www.subconscious.dev/compare/together-ai-vs-hugging-face"
   ]
 }
