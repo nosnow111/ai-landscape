@@ -1,138 +1,137 @@
 {
-  "summary": "The open AI model ecosystem spans model repositories (where weights are hosted and distributed) and developer-facing inference platforms (where those models are served via APIs). Hugging Face dominates as the central hub, crossing 3 million public models by August 2026, though downloads are highly concentrated\u2014roughly the top 200 models account for ~half of all downloads\u2014and China-origin models have surpassed U.S. ones in monthly download volume. Inference platforms like Ollama (local), Replicate, Together AI, Fireworks AI, and SiliconFlow layer serverless or self-hosted inference on top of open weights, competing on price, latency, and model breadth.",
+  "summary": "The open AI model ecosystem spans model hubs that host and distribute weights (led by Hugging Face, which crossed 3 million public models in August 2026) and developer-facing inference platforms that serve those models via managed APIs. Hugging Face dominates distribution\u2014though downloads are highly concentrated, with the top 200 models accounting for roughly half of all downloads\u2014while platforms like Ollama, Replicate, Together AI, Fireworks AI, and SiliconFlow compete on speed, price, and ease of running open models. A notable 2026 trend is the rise of Chinese open-weight labs (Moonshot, MiniMax, Xiaomi, Z.ai, DeepSeek), with China surpassing the U.S. in monthly model downloads.",
   "platforms": [
     {
       "name": "Hugging Face",
-      "purpose": "The central open repository for machine learning models, datasets, and demos (Spaces), plus a serverless Inference API and partner-provider inference routing.",
-      "model_count": "3M+ public models (crossed 3,011,630 in mid-August 2026, ~747K added in 2026 YTD)",
-      "pricing": "Free hosting for public/most private repos; Pro ($9/mo); Enterprise Hub (~$20/user/mo); inference billed per-token/per-second via Inference Providers with pay-as-you-go credits",
+      "purpose": "The central hub for hosting, sharing, versioning, and discovering open models, datasets, and demos (Spaces), plus a serverless Inference API and dedicated Inference Endpoints.",
+      "model_count": "~3 million+ public models (crossed 3M in August 2026, adding ~747K in the first 7.7 months of 2026)",
+      "pricing": "Free tier for public repos and limited inference; PRO at ~$9/month; Inference Endpoints billed per compute hour; Enterprise Hub at ~$20/user/month; pay-as-you-go inference providers routed through the Hub",
       "features": [
-        "Largest model and dataset hub with Git-based versioning",
-        "Transformers, Datasets, and Diffusers libraries",
-        "Spaces for hosting demos and apps",
-        "Inference Providers routing (Together, Fireworks, Replicate, SambaNova, etc.)",
-        "Download/usage stats and model cards",
-        "AutoTrain and fine-tuning tooling"
+        "Largest open model and dataset repository",
+        "Git-based repos with LFS for large weights",
+        "Transformers, Diffusers, and Datasets libraries",
+        "Spaces for hosting demos/apps",
+        "Serverless Inference API and dedicated Inference Endpoints",
+        "Download stats and model cards for discoverability",
+        "Routing to third-party inference providers"
       ],
-      "best_for": "Researchers, ML engineers, and teams needing the broadest selection of open models/datasets and flexible hosting",
+      "best_for": "Researchers, ML engineers, and developers who need the widest model/dataset selection, open-source tooling, and flexible hosting",
       "url": "https://huggingface.co"
     },
     {
       "name": "Ollama",
-      "purpose": "A tool for running open LLMs locally on your own machine with a simple CLI and local REST API.",
-      "model_count": "Hundreds of curated/quantized models in its library (Llama, Qwen, Gemma, Mistral, DeepSeek, Phi, etc.); can import any GGUF",
-      "pricing": "Free and open source; no usage fees (you supply the hardware)",
+      "purpose": "A tool to download, manage, and run open LLMs locally on your own machine with a simple CLI and local API server.",
+      "model_count": "Hundreds of curated models in its library (e.g., Llama, Mistral, Gemma, Qwen, DeepSeek, Phi), with thousands more importable via GGUF",
+      "pricing": "Free and open source (runs on your own hardware); no per-token costs",
       "features": [
         "One-command local model download and run",
-        "Optimized GGUF/quantized model serving",
-        "OpenAI-compatible local API endpoint",
+        "OpenAI-compatible local REST API",
+        "GGUF/quantized model support for consumer hardware",
         "Cross-platform (macOS, Linux, Windows)",
-        "Modelfile customization and model packaging",
-        "GPU and Apple Silicon acceleration"
+        "Modelfile for custom model configuration",
+        "Offline/private inference with no data leaving the device"
       ],
-      "best_for": "Developers and privacy-conscious users wanting fast, free, offline local inference and prototyping",
+      "best_for": "Developers and privacy-conscious users who want to run open models locally for prototyping, offline use, or self-hosting",
       "url": "https://ollama.com"
     },
     {
       "name": "Replicate",
-      "purpose": "A cloud platform to run and share open models via API, with easy deployment of custom models using Cog containers.",
-      "model_count": "Thousands of community and official models (LLMs, image, video, audio)",
-      "pricing": "Pay-per-use billed by compute time (per-second GPU/CPU pricing) or per-token/output for some hosted models; no subscription required",
+      "purpose": "A cloud platform for running and deploying open and community models via API, including image, video, audio, and language models packaged as reproducible containers.",
+      "model_count": "Thousands of community-published models (Cog-packaged)",
+      "pricing": "Pay-per-use billed by compute time (per-second GPU/CPU pricing) or per-run for some models; no subscription required",
       "features": [
-        "Run any public model via a single API call",
-        "Cog for packaging and deploying custom models",
-        "Strong catalog of image/video/audio generation models",
-        "Automatic scaling and cold-start handling",
-        "Fine-tuning support for select models",
-        "Simple, language-agnostic REST/client SDKs"
+        "Run thousands of models with a single API call",
+        "Cog framework for packaging and publishing custom models",
+        "Strong support for image/video/audio generation (e.g., Stable Diffusion, FLUX)",
+        "Auto-scaling with scale-to-zero",
+        "Fine-tuning for select models",
+        "Simple REST and client-library access"
       ],
-      "best_for": "Developers and startups wanting quick API access to multimodal open models without managing infrastructure",
+      "best_for": "Developers and startups wanting quick API access to multimodal/generative models without managing infrastructure",
       "url": "https://replicate.com"
     },
     {
       "name": "Together AI",
-      "purpose": "A developer inference and fine-tuning cloud offering fast, low-cost access to a large catalog of open LLMs and multimodal models.",
+      "purpose": "A high-performance inference and fine-tuning cloud for open-source LLMs and multimodal models, plus GPU training infrastructure.",
       "model_count": "200+ open models (Llama, Qwen, DeepSeek, Mixtral, FLUX, etc.)",
-      "pricing": "Pay-as-you-go per-token pricing (varies by model size); dedicated GPU endpoints billed hourly; fine-tuning priced separately",
+      "pricing": "Pay-per-token for inference (varies by model size); hourly GPU rental for dedicated endpoints and training; fine-tuning priced by tokens/usage",
       "features": [
-        "High-throughput, optimized serverless inference",
-        "OpenAI-compatible API",
-        "Fine-tuning and dedicated endpoints",
-        "GPU clusters for training",
-        "Broad open-model catalog including large MoE models",
-        "Batch inference and JSON/structured outputs"
+        "Fast, optimized OpenAI-compatible inference API",
+        "Dedicated endpoints and reserved GPU clusters",
+        "Fine-tuning and custom model training",
+        "Broad catalog of leading open-weight models",
+        "Batch inference and serverless options",
+        "GPU clusters for large-scale training (Together GPU Clusters)"
       ],
-      "best_for": "Developers and companies building production apps on open models who want performance plus fine-tuning and dedicated capacity",
+      "best_for": "Teams building production LLM apps on open models that need scalable, low-cost inference plus training/fine-tuning",
       "url": "https://together.ai"
     },
     {
       "name": "Fireworks AI",
-      "purpose": "A performance-focused inference platform serving open and specialized models with low latency and high throughput.",
-      "model_count": "100+ open models plus custom-deployed models",
-      "pricing": "Pay-as-you-go per-token pricing; on-demand dedicated GPU deployments billed per GPU-hour; fine-tuning available",
+      "purpose": "A speed-optimized inference platform for open-source and fine-tuned LLMs, vision, and audio models with low-latency serving.",
+      "model_count": "100+ curated open models plus custom/fine-tuned model hosting",
+      "pricing": "Pay-per-token for serverless inference; per-GPU-hour for on-demand dedicated deployments; fine-tuning billed by usage",
       "features": [
-        "FireAttention-optimized, low-latency serving",
+        "FireAttention engine for very low-latency, high-throughput inference",
         "OpenAI-compatible API",
-        "Function calling and structured/JSON output",
-        "Fine-tuning and LoRA deployment",
-        "Multimodal and vision model support",
-        "Dedicated and reserved capacity options"
+        "Serverless and dedicated deployment options",
+        "LoRA fine-tuning and custom model serving",
+        "Function calling, JSON mode, and structured output",
+        "Multimodal (vision, audio) model support"
       ],
-      "best_for": "Latency-sensitive production workloads and teams needing optimized throughput on open models",
+      "best_for": "Developers and enterprises needing fast, production-grade, cost-efficient inference for open and fine-tuned models",
       "url": "https://fireworks.ai"
     },
     {
       "name": "SiliconFlow",
-      "purpose": "A developer inference platform (strong in the China/Asia market) offering fast, cost-efficient access to a wide range of open models, including leading China-origin LLMs.",
-      "model_count": "100+ open models (DeepSeek, Qwen, GLM, Kimi/Moonshot, FLUX, and more)",
-      "pricing": "Pay-as-you-go per-token pricing, known for competitive/low rates; free tier/credits for some models",
+      "purpose": "A developer inference platform (strong in the Chinese/Asian market) offering fast, affordable API access to a broad range of open-source LLMs and multimodal models.",
+      "model_count": "100+ open models, with emphasis on leading Chinese open-weight models (DeepSeek, Qwen, GLM, Kimi, MiniMax, FLUX)",
+      "pricing": "Pay-per-token, generally very competitive/low-cost; free quota for some models; dedicated deployment options",
       "features": [
         "OpenAI-compatible API",
-        "Strong catalog of top Chinese open models (DeepSeek, Qwen, GLM, Kimi)",
-        "Text, image, audio, and video generation",
-        "High-throughput optimized serving",
-        "Low-cost pricing and free quotas",
-        "Fine-tuning and dedicated deployment options"
+        "Strong catalog of Chinese open-weight LLMs and image/video models",
+        "Low-latency, cost-optimized inference",
+        "Text, image, video, audio, and embedding model support",
+        "Serverless and dedicated endpoints",
+        "Fine-tuning and batch inference"
       ],
-      "best_for": "Developers (especially in Asia) seeking affordable inference and access to leading Chinese open models",
+      "best_for": "Developers (especially in Asia) wanting low-cost API access to top Chinese and global open-weight models",
       "url": "https://siliconflow.cn"
     },
     {
       "name": "Groq",
-      "purpose": "An ultra-low-latency inference platform running open LLMs on custom LPU hardware for extremely fast token generation.",
-      "model_count": "Dozens of curated open models (Llama, Qwen, Gemma, DeepSeek, Mixtral)",
-      "pricing": "Pay-as-you-go per-token pricing with a free developer tier",
+      "purpose": "An inference platform built on custom LPU hardware delivering extremely high-speed, low-latency serving of open-source LLMs via API.",
+      "model_count": "Dozens of curated open models (Llama, Mixtral, Gemma, Qwen, DeepSeek, Whisper)",
+      "pricing": "Pay-per-token, priced competitively; free developer tier with rate limits",
       "features": [
-        "LPU hardware delivering very high tokens/second",
+        "LPU hardware for industry-leading token throughput",
+        "Very low latency inference",
         "OpenAI-compatible API",
-        "Low and predictable latency",
-        "Curated high-quality open model selection",
-        "Function calling and structured outputs",
-        "GroqCloud developer console"
+        "Speech-to-text (Whisper) support",
+        "Simple developer onboarding with free tier"
       ],
-      "best_for": "Real-time and latency-critical applications (chat, agents, voice) needing maximum inference speed",
+      "best_for": "Developers prioritizing the fastest possible inference latency for real-time and streaming applications",
       "url": "https://groq.com"
     },
     {
       "name": "OpenRouter",
-      "purpose": "A unified API aggregator routing requests across many open and proprietary model providers through a single endpoint.",
-      "model_count": "300+ models across dozens of providers (open and closed)",
-      "pricing": "Pay-as-you-go passthrough pricing per provider plus a small platform fee; prepaid credits",
+      "purpose": "A unified API gateway/router that provides access to hundreds of open and closed models from many providers through a single OpenAI-compatible endpoint.",
+      "model_count": "300+ models aggregated across dozens of providers (both open and proprietary)",
+      "pricing": "Pay-per-token passthrough with a small markup; credits-based billing; some free models available",
       "features": [
-        "Single OpenAI-compatible API for many providers",
-        "Automatic fallback and provider routing",
-        "Price and latency comparison across providers",
-        "Access to both open and proprietary models",
-        "Usage analytics and spend controls",
-        "No vendor lock-in"
+        "Single API for many model providers",
+        "Automatic fallback and provider routing by price/latency",
+        "OpenAI-compatible interface",
+        "Transparent per-model pricing and usage analytics",
+        "Access to both open-weight and frontier closed models"
       ],
-      "best_for": "Developers wanting one API to flexibly switch between many open and closed models by price/performance",
+      "best_for": "Developers who want flexible, provider-agnostic access to many models without managing multiple accounts",
       "url": "https://openrouter.ai"
     }
   ],
   "_meta": {
     "title": "Model Repositories & Platforms",
-    "generated_at": "2026-11-07T05:17:11.988365+00:00"
+    "generated_at": "2026-11-08T05:12:28.437490+00:00"
   },
   "sources": [
     "https://huggingface.co/blog/huggingface/state-of-os-hf-spring-2026",
