@@ -1,226 +1,265 @@
 {
-  "summary": "The LLM landscape in 2026 is dominated by a handful of frontier families\u2014OpenAI's GPT line, Anthropic's Claude, Google's Gemini, Meta's Llama, and the fast-rising open-weight players DeepSeek, Mistral, and Qwen. Enterprise adoption is increasingly driven by multi-cloud aggregator availability (AWS Bedrock, Azure, Google Vertex AI, Snowflake Cortex, IBM watsonx), which amplifies real-world usage well beyond direct vendor APIs. Open-weight models have closed much of the quality gap while undercutting proprietary pricing dramatically, making cost-performance the defining competitive axis of the year.",
+  "summary": "The 2026 LLM landscape is dominated by a handful of frontier families\u2014OpenAI's GPT, Anthropic's Claude, and Google's Gemini\u2014whose real-world adoption is amplified by broad availability across enterprise aggregators like AWS Bedrock, Azure OpenAI, Google Vertex AI, and Snowflake Cortex. Open-weight models from DeepSeek, Meta, Mistral, Alibaba (Qwen), and Zhipu (GLM) have surged in developer usage thanks to strong HuggingFace download numbers and cost efficiency. Rankings below reflect a blend of API call volume, developer surveys, HuggingFace stats, and enterprise aggregator reach, limited strictly to models confirmed publicly available today.",
   "models": [
     {
       "name": "GPT-4o",
       "vendor": "OpenAI",
       "rank": 1,
-      "popularity_notes": "Remains the most widely integrated model across developer tooling and is available via both the OpenAI API and Azure OpenAI, giving it enormous enterprise aggregator reach.",
+      "popularity_notes": "Consistently the most-called model across OpenAI's direct API and Azure OpenAI, with the broadest enterprise aggregator reach of any model and top mindshare in developer surveys.",
       "context_window": "128K tokens",
       "cost_input": "$2.50",
       "cost_output": "$10.00",
       "open_source": false,
       "strengths": [
-        "Strong multimodal (text, vision, audio)",
-        "Low latency",
-        "Broad ecosystem and tooling support",
-        "Available on Azure OpenAI"
+        "Multimodal (text, image, audio)",
+        "Fast and widely integrated",
+        "Strong general-purpose reasoning",
+        "Massive ecosystem and tooling support"
       ],
-      "best_for": "General-purpose multimodal applications and production chat assistants",
+      "best_for": "General-purpose production applications requiring multimodal capabilities and broad platform support",
       "url": "https://platform.openai.com/docs/models",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
+      "name": "Gemini 2.5 Pro",
+      "vendor": "Google",
+      "rank": 2,
+      "popularity_notes": "Default frontier model on Google Vertex AI with deep integration across Google Cloud enterprise customers and a leading 1M+ token context window driving heavy adoption.",
+      "context_window": "1M tokens",
+      "cost_input": "$1.25",
+      "cost_output": "$10.00",
+      "open_source": false,
+      "strengths": [
+        "Very large context window",
+        "Strong multimodal reasoning",
+        "Tight Google Cloud/Workspace integration",
+        "Competitive pricing at scale"
+      ],
+      "best_for": "Long-context document analysis and enterprise workloads on Google Cloud",
+      "url": "https://ai.google.dev/gemini-api/docs/models",
+      "sonnet_rank": 3,
+      "rank_agreement": "minor"
+    },
+    {
       "name": "Claude Sonnet 4.6",
       "vendor": "Anthropic",
-      "rank": 2,
-      "popularity_notes": "Released February 17, 2026 matching Opus-level performance at Sonnet pricing, and is distributed through AWS Bedrock, Google Vertex AI, and direct API, driving heavy enterprise coding adoption.",
+      "rank": 3,
+      "popularity_notes": "The workhorse Claude model for coding and agentic tasks, available via Anthropic API, AWS Bedrock, Google Vertex AI, and Snowflake Cortex, giving it enormous enterprise reach.",
       "context_window": "200K tokens",
       "cost_input": "$3.00",
       "cost_output": "$15.00",
       "open_source": false,
       "strengths": [
         "Excellent coding performance",
-        "Strong reasoning",
-        "Wide aggregator availability (Bedrock, Vertex)",
-        "Large context window"
+        "Strong agentic/tool-use capabilities",
+        "Balanced speed and cost",
+        "Multi-cloud aggregator availability"
       ],
-      "best_for": "Agentic coding workflows and enterprise software development",
+      "best_for": "Software development, coding assistants, and agentic enterprise workflows",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models",
-      "sonnet_rank": 1,
-      "rank_agreement": "minor"
-    },
-    {
-      "name": "Gemini 2.5 Pro",
-      "vendor": "Google DeepMind",
-      "rank": 3,
-      "popularity_notes": "A context-window leader with deep integration across Google Vertex AI and Workspace, making it a default choice for enterprises already in the Google Cloud ecosystem.",
-      "context_window": "1M tokens",
-      "cost_input": "$1.25",
-      "cost_output": "$10.00",
-      "open_source": false,
-      "strengths": [
-        "Massive context window",
-        "Strong multimodal reasoning",
-        "Native Vertex AI integration",
-        "Competitive pricing"
-      ],
-      "best_for": "Long-document analysis and large-context retrieval tasks",
-      "url": "https://ai.google.dev/gemini-api/docs/models",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "Gemini 2.5 Flash",
-      "vendor": "Google DeepMind",
-      "rank": 4,
-      "popularity_notes": "The high-volume, low-cost workhorse of the Gemini family with a 1M-token context, widely adopted for cost-sensitive production workloads through Vertex AI.",
-      "context_window": "1M tokens",
-      "cost_input": "$0.30",
-      "cost_output": "$2.50",
-      "open_source": false,
-      "strengths": [
-        "Very low cost",
-        "Fast inference",
-        "Large context window",
-        "Vertex AI availability"
-      ],
-      "best_for": "High-throughput, cost-sensitive applications at scale",
-      "url": "https://ai.google.dev/gemini-api/docs/models",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "DeepSeek R1",
-      "vendor": "DeepSeek",
-      "rank": 5,
-      "popularity_notes": "A 671B-parameter MoE reasoning model that is the cheapest frontier-class model by a wide margin and sees massive HuggingFace download volume as an open-weight favorite.",
-      "context_window": "128K tokens",
-      "cost_input": "$0.55",
-      "cost_output": "$2.19",
-      "open_source": true,
-      "strengths": [
-        "Exceptional math and reasoning",
-        "Open weights",
-        "Extremely low cost",
-        "Strong algorithmic problem-solving"
-      ],
-      "best_for": "Reasoning-heavy and mathematical tasks on a budget",
-      "url": "https://api-docs.deepseek.com/",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
       "name": "DeepSeek V3",
       "vendor": "DeepSeek",
-      "rank": 6,
-      "popularity_notes": "The general-purpose open-weight counterpart to R1, delivering near-frontier quality at a fraction of proprietary pricing and widely self-hosted via HuggingFace.",
+      "rank": 4,
+      "popularity_notes": "Leading open-weight model with massive HuggingFace download volume and widespread hosting across inference providers due to its strong performance-to-cost ratio.",
       "context_window": "128K tokens",
       "cost_input": "$0.27",
       "cost_output": "$1.10",
       "open_source": true,
       "strengths": [
-        "Strong general performance",
         "Open weights",
-        "Very low cost",
-        "Large MoE architecture"
+        "Extremely low cost",
+        "Strong general and coding performance",
+        "Widely self-hosted and aggregator-available"
       ],
-      "best_for": "Cost-efficient general-purpose and self-hosted deployments",
-      "url": "https://api-docs.deepseek.com/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "best_for": "Cost-sensitive production deployments and self-hosted open-weight applications",
+      "url": "https://api-docs.deepseek.com/quick_start/pricing",
+      "sonnet_rank": 4,
+      "rank_agreement": "strong"
     },
     {
-      "name": "Llama 3.3 70B",
-      "vendor": "Meta",
-      "rank": 7,
-      "popularity_notes": "Meta's most-downloaded open-weight model on HuggingFace and available across AWS Bedrock, Azure, and Vertex AI, giving it broad enterprise self-hosting and aggregator reach.",
-      "context_window": "128K tokens",
-      "cost_input": "$0.20",
-      "cost_output": "$0.20",
-      "open_source": true,
-      "strengths": [
-        "Open weights",
-        "Strong instruction following",
-        "Wide aggregator support",
-        "Efficient 70B size"
-      ],
-      "best_for": "Self-hosted and privacy-sensitive enterprise deployments",
-      "url": "https://llama.meta.com/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
-    },
-    {
-      "name": "Claude Opus 4.6",
+      "name": "Claude Opus 4.8",
       "vendor": "Anthropic",
-      "rank": 8,
-      "popularity_notes": "Released February 5, 2026 as Anthropic's top-tier reasoning model, used for the most demanding agentic and coding tasks and available via Bedrock and Vertex AI.",
+      "rank": 5,
+      "popularity_notes": "Anthropic's top-tier frontier model for complex reasoning, heavily used in high-value enterprise workflows and available across AWS Bedrock and Google Vertex AI.",
       "context_window": "200K tokens",
       "cost_input": "$15.00",
       "cost_output": "$75.00",
       "open_source": false,
       "strengths": [
         "Best-in-class reasoning",
-        "Top coding performance",
-        "Aggregator availability",
-        "Strong long-context handling"
+        "Superior long-form coding",
+        "Strong agentic reliability",
+        "Multi-cloud enterprise availability"
       ],
-      "best_for": "Complex agentic reasoning and high-stakes coding tasks",
+      "best_for": "Complex reasoning, research, and high-stakes coding tasks",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
-      "name": "Mistral Large 2",
-      "vendor": "Mistral AI",
-      "rank": 9,
-      "popularity_notes": "The leading European open-weight frontier model, available on Azure, Bedrock, and Vertex AI, with strong adoption among EU enterprises needing data-residency options.",
-      "context_window": "128K tokens",
+      "name": "Gemini 2.5 Flash",
+      "vendor": "Google",
+      "rank": 6,
+      "popularity_notes": "High-volume, low-latency model widely adopted for cost-efficient production workloads through Vertex AI and the Gemini API.",
+      "context_window": "1M tokens",
+      "cost_input": "$0.30",
+      "cost_output": "$2.50",
+      "open_source": false,
+      "strengths": [
+        "Very fast and cheap",
+        "Large context window",
+        "Good multimodal support",
+        "Scales well for high-throughput apps"
+      ],
+      "best_for": "High-volume, latency-sensitive production applications",
+      "url": "https://ai.google.dev/gemini-api/docs/models",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "o3",
+      "vendor": "OpenAI",
+      "rank": 7,
+      "popularity_notes": "OpenAI's flagship reasoning model, widely used for complex problem-solving and available through both the OpenAI API and Azure OpenAI.",
+      "context_window": "200K tokens",
       "cost_input": "$2.00",
-      "cost_output": "$6.00",
+      "cost_output": "$8.00",
+      "open_source": false,
+      "strengths": [
+        "Advanced step-by-step reasoning",
+        "Strong math and coding",
+        "Tool-use integration",
+        "Azure enterprise availability"
+      ],
+      "best_for": "Complex reasoning, STEM, and analytical problem-solving tasks",
+      "url": "https://platform.openai.com/docs/models",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Llama 3.3 70B",
+      "vendor": "Meta",
+      "rank": 8,
+      "popularity_notes": "One of the most downloaded open-weight models on HuggingFace and broadly available via AWS Bedrock, Azure, and Vertex AI for self-hosted and managed deployments.",
+      "context_window": "128K tokens",
+      "cost_input": "$0.23",
+      "cost_output": "$0.40",
       "open_source": true,
       "strengths": [
         "Open weights",
-        "Strong multilingual support",
-        "European data-residency options",
-        "Multi-cloud availability"
+        "Strong general performance at 70B scale",
+        "Wide aggregator and tooling support",
+        "Active fine-tuning ecosystem"
       ],
-      "best_for": "Multilingual and EU-regulated enterprise workloads",
-      "url": "https://docs.mistral.ai/getting-started/models/models_overview/",
+      "best_for": "Self-hosted and customizable open-weight enterprise deployments",
+      "url": "https://llama.meta.com/",
+      "sonnet_rank": 7,
+      "rank_agreement": "minor",
+      "url_auto_fixed": true
+    },
+    {
+      "name": "DeepSeek R1",
+      "vendor": "DeepSeek",
+      "rank": 9,
+      "popularity_notes": "Popular open-weight reasoning model with high HuggingFace download numbers, offering frontier-level reasoning at a fraction of proprietary costs.",
+      "context_window": "128K tokens",
+      "cost_input": "$0.55",
+      "cost_output": "$2.19",
+      "open_source": true,
+      "strengths": [
+        "Open-weight reasoning",
+        "Very cost-effective",
+        "Competitive with proprietary reasoning models",
+        "Widely hosted across providers"
+      ],
+      "best_for": "Cost-efficient reasoning and analytical tasks with open-weight flexibility",
+      "url": "https://api-docs.deepseek.com/quick_start/pricing",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
       "name": "Qwen3-235B-A22B",
-      "vendor": "Alibaba Cloud",
+      "vendor": "Alibaba",
       "rank": 10,
-      "popularity_notes": "Alibaba's flagship open-weight MoE model with rapidly growing HuggingFace downloads and strong adoption in Asian markets and via self-hosting.",
+      "popularity_notes": "Alibaba's flagship open-weight MoE model with rapidly growing HuggingFace adoption and strong multilingual and coding performance.",
       "context_window": "128K tokens",
-      "cost_input": "$0.22",
-      "cost_output": "$0.88",
+      "cost_input": "$0.20",
+      "cost_output": "$0.60",
       "open_source": true,
       "strengths": [
         "Open weights",
         "Efficient MoE architecture",
-        "Strong multilingual and coding performance",
-        "Very low cost"
+        "Strong multilingual support",
+        "Competitive coding and reasoning"
       ],
-      "best_for": "Cost-efficient multilingual and self-hosted deployments",
+      "best_for": "Multilingual and cost-efficient open-weight deployments",
       "url": "https://huggingface.co/Qwen/Qwen3-235B-A22B",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded",
-      "url_auto_fixed": true
+      "sonnet_rank": 6,
+      "rank_agreement": "disagree"
+    },
+    {
+      "name": "Mistral Large 2",
+      "vendor": "Mistral AI",
+      "rank": 11,
+      "popularity_notes": "Europe's leading frontier model, available via AWS Bedrock, Azure, and Vertex AI, with strong adoption among EU enterprises prioritizing data sovereignty.",
+      "context_window": "128K tokens",
+      "cost_input": "$2.00",
+      "cost_output": "$6.00",
+      "open_source": true,
+      "strengths": [
+        "Strong multilingual performance",
+        "Open-weight availability",
+        "European data-sovereignty appeal",
+        "Multi-cloud aggregator reach"
+      ],
+      "best_for": "European enterprise deployments and multilingual applications",
+      "url": "https://docs.mistral.ai/getting-started/models/models_overview/",
+      "sonnet_rank": 8,
+      "rank_agreement": "disagree"
+    },
+    {
+      "name": "Claude Haiku 4.5",
+      "vendor": "Anthropic",
+      "rank": 12,
+      "popularity_notes": "Anthropic's fast, low-cost model adopted for high-volume lightweight tasks and available across AWS Bedrock, Vertex AI, and the Anthropic API.",
+      "context_window": "200K tokens",
+      "cost_input": "$1.00",
+      "cost_output": "$5.00",
+      "open_source": false,
+      "strengths": [
+        "Fast and inexpensive",
+        "Solid coding for its size",
+        "Large context window",
+        "Multi-cloud availability"
+      ],
+      "best_for": "High-volume, latency-sensitive tasks requiring low cost",
+      "url": "https://docs.anthropic.com/en/docs/about-claude/models",
+      "sonnet_rank": 9,
+      "rank_agreement": "disagree"
     }
   ],
   "_meta": {
     "title": "Major AI Models",
-    "generated_at": "2026-11-09T05:24:09.232987+00:00"
+    "generated_at": "2026-11-10T06:36:18.466644+00:00"
   },
   "notable_sonnet_additions": [
-    "Gemini 3.1 Pro",
-    "GPT-5.4",
-    "DeepSeek V3.2",
-    "Mistral Large 3"
+    "GPT-5",
+    "Claude Opus 5",
+    "Grok-3",
+    "Meta Muse Spark"
   ],
   "cross_checked": true,
   "sources": [
+    "https://www.techtarget.com/news/12-of-the-best-large-language-models/872550/",
     "https://zapier.com/blog/best-llm/",
-    "https://en.wikipedia.org/wiki/List_of_large_language_models",
     "https://codingscape.com/blog/most-powerful-llms-large-language-models",
-    "https://medium.com/@sanjeevpatel3007/best-ai-models-march-april-2026-every-major-release-ranked-5546e2590e8b",
-    "https://dev.to/lemondata_dev/best-ai-models-for-coding-in-2026-claude-gpt-5-gemini-and-deepseek-compared-2ki5",
-    "https://explodingtopics.com/blog/list-of-llms"
+    "https://seovision.io/blog/best-ai-llms",
+    "https://www.shakudo.io/blog/top-9-large-language-models",
+    "https://gaim-solutions.com/en/ratgeber/latest-ai-models-2026"
   ]
 }
