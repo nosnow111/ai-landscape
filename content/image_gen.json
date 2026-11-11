@@ -1,19 +1,20 @@
 {
-  "summary": "As of 2026, AI image generation is dominated by a few major platforms whose outputs now routinely pass casual human evaluation. Midjourney leads in artistic quality, OpenAI's DALL-E/GPT Image line wins on ecosystem reach via ChatGPT, Stable Diffusion and Flux anchor the open-weight/self-hosted ecosystem, and integrated tools like Adobe Firefly and Canva AI capture huge mainstream user bases through existing productivity suites. A note on naming: several research sources reference marketing nicknames and unreleased variants (e.g. 'Nano Banana', 'GPT Image 2.5'); only official, verifiable product names are used below.",
+  "summary": "The AI image generation landscape in 2026 is dominated by integrated multimodal models, with OpenAI's GPT Image (the engine behind ChatGPT's image features) topping blind-preference leaderboards, while Midjourney retains its lead for artistic and stylized output. Open-weight ecosystems led by Flux and Stable Diffusion remain the backbone of developer and local-generation workflows, and ecosystem-bundled tools like Google's Imagen/Gemini, Adobe Firefly, and Canva AI drive massive adoption through existing user bases. Specialized players such as Ideogram (text rendering), Leonardo AI, and Grok's image model round out the market.",
   "tools": [
     {
-      "name": "DALL-E 3 (ChatGPT Images)",
+      "name": "DALL-E 3 / GPT Image (ChatGPT)",
       "vendor": "OpenAI",
       "rank": 1,
       "pricing_free": true,
-      "pricing_paid": "Bundled with ChatGPT Plus ($20/month); API pay-per-image",
+      "pricing_paid": "ChatGPT Plus $20/month; Pro $200/month; API gpt-image at ~$0.02-0.19/image",
       "strengths": [
+        "Top-ranked on blind human-preference arena leaderboards",
+        "Excellent prompt understanding and instruction following",
+        "Strong text-in-image rendering",
         "Massive reach via ChatGPT's user base",
-        "Excellent prompt adherence and text rendering",
-        "Conversational editing and iteration",
-        "No separate tool to learn"
+        "Free tier access inside ChatGPT"
       ],
-      "best_for": "Mainstream users generating images inside ChatGPT conversations",
+      "best_for": "General-purpose and conversational image generation with precise prompt adherence",
       "url": "https://openai.com/dall-e-3",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
@@ -23,117 +24,118 @@
       "vendor": "Midjourney, Inc.",
       "rank": 2,
       "pricing_free": false,
-      "pricing_paid": "$10-$60/month subscription tiers",
+      "pricing_paid": "Basic $10/month; Standard $30/month; Pro $60/month; Mega $120/month",
       "strengths": [
-        "Best-in-class artistic and aesthetic quality",
-        "Strong stylistic consistency",
-        "Large active community",
-        "Polished results with minimal prompting"
+        "Best-in-class artistic and stylized aesthetics",
+        "Highly consistent, beautiful default output",
+        "Strong community and style controls",
+        "Unlimited relaxed generations on higher tiers"
       ],
-      "best_for": "Artists and designers seeking high-aesthetic, stylized imagery",
+      "best_for": "Concept art, illustration, and visually striking creative work",
       "url": "https://www.midjourney.com",
       "sonnet_rank": 1,
       "rank_agreement": "minor"
     },
     {
-      "name": "Adobe Firefly",
-      "vendor": "Adobe",
-      "rank": 3,
-      "pricing_free": true,
-      "pricing_paid": "Included in Creative Cloud plans; Firefly premium from ~$9.99/month",
-      "strengths": [
-        "Deep integration with Photoshop and Creative Cloud",
-        "Commercially safe, licensed training data",
-        "Generative Fill and editing workflows",
-        "Enterprise adoption"
-      ],
-      "best_for": "Professional creatives needing commercially safe generation inside Adobe tools",
-      "url": "https://www.adobe.com/products/firefly.html",
-      "sonnet_rank": 5,
-      "rank_agreement": "minor"
-    },
-    {
       "name": "Stable Diffusion",
       "vendor": "Stability AI",
-      "rank": 4,
+      "rank": 3,
       "pricing_free": true,
-      "pricing_paid": "Free to self-host; near-free on hosted APIs (fal.ai, Replicate)",
+      "pricing_paid": "Free open-weights (local); cloud/API hosting ~$5-100/month depending on volume",
       "strengths": [
-        "Open-weight and fully self-hostable",
+        "Open-source with maximum control",
+        "Local/offline generation with no per-image cost",
         "Huge ecosystem of fine-tunes, LoRAs, and ControlNet",
-        "Maximum customization and control",
-        "Private on-prem pipelines"
+        "Best value at scale"
       ],
-      "best_for": "Developers and power users building controlled, custom image pipelines",
-      "url": "https://stability.ai/stable-image",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "Canva AI (Magic Media)",
-      "vendor": "Canva",
-      "rank": 5,
-      "pricing_free": true,
-      "pricing_paid": "Canva Pro ~$12.99/month for expanded credits",
-      "strengths": [
-        "Enormous non-designer user base",
-        "Seamless design-suite integration",
-        "Ease of use for marketing assets",
-        "Templates plus generation"
-      ],
-      "best_for": "Everyday users and marketers creating graphics within Canva",
-      "url": "https://www.canva.com/ai-image-generator/",
-      "sonnet_rank": 9,
-      "rank_agreement": "disagree"
+      "best_for": "Developers and power users needing custom, controllable, local workflows",
+      "url": "https://stability.ai",
+      "sonnet_rank": 3,
+      "rank_agreement": "strong"
     },
     {
       "name": "Flux",
       "vendor": "Black Forest Labs",
+      "rank": 4,
+      "pricing_free": true,
+      "pricing_paid": "Flux Schnell free/open-weights; Flux Pro API ~$0.04-0.06/image (~$40-60/month)",
+      "strengths": [
+        "Leading photorealism at native 4 MP",
+        "Open-weight options available (Schnell, Dev)",
+        "Fast, high-quality generation",
+        "Natural-looking outputs"
+      ],
+      "best_for": "Photorealistic generation and technical/local pipelines",
+      "url": "https://blackforestlabs.ai",
+      "sonnet_rank": 7,
+      "rank_agreement": "disagree"
+    },
+    {
+      "name": "Google Imagen (Gemini)",
+      "vendor": "Google",
+      "rank": 5,
+      "pricing_free": true,
+      "pricing_paid": "Included with Google One AI / Gemini Advanced ~$20/month; Vertex AI API usage-based",
+      "strengths": [
+        "Deep integration across Google ecosystem",
+        "Strong photorealism and fast generation",
+        "Accessible via Gemini app and Workspace",
+        "Scalable through Vertex AI"
+      ],
+      "best_for": "Google ecosystem and Workspace users",
+      "url": "https://deepmind.google/models/gemini-image/",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded",
+      "url_auto_fixed": true
+    },
+    {
+      "name": "Adobe Firefly",
+      "vendor": "Adobe",
       "rank": 6,
       "pricing_free": true,
-      "pricing_paid": "$0.01-$0.10 per image on hosted APIs; open weights available",
+      "pricing_paid": "Firefly plans from ~$9.99/month; bundled with Creative Cloud",
       "strengths": [
-        "Most natural, photorealistic outputs at high resolution",
-        "Strong for literal product and geometry-honest work",
-        "Open-weight friendly",
-        "Rapidly growing developer adoption"
+        "Commercially safe, licensed training data",
+        "Deep integration with Photoshop and Creative Cloud",
+        "Brand-safe generative fill and editing",
+        "Enterprise-friendly licensing"
       ],
-      "best_for": "Developers and product teams needing realistic, literal image generation",
-      "url": "https://blackforestlabs.ai",
+      "best_for": "Brand-safe commercial and professional design work",
+      "url": "https://www.adobe.com/products/firefly.html",
       "sonnet_rank": 4,
       "rank_agreement": "minor"
     },
     {
-      "name": "Grok Imagine (Aurora)",
-      "vendor": "xAI",
+      "name": "Canva AI (Magic Media)",
+      "vendor": "Canva",
       "rank": 7,
       "pricing_free": true,
-      "pricing_paid": "Included with X Premium / Premium+ subscriptions",
+      "pricing_paid": "Canva Pro ~$15/month (includes Magic Media credits)",
       "strengths": [
-        "Distribution through the X platform",
-        "Fast generation",
-        "Fewer content restrictions",
-        "Strong recent leaderboard performance"
+        "Extremely accessible for non-designers",
+        "Integrated into a full design platform",
+        "Huge existing user base",
+        "Fast template-to-image workflows"
       ],
-      "best_for": "X/Twitter users generating images directly in-platform",
-      "url": "https://x.ai",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
+      "best_for": "Non-designers creating social and marketing visuals",
+      "url": "https://www.canva.com/ai-image-generator/",
+      "sonnet_rank": 5,
+      "rank_agreement": "minor"
     },
     {
-      "name": "Google Imagen",
-      "vendor": "Google",
+      "name": "Ideogram",
+      "vendor": "Ideogram AI",
       "rank": 8,
       "pricing_free": true,
-      "pricing_paid": "Via Gemini Advanced (~$19.99/month) and Vertex AI usage pricing",
+      "pricing_paid": "Basic $8/month; Plus $20/month; Pro $60/month",
       "strengths": [
-        "High realism and prompt accuracy",
-        "Available through Gemini and Vertex AI",
-        "Enterprise cloud integration",
-        "Strong speed and ease of use"
+        "Industry-leading text rendering inside images",
+        "Strong typography and logo generation",
+        "Reliable prompt adherence",
+        "Generous free tier"
       ],
-      "best_for": "Google ecosystem and enterprise cloud users",
-      "url": "https://deepmind.google/models/imagen/",
+      "best_for": "Images requiring accurate text, logos, and typography",
+      "url": "https://ideogram.ai",
       "sonnet_rank": 6,
       "rank_agreement": "minor"
     },
@@ -142,68 +144,69 @@
       "vendor": "Leonardo.Ai (Canva)",
       "rank": 9,
       "pricing_free": true,
-      "pricing_paid": "Paid plans from ~$10/month for expanded credits",
+      "pricing_paid": "Apprentice $12/month; Artisan $30/month; Maestro $60/month",
       "strengths": [
-        "Fine-tuned model library and presets",
-        "Game-asset and concept-art focus",
-        "Granular control tools",
-        "Active creator community"
+        "Game-asset and fine-tuned model focus",
+        "Flexible controls and custom model training",
+        "Strong community model library",
+        "Generous daily free credits"
       ],
-      "best_for": "Game developers and concept artists creating stylized assets",
+      "best_for": "Game assets, concept art, and controllable creative workflows",
       "url": "https://leonardo.ai",
-      "sonnet_rank": 7,
-      "rank_agreement": "minor"
-    },
-    {
-      "name": "Ideogram",
-      "vendor": "Ideogram AI",
-      "rank": 10,
-      "pricing_free": true,
-      "pricing_paid": "Plans from ~$8/month",
-      "strengths": [
-        "Industry-leading text rendering in images",
-        "Strong prompt adherence on simple requests",
-        "Good for logos and typography",
-        "Easy to use"
-      ],
-      "best_for": "Creating graphics, logos, and designs that require legible text",
-      "url": "https://ideogram.ai",
-      "sonnet_rank": 10,
+      "sonnet_rank": 9,
       "rank_agreement": "strong"
     },
     {
-      "name": "Runway",
-      "vendor": "Runway",
+      "name": "Grok Imagine",
+      "vendor": "xAI",
+      "rank": 10,
+      "pricing_free": false,
+      "pricing_paid": "Included with X Premium+ / SuperGrok subscriptions (~$30-40/month)",
+      "strengths": [
+        "High ranking on human-preference arena leaderboards",
+        "Fast generation integrated with X/Grok",
+        "Rapidly growing adoption via X platform",
+        "Fewer content restrictions than rivals"
+      ],
+      "best_for": "X/Grok users wanting quick in-platform image generation",
+      "url": "https://x.ai",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Recraft",
+      "vendor": "Recraft AI",
       "rank": 11,
       "pricing_free": true,
-      "pricing_paid": "Plans from ~$12/month; higher tiers for video/credits",
+      "pricing_paid": "Basic $12/month; Advanced $33/month; Pro higher tiers",
       "strengths": [
-        "Combined image and video generation",
-        "Creative and filmmaking workflows",
-        "Frequent model updates",
-        "Professional media adoption"
+        "Vector and SVG output for design workflows",
+        "Strong brand-style consistency controls",
+        "Good text and icon generation",
+        "Top performance on design-focused benchmarks"
       ],
-      "best_for": "Filmmakers and creatives combining image and video generation",
-      "url": "https://runwayml.com",
-      "sonnet_rank": 8,
-      "rank_agreement": "disagree"
+      "best_for": "Graphic design, vector art, and brand asset workflows",
+      "url": "https://www.recraft.ai",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
     }
   ],
   "_meta": {
     "title": "AI Image Generation",
-    "generated_at": "2026-11-10T06:36:09.250968+00:00"
+    "generated_at": "2026-11-11T05:22:52.349993+00:00"
   },
   "notable_sonnet_additions": [
     "DALL-E 3",
-    "Stable Diffusion 4"
+    "Runway",
+    "Google Imagen"
   ],
   "cross_checked": true,
   "sources": [
     "https://llm-stats.com/leaderboards/best-ai-for-image-generation",
     "https://datanorth.ai/blog/top-10-best-ai-image-generation-tools-2026",
-    "https://curiousrefuge.com/blog/best-ai-image-generators-2026",
-    "https://www.getaiperks.com/en/blogs/45-best-ai-image-generators-2026",
+    "https://creatify.ai/blog/best-ai-image-generators-and-tools",
     "https://freeacademy.ai/blog/midjourney-vs-dalle-vs-stable-diffusion-vs-flux-comparison-2026",
-    "https://www.lovart.ai/blog/ai-image-models-compared-2026"
+    "https://aloa.co/ai/comparisons/ai-image-comparison/dalle-vs-midjourney-vs-stable-diffusion",
+    "https://aivoraai.github.io/blog/midjourney-vs-dall-e-vs-stable-diffusion.html"
   ]
 }
