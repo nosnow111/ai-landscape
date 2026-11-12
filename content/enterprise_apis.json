@@ -1,119 +1,121 @@
 {
-  "summary": "The enterprise AI model API aggregator landscape in 2026 is dominated by the three major hyperscalers \u2014 AWS Bedrock, Azure OpenAI/Foundry, and Google Vertex AI \u2014 each offering multiple foundation models behind a managed API that keeps data within the customer's cloud security perimeter. Data-platform-native options like Snowflake Cortex (product revenue up 26% YoY to $996.8M in Q1 FY2026) and Databricks are gaining fast traction by bringing models to where governed enterprise data already lives, while IBM watsonx, Oracle Cloud AI, and Cloudflare Workers AI serve more specialized niches. There is no single winner \u2014 the best fit is largely determined by an organization's existing cloud footprint, governance maturity, and compliance requirements.",
+  "summary": "The enterprise AI model API landscape in 2026 is dominated by hyperscaler aggregators \u2014 AWS Bedrock, Azure OpenAI/Foundry, and Google Vertex AI Model Garden \u2014 each offering multiple foundation models behind a single managed API that keeps data within the corporation's cloud boundary. There is no single winner; the best fit is driven by an enterprise's existing cloud footprint, required model selection, and compliance needs. Data-platform-native players like Snowflake Cortex AI and governance-focused vendors like IBM watsonx are gaining ground by running models directly against governed enterprise data.",
   "why_enterprises_use_aggregators": [
-    "Data residency and security: models are called within the company's own cloud/VPC perimeter so proprietary data and prompts never leave the governed environment or train vendor models.",
-    "Consolidated billing and existing cloud contracts: usage flows through established enterprise agreements (EDPs, committed spend, marketplace credits) rather than separate vendor invoices and new procurement cycles.",
-    "Compliance and governance: built-in audit logging, SOC 2/HIPAA/FedRAMP/ISO certifications, IAM-based access control, and data-processing agreements satisfy regulated-industry requirements out of the box.",
-    "Model choice and portability: a single API abstracts multiple providers (Claude, Llama, Mistral, Gemini, GPT, Cohere, Nova), avoiding lock-in to one model vendor and allowing swaps as price/performance shifts.",
-    "Integrated enterprise tooling: native RAG/knowledge bases, vector search, agent orchestration, fine-tuning, and observability reduce the glue code needed versus stitching together raw vendor APIs."
+    "Data residency and privacy: prompts, completions, and fine-tuning data stay inside the enterprise's own cloud environment (VPC/region) and are not used to train the vendor's base models.",
+    "Compliance and governance: aggregators ship with audit logging, access controls, and certifications (SOC 2, HIPAA, ISO 27001, FedRAMP) that raw vendor APIs often lack out of the box.",
+    "Single billing and consolidated contracts: AI spend rolls into existing cloud commitments (EDPs, MACC, committed-use discounts) instead of separate vendor invoices.",
+    "Leverage existing cloud footprint: identity (IAM/Entra), networking, security tooling, and data gravity already live in the cloud, so adding models there minimizes integration work.",
+    "Model optionality and vendor insurance: one API gives access to many models (Claude, Llama, Mistral, Gemini, Nova, GPT), reducing lock-in and enabling price/performance switching."
   ],
   "platforms": [
     {
-      "name": "Azure OpenAI Service / Azure AI Foundry",
-      "vendor": "Microsoft",
+      "name": "Amazon Bedrock",
+      "vendor": "Amazon Web Services (AWS)",
       "rank": 1,
       "available_models": [
-        "GPT-4o",
-        "GPT-4.1",
-        "o-series reasoning models",
-        "Phi",
-        "DALL-E",
-        "Whisper",
-        "select open-weight and partner models via Foundry Model Catalog"
-      ],
-      "data_residency": true,
-      "compliance": [
-        "SOC 1/2/3",
-        "HIPAA",
-        "ISO 27001/27018",
-        "FedRAMP High",
-        "GDPR",
-        "PCI DSS"
-      ],
-      "pricing": "Pay-as-you-go per 1K/1M tokens plus Provisioned Throughput Units (PTUs) for reserved capacity; billed through Azure enterprise agreement.",
-      "key_features": [
-        "VNet/Private Endpoint isolation",
-        "Azure AD/Entra IAM",
-        "content filtering & responsible AI controls",
-        "native Azure AI Search RAG",
-        "fine-tuning",
-        "Foundry Agent Service",
-        "audit logs via Azure Monitor"
-      ],
-      "best_for": "Microsoft-first enterprises already standardized on Azure, M365, and Entra ID that want first-party OpenAI models.",
-      "url": "https://cruxdigits.nl/blog/azure-openai-vs-aws-bedrock-vs-vertex-ai/",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "AWS Bedrock",
-      "vendor": "Amazon Web Services",
-      "rank": 2,
-      "available_models": [
-        "Anthropic Claude",
+        "Anthropic Claude (Opus, Sonnet, Haiku)",
         "Meta Llama",
         "Mistral",
-        "Cohere",
-        "AI21 Labs",
+        "Cohere Command/Embed",
         "Amazon Nova",
-        "Amazon Titan",
-        "Stability AI"
+        "AI21 Jamba",
+        "Stability AI (image)"
       ],
       "data_residency": true,
       "compliance": [
         "SOC 1/2/3",
         "HIPAA",
         "ISO 27001",
-        "FedRAMP (Moderate/High)",
-        "GDPR",
-        "PCI DSS"
+        "FedRAMP High",
+        "PCI DSS",
+        "GDPR"
       ],
-      "pricing": "On-demand per-token pricing plus Provisioned Throughput for reserved capacity; billed through AWS account and EDP commitments.",
+      "pricing": "Pay-per-token (on-demand) plus Provisioned Throughput reserved capacity; batch and import options available.",
       "key_features": [
         "VPC/PrivateLink isolation",
-        "IAM as source of truth",
-        "Bedrock Knowledge Bases (RAG)",
-        "Bedrock Agents",
-        "Guardrails",
-        "custom fine-tuning",
-        "CloudTrail audit logs"
+        "CloudTrail audit logs",
+        "Fine-tuning and continued pre-training",
+        "Knowledge Bases (RAG)",
+        "Guardrails for content filtering",
+        "Agents for Bedrock",
+        "No customer data used to train base models"
       ],
-      "best_for": "AWS-native enterprises with IAM as the identity source of truth that want the widest multi-provider model choice behind one API.",
+      "best_for": "Enterprises already on AWS or wanting the widest third-party model choice behind one API.",
+      "url": "https://cruxdigits.nl/blog/azure-openai-vs-aws-bedrock-vs-vertex-ai/",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Azure OpenAI Service / Microsoft Foundry",
+      "vendor": "Microsoft",
+      "rank": 2,
+      "available_models": [
+        "OpenAI GPT-4o / GPT-4.1 / o-series",
+        "OpenAI GPT-3.5",
+        "DALL-E",
+        "Whisper",
+        "Meta Llama (via Foundry Model Catalog)",
+        "Mistral",
+        "Cohere",
+        "Phi (Microsoft)"
+      ],
+      "data_residency": true,
+      "compliance": [
+        "SOC 1/2/3",
+        "HIPAA",
+        "ISO 27001",
+        "FedRAMP High",
+        "PCI DSS",
+        "GDPR",
+        "EU Data Boundary"
+      ],
+      "pricing": "Pay-per-token (standard) plus Provisioned Throughput Units (PTUs) for reserved capacity; included in Azure consumption/MACC.",
+      "key_features": [
+        "VNet/Private Endpoint isolation",
+        "Azure Monitor audit logs",
+        "Fine-tuning support",
+        "Content filtering and responsible AI",
+        "Deep integration with Microsoft 365/Copilot and Entra ID",
+        "Data not used to train OpenAI models"
+      ],
+      "best_for": "Microsoft-first enterprises wanting first-party OpenAI models with Azure security and identity.",
       "url": "https://www.epcgroup.net/blog/aws-bedrock-vs-microsoft-foundry-vs-vertex-ai-2026",
-      "sonnet_rank": 1,
-      "rank_agreement": "minor"
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
     },
     {
       "name": "Google Vertex AI Model Garden",
       "vendor": "Google Cloud",
       "rank": 3,
       "available_models": [
-        "Gemini 2.5 Pro/Flash",
-        "Claude (via partnership)",
-        "Llama",
+        "Google Gemini 2.5 (Pro, Flash)",
+        "Anthropic Claude",
+        "Meta Llama",
         "Mistral",
-        "Gemma",
-        "200+ models in Model Garden"
+        "Gemma (open)",
+        "Imagen (image)",
+        "Veo (video)",
+        "Chirp (speech)"
       ],
       "data_residency": true,
       "compliance": [
         "SOC 1/2/3",
         "HIPAA",
-        "ISO 27001/27017/27018",
+        "ISO 27001",
         "FedRAMP High",
+        "PCI DSS",
         "GDPR"
       ],
-      "pricing": "Pay-as-you-go per token/character plus GSU (Generative AI Scale Unit) reserved throughput \u2014 e.g. 25 GSUs of Gemini 2.5 Flash yields ~67,250 tokens/sec sustained; billed via GCP.",
+      "pricing": "Pay-per-token on-demand plus Provisioned Throughput sold in GSUs (Generative AI Scale Units); ~25 GSUs of Gemini 2.5 Flash \u2248 67,250 tokens/sec sustained.",
       "key_features": [
-        "VPC Service Controls",
-        "Cloud IAM",
-        "Vertex AI Search (RAG)",
-        "Agent Engine",
-        "fine-tuning & distillation",
+        "VPC Service Controls isolation",
         "Cloud Audit Logs",
-        "grounding with Google Search"
+        "Fine-tuning and distillation",
+        "Grounding with Google Search/enterprise data",
+        "Agent Builder and RAG Engine",
+        "Data not used to train base models"
       ],
-      "best_for": "GCP-heavy organizations and data/ML teams wanting Gemini plus a broad Model Garden and strong MLOps tooling.",
+      "best_for": "Data/ML-heavy enterprises on Google Cloud wanting Gemini plus multi-model choice and strong MLOps.",
       "url": "https://technologymatch.com/blog/aws-bedrock-vs-azure-openai-vs-google-vertex-ai-enterprise-ai-comparison",
       "sonnet_rank": 3,
       "rank_agreement": "strong"
@@ -127,179 +129,185 @@
         "Meta Llama",
         "Mistral",
         "Snowflake Arctic",
-        "OpenAI (via partnership)",
-        "Cortex-hosted LLMs"
+        "Reka",
+        "DeepSeek"
       ],
       "data_residency": true,
       "compliance": [
-        "SOC 2 Type II",
+        "SOC 1/2/3",
         "HIPAA",
         "ISO 27001",
-        "FedRAMP",
         "PCI DSS",
-        "GDPR"
+        "GDPR",
+        "HITRUST"
       ],
-      "pricing": "Consumption-based, billed in Snowflake credits as part of product revenue; no separate model infrastructure to manage.",
+      "pricing": "Consumption-based using Snowflake credits (per-token / per-function billing) within existing Snowflake contract.",
       "key_features": [
-        "runs inside Snowflake security perimeter",
-        "Cortex AISQL (natural-language-to-SQL)",
-        "Cortex Search (semantic/hybrid)",
-        "Knowledge Extensions grounding",
-        "agent orchestration",
-        "governed data access"
+        "Models run directly on governed data inside Snowflake",
+        "No data movement outside the platform",
+        "Cortex Analyst and Cortex Search (RAG)",
+        "Row/column-level governance and access policies",
+        "Observability and audit via Snowflake",
+        "Fine-tuning support"
       ],
-      "best_for": "Enterprises with data already governed in Snowflake wanting AI/RAG/agents to run where the data lives without moving it.",
-      "url": "https://finance.yahoo.com/news/snowflake-stock-rides-cortex-ai-153300195.html",
+      "best_for": "Enterprises whose data already lives in Snowflake and want governed AI directly on that data.",
+      "url": "https://www.snowflake.com/en/news/press-releases/snowflake-and-anthropic-accelerate-enterprise-ai-adoption-driven-by-rising-demand-for-governed-ai/",
       "sonnet_rank": 4,
       "rank_agreement": "strong"
     },
     {
-      "name": "Databricks (Mosaic AI / Model Serving)",
-      "vendor": "Databricks",
-      "rank": 5,
-      "available_models": [
-        "Llama",
-        "Mistral",
-        "DBRX",
-        "Anthropic Claude (external)",
-        "OpenAI (external endpoints)",
-        "bring-your-own and fine-tuned models"
-      ],
-      "data_residency": true,
-      "compliance": [
-        "SOC 2 Type II",
-        "HIPAA",
-        "ISO 27001",
-        "FedRAMP",
-        "GDPR"
-      ],
-      "pricing": "Consumption-based DBUs for model serving and training; billed through Databricks/cloud marketplace.",
-      "key_features": [
-        "Unity Catalog governance",
-        "Vector Search (RAG)",
-        "Mosaic AI Agent Framework",
-        "custom fine-tuning & pretraining",
-        "MLflow observability",
-        "serves within lakehouse perimeter"
-      ],
-      "best_for": "Data engineering and ML teams on the lakehouse that need to fine-tune, serve, and govern custom and open models alongside their data.",
-      "url": "https://www.shivojha.com/posts/ai-ml/enterprise-ai-platform-comparison-2026",
-      "sonnet_rank": null,
-      "rank_agreement": "excluded"
-    },
-    {
-      "name": "IBM watsonx",
+      "name": "IBM watsonx.ai",
       "vendor": "IBM",
-      "rank": 6,
+      "rank": 5,
       "available_models": [
         "IBM Granite",
         "Meta Llama",
         "Mistral",
-        "select open-weight foundation models"
+        "Google (select)",
+        "Third-party and open-source foundation models via catalog"
       ],
       "data_residency": true,
       "compliance": [
         "SOC 2",
-        "HIPAA",
         "ISO 27001",
+        "HIPAA",
         "GDPR",
         "FedRAMP (select)",
         "EU AI Act readiness"
       ],
-      "pricing": "Subscription and consumption tiers (Resource Units); commercial structure requires governance scrutiny per enterprise relationships.",
+      "pricing": "Capacity Unit Hours (CUH) and per-token consumption; available as SaaS or on-prem/hybrid via Cloud Pak for Data.",
       "key_features": [
-        "watsonx.ai model studio",
-        "watsonx.governance for AI risk/compliance",
-        "watsonx.data lakehouse",
-        "on-prem/hybrid deployment",
-        "fine-tuning",
-        "audit and model risk management"
+        "Hybrid/on-prem deployment option",
+        "watsonx.governance for model lifecycle and risk",
+        "Fine-tuning and prompt tuning",
+        "Audit and lineage tracking",
+        "Named a Leader in 2026 Gartner MQ for DSML Platforms",
+        "Enterprise indemnification on IBM Granite"
       ],
-      "best_for": "Regulated enterprises with significant existing IBM relationships that prioritize AI governance, hybrid/on-prem deployment, and model risk management.",
-      "url": "https://2-data.com/knowledge-hub/ibm-ai-strategy-in-2026-what-the-watsonx-evolution-means-for-enterprise-contracts-governance-and-long-term-platform-dependency",
-      "sonnet_rank": 5,
-      "rank_agreement": "minor"
-    },
-    {
-      "name": "Oracle Cloud Infrastructure (OCI) Generative AI",
-      "vendor": "Oracle",
-      "rank": 7,
-      "available_models": [
-        "Cohere Command",
-        "Meta Llama",
-        "xAI Grok (via partnership)",
-        "OCI-hosted foundation models"
-      ],
-      "data_residency": true,
-      "compliance": [
-        "SOC 1/2",
-        "HIPAA",
-        "ISO 27001",
-        "FedRAMP High",
-        "PCI DSS",
-        "GDPR"
-      ],
-      "pricing": "Pay-as-you-go per-character/token plus dedicated AI cluster hosting for reserved capacity; billed via OCI and Universal Credits.",
-      "key_features": [
-        "dedicated AI clusters for isolation",
-        "OCI IAM",
-        "fine-tuning (T-Few)",
-        "integration with Oracle Fusion/Autonomous DB",
-        "private endpoints",
-        "audit logging"
-      ],
-      "best_for": "Oracle database and ERP/Fusion application customers wanting GenAI embedded near their Oracle data estate.",
-      "url": "https://www.epcgroup.net/blog/aws-bedrock-vs-microsoft-foundry-vs-vertex-ai-2026",
+      "best_for": "Regulated enterprises needing governance, hybrid/on-prem deployment, and IP indemnification.",
+      "url": "https://www.ibm.com/products/watsonx-ai",
       "sonnet_rank": null,
       "rank_agreement": "excluded"
     },
     {
       "name": "Cloudflare Workers AI",
       "vendor": "Cloudflare",
-      "rank": 8,
+      "rank": 6,
       "available_models": [
         "Meta Llama",
         "Mistral",
-        "open-source LLMs",
-        "embedding & image models",
-        "models accessible via AI Gateway to OpenAI/Anthropic"
+        "Google Gemma",
+        "DeepSeek",
+        "Stable Diffusion (image)",
+        "Whisper",
+        "Various open-source embedding models"
       ],
       "data_residency": true,
       "compliance": [
-        "SOC 2 Type II",
+        "SOC 2",
         "ISO 27001",
         "GDPR",
         "PCI DSS"
       ],
-      "pricing": "Usage-based (neurons/tokens) with generous free tier; pay-as-you-go on the Cloudflare developer platform.",
+      "pricing": "Pay-per-use measured in 'Neurons' (compute units); generous free tier, serverless billing.",
       "key_features": [
-        "serverless edge inference (300+ locations)",
-        "AI Gateway for caching/rate-limiting/logging",
-        "Vectorize (vector DB for RAG)",
-        "data localization suite",
-        "low-latency global deployment"
+        "Serverless edge inference close to users",
+        "AI Gateway for caching, rate-limiting, logging, and analytics",
+        "Data Localization Suite for regional residency",
+        "Vectorize vector DB and R2 integration",
+        "Low-latency global deployment"
       ],
-      "best_for": "Developers and enterprises needing low-latency, globally distributed edge inference and a unified gateway in front of multiple model vendors.",
-      "url": "https://www.shivojha.com/posts/ai-ml/enterprise-ai-platform-comparison-2026",
+      "best_for": "Developers and enterprises needing low-latency, serverless, open-model inference at the edge.",
+      "url": "https://developers.cloudflare.com/workers-ai/",
       "sonnet_rank": 6,
-      "rank_agreement": "minor"
+      "rank_agreement": "strong"
+    },
+    {
+      "name": "Oracle Cloud Infrastructure (OCI) Generative AI",
+      "vendor": "Oracle",
+      "rank": 7,
+      "available_models": [
+        "Cohere Command/Embed",
+        "Meta Llama",
+        "xAI Grok (via partnership)",
+        "OCI-hosted open models"
+      ],
+      "data_residency": true,
+      "compliance": [
+        "SOC 1/2",
+        "ISO 27001",
+        "HIPAA",
+        "FedRAMP",
+        "PCI DSS",
+        "GDPR"
+      ],
+      "pricing": "On-demand per-character/token pricing plus dedicated AI clusters for reserved capacity.",
+      "key_features": [
+        "Dedicated AI clusters for isolation",
+        "VCN private networking",
+        "Fine-tuning (T-Few) support",
+        "Integration with Oracle Fusion/EBS and Autonomous Database",
+        "Sovereign cloud and distributed cloud regions"
+      ],
+      "best_for": "Oracle-centric enterprises and sovereign/regulated workloads needing dedicated capacity.",
+      "url": "https://www.oracle.com/artificial-intelligence/generative-ai/",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded"
+    },
+    {
+      "name": "Databricks Mosaic AI / Foundation Model APIs",
+      "vendor": "Databricks",
+      "rank": 8,
+      "available_models": [
+        "Meta Llama",
+        "Anthropic Claude (via partnership)",
+        "Mistral",
+        "DBRX",
+        "OpenAI (external model serving)",
+        "Custom/fine-tuned models"
+      ],
+      "data_residency": true,
+      "compliance": [
+        "SOC 2",
+        "ISO 27001",
+        "HIPAA",
+        "PCI DSS",
+        "GDPR",
+        "FedRAMP (select)"
+      ],
+      "pricing": "Consumption-based (DBUs) with pay-per-token and provisioned throughput options.",
+      "key_features": [
+        "Unity Catalog governance and lineage",
+        "Models run on governed lakehouse data",
+        "Fine-tuning and custom model training",
+        "Mosaic AI Gateway for routing and audit",
+        "Vector Search for RAG",
+        "MLflow integration"
+      ],
+      "best_for": "Data-engineering and ML teams on the Databricks lakehouse wanting governed AI on their data.",
+      "url": "https://www.databricks.com/product/machine-learning",
+      "sonnet_rank": null,
+      "rank_agreement": "excluded",
+      "url_auto_fixed": true
     }
   ],
   "_meta": {
     "title": "Enterprise Model APIs",
-    "generated_at": "2026-11-11T05:23:09.273607+00:00"
+    "generated_at": "2026-11-12T06:27:12.229253+00:00"
   },
   "notable_sonnet_additions": [
+    "AWS Bedrock",
     "Azure OpenAI Service",
+    "IBM watsonx",
     "Oracle Cloud AI"
   ],
   "cross_checked": true,
   "sources": [
     "https://technologymatch.com/blog/aws-bedrock-vs-azure-openai-vs-google-vertex-ai-enterprise-ai-comparison",
     "https://cruxdigits.nl/blog/azure-openai-vs-aws-bedrock-vs-vertex-ai/",
-    "https://www.epcgroup.net/blog/aws-bedrock-vs-microsoft-foundry-vs-vertex-ai-2026?srsltid=AYCX9vLRSpgt73FIcdXBvqa-Lm_uffATfRfyt9GIeKi-EaCSU-6BGhKR",
-    "https://www.shivojha.com/posts/ai-ml/enterprise-ai-platform-comparison-2026",
-    "https://finance.yahoo.com/news/snowflake-stock-rides-cortex-ai-153300195.html",
-    "https://2-data.com/knowledge-hub/ibm-ai-strategy-in-2026-what-the-watsonx-evolution-means-for-enterprise-contracts-governance-and-long-term-platform-dependency"
+    "https://www.epcgroup.net/blog/aws-bedrock-vs-microsoft-foundry-vs-vertex-ai-2026?srsltid=AYCX9vLshXQX-LHI8h6Fzra35-YCby7-ANobtqPmEE-9ftbe2M8wmAnK",
+    "https://www.snowflake.com/en/news/press-releases/snowflake-and-anthropic-accelerate-enterprise-ai-adoption-driven-by-rising-demand-for-governed-ai/",
+    "https://www.gsb.stanford.edu/faculty-research/case-studies/snowflake-2026-all-enterprise-ai",
+    "https://www.ibm.com/products/watsonx-ai"
   ]
 }

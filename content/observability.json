@@ -1,106 +1,109 @@
 {
-  "summary": "AI observability has become essential in 2026 as LLM-powered applications scale into production, with New Relic reporting 30% quarter-over-quarter growth in AI monitoring adoption. These tools capture the trace behind each production outcome\u2014prompts, responses, retrieval context, model calls, costs, and quality scores\u2014helping teams detect hallucinations, control spend, and debug failures that traditional APM cannot explain. Choosing the right tool depends on your framework, self-hosting needs, and whether your priority is deep evaluation or lightweight cost governance.",
+  "summary": "AI observability has become essential as LLM and agent-based applications grow more complex and expensive, with the market expanding at a 30%+ CAGR yet only about 15% of GenAI deployments currently instrumenting any observability (projected to hit 50% by 2028 per Gartner). Observability tools track traces, costs, latency, and output quality\u2014helping teams catch failures that break differently in agentic systems while controlling unpredictable API spend. 2026 is a consolidation year, marked by ClickHouse acquiring Langfuse and Braintrust raising an $80M Series B.",
   "tools": [
     {
       "name": "LangSmith",
-      "monitors": "Prompts, traces, token usage, latency, cost breakdowns, and evaluation metrics\u2014especially deep, zero-config tracing for LangChain and LangGraph applications.",
+      "monitors": "End-to-end LLM application tracing, token usage, latency, cost, evaluation metrics, and production monitoring\u2014especially tightly integrated with the LangChain ecosystem.",
       "features": [
-        "Zero-config framework tracing for LangChain/LangGraph",
-        "Detailed cost and token breakdowns per trace",
-        "Dataset creation and evaluation workflows",
-        "Prompt playground and versioning",
-        "Human annotation and feedback loops"
+        "Detailed trace visualization and debugging of chains/agents",
+        "Dataset creation and regression testing",
+        "Built-in LLM-as-judge and custom evaluators",
+        "Production monitoring dashboards and alerts",
+        "Deep native integration with LangChain/LangGraph"
       ],
-      "pricing": "Seat-based plus usage; starts around $39/user/month. Per-trace overage charges can add roughly 5\u201310% of underlying LLM API spend for trace-heavy workloads.",
-      "best_for": "Teams whose architecture is built on LangChain or LangGraph and want deep, out-of-the-box tracing that justifies vendor coupling.",
+      "pricing": "Usage-priced; roughly $264 per 100,000 traces per analyses in 2026. Trace costs can run ~5\u201310% of underlying LLM API spend for trace-heavy workloads. Free developer tier available.",
+      "best_for": "Teams already building on LangChain/LangGraph who want deep, framework-native tracing and evaluation.",
       "url": "https://www.metacto.com/blogs/what-is-langsmith-a-comprehensive-guide-to-llm-observability"
     },
     {
       "name": "Helicone",
-      "monitors": "LLM API costs, request volume, latency, and per-user/per-department spend via a lightweight proxy gateway.",
+      "monitors": "LLM API calls, cost per department/user/model, token usage, latency, and request/response logging via a lightweight proxy.",
       "features": [
-        "Single-line base URL change for integration (under 5 minutes)",
-        "Zero markup on LLM costs",
-        "Per-user and per-department cost attribution",
-        "Request caching and rate limiting",
-        "Self-hosting option available for free"
+        "Single-line base URL change for integration (setup in under 5 minutes)",
+        "Per-user and per-department cost governance",
+        "Response caching to cut costs",
+        "Rate limiting and usage tracking",
+        "Framework-agnostic proxy architecture"
       ],
-      "pricing": "Request-based pricing with a generous free tier; self-hostable for free and charges zero markup on LLM costs.",
-      "best_for": "Teams who want instant, low-overhead visibility into LLM spend and fast cost governance without framework coupling.",
-      "url": "https://www.activepieces.com/blog/langsmith-vs-helicone-for-llm-observability-in-2026"
+      "pricing": "Generous free tier; usage-priced. Helicone Pro reaches 100,000 traces at ~$79 per Markaicode\u2014a fraction of comparable LangSmith pricing.",
+      "best_for": "Teams wanting fast, low-overhead cost visibility and governance across any LLM provider without framework lock-in.",
+      "url": "https://docs.helicone.ai/guides/overview",
+      "url_auto_fixed": true
     },
     {
       "name": "Weights & Biases (W&B Weave)",
-      "monitors": "Model experiments, LLM application traces, evaluations, prompt performance, and data quality across the ML/LLM lifecycle.",
+      "monitors": "Combined ML and LLM workloads\u2014experiment tracking, model performance, LLM traces, evaluations, and unified monitoring across both traditional ML and GenAI.",
       "features": [
-        "Weave for LLM tracing and evaluation",
-        "Experiment tracking and model versioning",
-        "Rich visualization dashboards",
-        "Dataset and evaluation management",
-        "Collaboration tools for ML/AI teams"
+        "Unified ML + LLM observability via W&B Weave",
+        "Experiment tracking and versioning",
+        "LLM trace logging and evaluation workflows",
+        "Rich dashboards and collaboration tools",
+        "Integration with broader W&B MLOps platform"
       ],
-      "pricing": "Free tier for individuals; team and enterprise plans are usage- and seat-based with custom enterprise pricing.",
-      "best_for": "ML teams who already use W&B for experiment tracking and want unified observability spanning training and LLM production.",
-      "url": "https://www.firecrawl.dev/blog/best-llm-observability-tools"
+      "pricing": "Free tier for individuals; team and enterprise plans are subscription/usage-based with custom enterprise pricing.",
+      "best_for": "Teams running both ML and LLM workloads who want a single platform for unified model and GenAI monitoring.",
+      "url": "https://wandb.ai/site/weave"
     },
     {
-      "name": "Arize AI (Phoenix)",
-      "monitors": "Model performance, data quality, embeddings/drift, retrieval quality, and LLM evaluation with OpenTelemetry-based tracing.",
+      "name": "Arize AI (Arize AX / Phoenix)",
+      "monitors": "LLM and ML observability\u2014traces, embeddings, drift, data quality, evaluation metrics, and enterprise production monitoring.",
       "features": [
-        "Open-source Phoenix with OpenTelemetry integration",
-        "Evaluation and LLM-as-a-judge metrics",
-        "Embedding and drift analysis",
-        "RAG and retrieval quality insights",
-        "Self-hostable for free"
+        "Phoenix open-source entry point for traces, experiments, and evaluators",
+        "Arize AX hosted dashboards with data retention",
+        "Enterprise-grade monitoring and alerting",
+        "Embedding and drift analysis rooted in ML observability",
+        "OpenTelemetry-compatible instrumentation"
       ],
-      "pricing": "Phoenix is open-source and free to self-host; Arize AX enterprise platform uses usage-based/custom pricing.",
-      "best_for": "Teams prioritizing deep evaluation, drift detection, and open-standard (OpenTelemetry) observability with self-hosting flexibility.",
-      "url": "https://www.firecrawl.dev/blog/best-llm-observability-tools"
+      "pricing": "Phoenix (OSS) is free to self-host; Arize AX offered via hosted cloud and enterprise contracts (custom pricing).",
+      "best_for": "ML-mature teams wanting to bring established ML observability practices into LLM tracing, with an open-source-to-enterprise upgrade path.",
+      "url": "https://arize.com/",
+      "url_auto_fixed": true
     },
     {
-      "name": "Langfuse",
-      "monitors": "Traces, spans, prompts, token usage, costs, latency, and evaluation scores across multiple frameworks.",
+      "name": "LangFuse",
+      "monitors": "LLM traces, token/cost tracking, latency, prompt management, evaluations, and production analytics\u2014framework-agnostic and open source.",
       "features": [
-        "Open-source and self-hostable for free",
-        "Multi-framework support (not tied to LangChain)",
+        "Open-source, self-hostable architecture",
+        "Detailed tracing and nested span visualization",
         "Prompt management and versioning",
-        "Cost and token tracking per trace",
-        "Evaluation and scoring workflows"
+        "Cost and token analytics per model",
+        "Evaluation and dataset tooling"
       ],
-      "pricing": "Open-source with free self-hosting; managed cloud offers a free tier plus usage-based paid plans.",
-      "best_for": "Teams needing self-hosting, data ownership, and multi-framework support as a flexible, cost-controlled alternative to LangSmith.",
-      "url": "https://www.metacto.com/blogs/what-is-langsmith-a-comprehensive-guide-to-llm-observability"
+      "pricing": "Self-host is free (compute + storage costs only), often the cheapest option; managed cloud is usage-priced with a free tier. Acquired by ClickHouse in January 2026.",
+      "best_for": "Cost-conscious teams wanting a flexible, open-source observability stack they can self-host and fully control.",
+      "url": "https://www.digitalapplied.com/blog/agent-observability-platforms-langsmith-langfuse-arize-2026"
     },
     {
       "name": "OpenLLMetry",
-      "monitors": "LLM calls, traces, token usage, and latency using OpenTelemetry-based instrumentation that exports to any compatible backend.",
+      "monitors": "LLM and agent telemetry via OpenTelemetry-compliant spans\u2014traces, token usage, latency, and errors across any stack.",
       "features": [
-        "Open-source, OpenTelemetry-native instrumentation",
-        "Vendor-agnostic\u2014exports to existing observability backends",
-        "Auto-instrumentation for popular LLM SDKs",
-        "Integrates with Datadog, New Relic, Grafana, etc.",
-        "Avoids vendor lock-in"
+        "OpenTelemetry-based, vendor-neutral instrumentation",
+        "Near-zero integration overhead (e.g., single-line OpenAIInstrumentor().instrument() in Python)",
+        "Works across any backend that accepts OTel data",
+        "Semantic-convention-compliant spans",
+        "Ideal for multi-framework and polyglot setups"
       ],
-      "pricing": "Free and open-source; costs are only those of the backend you export telemetry to.",
-      "best_for": "Engineering teams who want standards-based, vendor-neutral LLM telemetry piped into their existing observability stack.",
-      "url": "https://www.firecrawl.dev/blog/best-llm-observability-tools"
+      "pricing": "Open source and free; costs come only from the chosen OpenTelemetry backend/destination.",
+      "best_for": "Multi-framework or standards-first teams wanting vendor-neutral, drop-in instrumentation that exports to any observability backend.",
+      "url": "https://www.digitalapplied.com/blog/ai-agent-observability-2026-tracing-monitoring-stack-guide"
     }
   ],
   "cost_tips": [
-    "Use a lightweight gateway/proxy like Helicone or Portkey with zero markup to track per-user and per-department spend, then enable response caching to avoid paying for repeated identical queries.",
-    "Route requests to the cheapest model that meets quality requirements\u2014reserve frontier models for complex tasks and use smaller/cheaper models for routine or classification work.",
-    "Trim token usage by shortening prompts, compressing retrieval context, setting sensible max_output_token limits, and removing redundant system instructions.",
-    "Watch trace-heavy observability overhead: per-trace charges (e.g., LangSmith's ~5\u201310% of LLM spend) can add up, so consider sampling traces or self-hosting open-source tools like Langfuse or Phoenix for high-volume workloads."
+    "Use response caching (e.g., via Helicone proxy) to avoid paying for repeated or near-identical requests, which can dramatically cut spend on high-traffic endpoints.",
+    "Right-size your models\u2014route simple tasks to smaller/cheaper models and reserve frontier models for complex reasoning, using cheaper models for classification, routing, and summarization.",
+    "Instrument per-user and per-department cost tracking to catch runaway spend early; observability trace costs can reach 5\u201310% of LLM API spend, so sample or self-host (e.g., Langfuse) at high volume.",
+    "Reduce token usage by trimming prompts, compressing context/RAG retrievals, setting sensible max-token limits, and batching requests where latency allows."
   ],
   "_meta": {
     "title": "AI Observability, Cost & Monitoring",
-    "generated_at": "2026-11-11T05:22:48.372400+00:00"
+    "generated_at": "2026-11-12T06:26:56.612939+00:00"
   },
   "sources": [
-    "https://www.youtube.com/watch?v=4Qu2-xt-MCo",
     "https://www.firecrawl.dev/blog/best-llm-observability-tools",
+    "https://www.digitalapplied.com/blog/ai-agent-observability-2026-tracing-monitoring-stack-guide",
     "https://www.confident-ai.com/knowledge-base/compare/llm-monitoring-vs-observability-top-tools-2026",
     "https://www.activepieces.com/blog/langsmith-vs-helicone-for-llm-observability-in-2026",
+    "https://www.digitalapplied.com/blog/agent-observability-platforms-langsmith-langfuse-arize-2026",
     "https://www.metacto.com/blogs/what-is-langsmith-a-comprehensive-guide-to-llm-observability"
   ]
 }
