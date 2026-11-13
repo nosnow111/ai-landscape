@@ -1,182 +1,206 @@
 {
-  "summary": "LLM inference costs are dominated by token usage, and most production systems leave significant savings on the table by sending redundant context, re-running identical queries, and routing everything to premium models. Combining caching, compression, and model routing commonly cuts API spend by 40-80% while improving latency (time-to-first-token improvements of 13-31% from prompt caching alone). These optimizations are stackable and mostly low-risk, making them among the highest-ROI engineering work available.",
+  "summary": "LLM inference costs are dominated by token volume, and most production workloads contain far more repetition and waste than teams expect. Layering caching (exact-match, prefix, and semantic), prompt compression, model routing, and output constraints commonly cuts API spend by 40-80% while improving time-to-first-token by 13-31%. The highest-ROI approach is combining multiple techniques: no single method wins, but stacked optimizations compound.",
   "techniques": [
     {
-      "name": "Prompt (Prefix) Caching",
-      "description": "Reuses the cached KV state for a repeated prompt prefix (e.g. a shared system prompt or long document) so the model skips recomputing those tokens during the prefill stage. It reduces input-token cost and improves time-to-first-token, but the model still performs normal decoding to generate the response.",
-      "savings": "41-80% cost reduction on cached input, 13-31% faster time-to-first-token",
+      "name": "Provider prefix / prompt caching (exact-match)",
+      "description": "Reuses the cached KV state for a repeated prompt prefix (e.g. a long system prompt or shared context) so the model skips recomputing the prefill stage for that portion. It still performs normal decoding, so it reduces input-token cost and latency but not output cost.",
+      "savings": "41-80% cost reduction on cached input; 13-31% faster time-to-first-token",
       "difficulty": "Easy",
       "works_with": [
         "OpenAI",
         "Anthropic",
         "Google Gemini",
-        "AWS Bedrock",
-        "DeepSeek"
+        "DeepSeek",
+        "Amazon Bedrock"
       ],
-      "example": "Place your large, static system instructions and reference documents at the start of the prompt and mark them as cacheable (Anthropic cache_control or OpenAI automatic prefix caching) so repeated requests only pay full price for the variable user portion."
+      "example": "Place your large static system prompt and few-shot examples at the very start of every request so OpenAI/Anthropic can cache the shared prefix across calls, charging reduced rates for the repeated tokens."
     },
     {
-      "name": "Semantic Caching",
-      "description": "Matches incoming queries by meaning using embedding similarity rather than exact text, and can return a cached response without invoking the model at all. It saves both input and output tokens, unlike prefix caching which saves only input, and works best under user-defined error-rate or similarity thresholds.",
-      "savings": "30% token spend reduction at ~45% cache hit rate; up to 50%+ in high-repetition workloads",
+      "name": "Semantic caching",
+      "description": "Matches incoming queries by meaning rather than exact text using embedding similarity, and returns a previously generated response without calling the model at all. Unlike prefix caching it saves both input AND output tokens, and can bypass inference entirely on near-matches.",
+      "savings": "~45% cache hit rate; up to 100% savings on each hit (no inference call)",
+      "difficulty": "Medium",
+      "works_with": [
+        "Any provider (OpenAI",
+        "Anthropic",
+        "Google",
+        "open-source models) \u2014 provider-agnostic"
+      ],
+      "example": "Embed each incoming query, search cached embeddings with cosine similarity > 0.85, and if 'How do I return a product?' matches a cached 'What's your return policy?' response, return it instantly instead of calling the LLM."
+    },
+    {
+      "name": "Multi-tier caching strategy",
+      "description": "Layers exact-match caching (sub-millisecond for identical queries), semantic caching (slightly higher latency for similar queries), and session context management together. Each layer catches a different class of repetition, and instrumenting hit rate per layer reveals where the real savings are.",
+      "savings": "Substantial \u2014 combined layers often cut token consumption dramatically in high-repetition chatbots",
+      "difficulty": "Medium",
+      "works_with": [
+        "Any provider",
+        "Redis",
+        "self-hosted"
+      ],
+      "example": "Check an exact-match cache first, fall back to a semantic cache on a miss, and only call the LLM if both miss \u2014 using Redis to back all layers."
+    },
+    {
+      "name": "Prompt compression",
+      "description": "Reduces the number of input tokens by removing redundancy, trimming boilerplate, summarizing context, or using compression models (e.g. LLMLingua) to compress prompts while preserving meaning.",
+      "savings": "~30% token reduction",
       "difficulty": "Medium",
       "works_with": [
         "OpenAI",
         "Anthropic",
-        "Google Gemini",
-        "any provider (client-side)",
-        "self-hosted"
+        "Google",
+        "open-source models"
       ],
-      "example": "Embed each incoming query, search cached embeddings for cosine similarity > 0.85, and if a match is found return the stored response ('How do I return a product?' matches 'What's your return policy?') instead of calling the LLM."
+      "example": "Run long retrieved documents through LLMLingua to compress a 2,000-token context down to ~1,400 tokens before sending it to the model."
     },
     {
-      "name": "Exact-Match Response Caching",
-      "description": "Caches the full response to identical queries at sub-millisecond latency, avoiding the LLM inference call entirely for repeated requests. It is the simplest cache layer and pairs well with semantic caching in a multi-tier strategy.",
-      "savings": "20-50% cost reduction in workloads with high query repetition",
-      "difficulty": "Easy",
-      "works_with": [
-        "any provider",
-        "self-hosted"
-      ],
-      "example": "Hash the normalized request (model + messages + params) and store the response in Redis with a TTL, serving cache hits directly for FAQ-style or dashboard-refresh traffic."
-    },
-    {
-      "name": "Prompt Compression",
-      "description": "Reduces the number of input tokens by sending only relevant summaries instead of full context, trimming boilerplate, and compressing retrieved documents. Advanced systems summarize long context while preserving output quality.",
-      "savings": "15-40% token cost reduction (often ~30%)",
-      "difficulty": "Medium",
-      "works_with": [
-        "any provider",
-        "self-hosted"
-      ],
-      "example": "Run retrieved RAG chunks through a compressor like LLMLingua or a cheap summarization model before injecting them into the prompt, sending a condensed version instead of raw full documents."
-    },
-    {
-      "name": "Model Routing",
-      "description": "Routes each request to the cheapest model capable of handling it, sending simple queries to small/fast models and reserving premium models for complex tasks. This is one of the highest-ROI optimizations because most traffic does not need a frontier model.",
-      "savings": "20-50% cost reduction (routing ~70% of traffic to cheaper models is common)",
+      "name": "Model routing (tiered models)",
+      "description": "Routes each request to the cheapest model capable of handling it, sending simple queries to small/cheap models and reserving frontier models for hard tasks. A classifier or heuristic decides the tier per request.",
+      "savings": "Large \u2014 e.g. routing 70% to cheap tiers, 25% to mid, 5% to frontier",
       "difficulty": "Medium",
       "works_with": [
         "OpenAI",
         "Anthropic",
-        "Google Gemini",
-        "Mistral",
-        "self-hosted",
+        "Google",
+        "open-source models",
+        "LiteLLM",
         "OpenRouter"
       ],
-      "example": "Use a lightweight classifier to send straightforward queries to GPT-4o-mini or GPT-3.5-class models and escalate only ambiguous or multi-step reasoning tasks to a premium model like GPT-4o or Claude Opus."
+      "example": "Route 70% of traffic to GPT-3.5/4o-mini, 25% to a mid-tier model, and only 5% to GPT-4-class models for the hardest queries."
     },
     {
-      "name": "Output Token Control (Max Tokens & Formatting)",
-      "description": "Caps and shapes the generated response, since output tokens are typically billed higher than input tokens. Requesting concise or structured output and setting a sensible max_tokens prevents runaway generations.",
-      "savings": "10-40% reduction on output cost",
-      "difficulty": "Easy",
-      "works_with": [
-        "any provider"
-      ],
-      "example": "Set max_tokens to a realistic limit and instruct the model to 'respond in at most 3 bullet points' or return JSON only, avoiding verbose explanations you will discard."
-    },
-    {
-      "name": "Request Batching",
-      "description": "Groups multiple independent requests into a single batch or uses provider async batch APIs that offer discounted pricing for non-latency-sensitive workloads.",
-      "savings": "Up to 50% via provider batch-API discounts",
+      "name": "Output constraints",
+      "description": "Limits generated output length via max_tokens caps, structured/JSON output schemas, and 'be concise' instructions. Output tokens are often priced higher than input tokens, so constraining them directly lowers cost.",
+      "savings": "~50% fewer output tokens",
       "difficulty": "Easy",
       "works_with": [
         "OpenAI",
         "Anthropic",
-        "Google Gemini"
+        "Google",
+        "open-source models"
       ],
-      "example": "Submit overnight bulk classification or enrichment jobs through OpenAI's Batch API to get a 50% discount versus synchronous calls."
+      "example": "Set max_tokens=150 and request a strict JSON schema so the model returns only the needed fields instead of verbose prose."
     },
     {
-      "name": "KV Cache Management (Infrastructure)",
-      "description": "On self-hosted inference servers, techniques like cache eviction (dropping low-importance tokens), cache compression (quantization/pooling), hybrid memory offloading to CPU/NVMe, and novel attention mechanisms reduce memory pressure and serving cost. A March 2026 Dell survey found no single technique wins \u2014 combination strategies perform best.",
-      "savings": "Varies; combination strategies yield the largest throughput/cost gains",
+      "name": "RAG / context optimization",
+      "description": "Reduces token usage without changing model or architecture by retrieving fewer, higher-quality documents (reranking top-K), trimming retrieved chunks, and managing conversation context so stale turns are dropped.",
+      "savings": "20-50% context token reduction",
+      "difficulty": "Medium",
+      "works_with": [
+        "Any provider",
+        "LangChain",
+        "LlamaIndex",
+        "vector DBs"
+      ],
+      "example": "Rerank retrieved chunks and pass only the top 3 most relevant instead of a naive top-10, cutting context tokens by more than half."
+    },
+    {
+      "name": "KV cache management (self-hosted inference)",
+      "description": "At the inference-server level, techniques organized by a March 2026 Dell survey into cache eviction (dropping low-importance tokens), cache compression (quantization/pooling), hybrid memory (offloading to CPU/NVMe), and novel attention mechanisms (linear/log-linear attention). No single technique wins; combinations work best.",
+      "savings": "Varies \u2014 improves memory efficiency and throughput on self-hosted deployments",
       "difficulty": "Hard",
       "works_with": [
-        "self-hosted",
         "vLLM",
         "TensorRT-LLM",
-        "SGLang"
+        "SGLang",
+        "self-hosted open-source models"
       ],
-      "example": "Deploy vLLM with PagedAttention and enable KV-cache quantization plus CPU offload to serve more concurrent requests per GPU without increasing hardware."
+      "example": "Enable KV-cache quantization and eviction in vLLM to fit longer contexts and more concurrent requests on the same GPU."
+    },
+    {
+      "name": "Request batching",
+      "description": "Groups multiple requests together for inference so fixed per-call overhead and GPU utilization are amortized, lowering effective cost per request on self-hosted or batch-API endpoints.",
+      "savings": "Up to ~50% via provider batch APIs",
+      "difficulty": "Easy",
+      "works_with": [
+        "OpenAI Batch API",
+        "Anthropic Message Batches",
+        "self-hosted (vLLM continuous batching)"
+      ],
+      "example": "Submit non-urgent embeddings or classification jobs to OpenAI's Batch API for a ~50% discount versus synchronous calls."
     }
   ],
   "tools": [
     {
       "name": "GPTCache",
-      "description": "Open-source semantic caching library for LLM queries that stores responses and returns cached results for semantically similar prompts using embeddings and a vector store.",
+      "description": "Open-source semantic caching library that stores LLM responses and returns cached answers for semantically similar queries using embedding similarity and a vector store.",
       "pricing_free": true,
-      "pricing_paid": "Free (open source); self-hosted infrastructure costs only",
+      "pricing_paid": "Free (open source, Apache 2.0); you pay only for your own infra",
       "url": "https://github.com/zilliztech/GPTCache"
     },
     {
-      "name": "Redis / Redis Semantic Cache",
-      "description": "In-memory data store supporting exact-match and vector-based semantic caching for LLM responses, enabling multi-tier caching with sub-millisecond exact-match lookups.",
+      "name": "Redis / Redis LangCache (semantic cache)",
+      "description": "Redis powers multi-tier caching with sub-millisecond exact-match lookups and vector-based semantic caching, and offers LangCache as a managed semantic cache for LLM apps.",
       "pricing_free": true,
-      "pricing_paid": "Redis Cloud paid tiers from ~$5/mo; Enterprise custom pricing",
+      "pricing_paid": "Free OSS/community tier; Redis Cloud and LangCache priced by usage/tier",
       "url": "https://redis.io/blog/llm-token-optimization-speed-up-apps"
     },
     {
       "name": "LiteLLM",
-      "description": "Unified proxy/SDK for 100+ LLM providers with built-in caching, model routing, fallbacks, rate limiting, and cost tracking across providers.",
+      "description": "Unified proxy/SDK across 100+ LLM providers with built-in caching, model routing, fallbacks, rate limiting, and spend tracking.",
       "pricing_free": true,
-      "pricing_paid": "Open-source free; LiteLLM Enterprise custom pricing",
+      "pricing_paid": "Free open source; LiteLLM Enterprise with SSO/support via custom pricing",
       "url": "https://github.com/BerriAI/litellm"
     },
     {
       "name": "Helicone",
-      "description": "LLM observability and gateway platform providing request logging, cost analytics, caching, and prompt management via a drop-in proxy.",
+      "description": "LLM observability and gateway platform providing caching, cost/usage analytics, rate limiting, and request logging via a drop-in proxy.",
       "pricing_free": true,
-      "pricing_paid": "Paid plans from ~$20/mo (Pro); Enterprise custom",
-      "url": "https://helicone.ai"
+      "pricing_paid": "Free tier; paid plans from ~$20/user/month plus usage-based tiers",
+      "url": "https://www.helicone.ai"
     },
     {
       "name": "LangChain",
-      "description": "LLM application framework with built-in LLM caching (in-memory, SQLite, Redis, semantic), prompt management, and routing abstractions.",
+      "description": "Framework for building LLM apps with built-in LLM caching (in-memory, SQLite, Redis, semantic), prompt templating, RAG, and routing utilities.",
       "pricing_free": true,
-      "pricing_paid": "Framework free; LangSmith observability from ~$39/user/mo",
+      "pricing_paid": "Free open source; LangSmith observability has free + paid plans from ~$39/user/month",
       "url": "https://www.langchain.com"
     },
     {
       "name": "LLMLingua",
-      "description": "Microsoft prompt-compression toolkit that compresses prompts (up to ~20x) while preserving task performance, reducing input tokens for long-context and RAG prompts.",
+      "description": "Microsoft Research prompt-compression toolkit that compresses prompts (and retrieved context) to reduce input tokens while preserving task performance.",
       "pricing_free": true,
-      "pricing_paid": "Free (open source)",
+      "pricing_paid": "Free (open source, MIT)",
       "url": "https://github.com/microsoft/LLMLingua"
     },
     {
-      "name": "OpenRouter",
-      "description": "Unified API gateway that routes requests across many providers/models with automatic fallback and price-based routing to the cheapest suitable model.",
+      "name": "vCache",
+      "description": "Semantic cache that returns cached responses for semantically similar prompts under user-defined error-rate guarantees, saving both input and output tokens.",
       "pricing_free": true,
-      "pricing_paid": "Pay-per-token passthrough with small routing fee",
+      "pricing_paid": "Free (open source research project)",
+      "url": "https://github.com/vcache-project/vCache"
+    },
+    {
+      "name": "OpenRouter",
+      "description": "Unified API gateway across many model providers enabling easy model routing, fallbacks, and price/performance comparison from a single endpoint.",
+      "pricing_free": true,
+      "pricing_paid": "Pay-as-you-go passthrough pricing with a small routing fee; free credits available",
       "url": "https://openrouter.ai"
     },
     {
       "name": "vLLM",
-      "description": "High-throughput open-source inference server with PagedAttention, KV-cache optimization, prefix caching, and quantization for cost-efficient self-hosted serving.",
+      "description": "High-throughput open-source inference server with PagedAttention, continuous batching, and KV-cache optimizations for self-hosted model serving.",
       "pricing_free": true,
-      "pricing_paid": "Free (open source); GPU infrastructure costs only",
+      "pricing_paid": "Free (open source, Apache 2.0); you pay only for GPU/infra",
       "url": "https://github.com/vllm-project/vllm"
     }
   ],
   "quick_wins": [
-    "Enable provider prompt/prefix caching by putting large static system prompts and reference docs at the start of your requests \u2014 near-zero effort for 40-80% savings on cached input and faster responses.",
-    "Add an exact-match response cache (e.g. Redis keyed on the normalized request) to eliminate duplicate inference calls for repeated queries.",
-    "Set a realistic max_tokens and instruct models to be concise or return structured output to cut costly output tokens.",
-    "Route traffic with a cheap classifier so simple queries hit small models (e.g. GPT-4o-mini) and only hard tasks reach premium models, cutting 20-50% of cost.",
-    "Drop in a gateway like LiteLLM or Helicone to get caching, routing, and per-model cost visibility so you can measure hit rate and spend before optimizing further."
+    "Enable provider prompt/prefix caching by moving large static system prompts and few-shot examples to the start of every request \u2014 easy 41-80% savings on repeated input tokens.",
+    "Cap output with max_tokens and request concise/structured (JSON) responses to cut output tokens by ~50%, since output is the most expensive token type.",
+    "Add a semantic cache (GPTCache or Redis LangCache) in front of your LLM to skip inference entirely on ~45% of repeated or similar queries.",
+    "Route requests by difficulty \u2014 send the bulk of traffic to a cheap small model (4o-mini/3.5) via LiteLLM or OpenRouter and reserve frontier models for the hardest 5%.",
+    "Instrument cost and cache-hit rate per layer (e.g. with Helicone) before optimizing further, and skip optimization entirely for low-volume apps where engineering time exceeds the savings."
   ],
   "_meta": {
     "title": "LLM Cost & Performance Optimization",
-    "generated_at": "2026-11-12T06:27:10.201813+00:00"
+    "generated_at": "2026-11-13T05:47:02.289162+00:00"
   },
   "sources": [
-    "https://abhyashsuchi.in/llm-cost-optimization-2026-proven-strategies",
     "https://redis.io/blog/llm-token-optimization-speed-up-apps",
+    "https://www.premai.io/blog/llm-cost-optimization-8-strategies-that-cut-api-spend-by-80-2026-guide",
     "https://exadel.com/news/llm-cost-optimization-enterprise-ai-framework",
     "https://www.digitalapplied.com/blog/prompt-caching-2026-cut-llm-costs-engineering-guide",
-    "https://www.premai.io/blog/llm-cost-optimization-8-strategies-that-cut-api-spend-by-80-2026-guide",
     "https://www.flexera.com/blog/ai/prompt-caching-breakdown"
   ]
 }
