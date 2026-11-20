@@ -53,19 +53,42 @@ def build():
         "ai_news": load_news_sorted("ai_news"),
     }
 
-    # Vendor news rolling cache — if today has no vendor items, inject cached ones
+    # Vendor news rolling cache — merge today's vendor items with previous cache,
+    # keep newest 10 unique items so the strip always has at least 5 to show
     ai_news_items = sections.get("ai_news", {}).get("items", [])
     vendor_items = [i for i in ai_news_items if i.get("category") == "vendor"]
     vendor_cache_date = None
+
+    # Load existing cache
+    _existing_cache = []
+    if os.path.exists(VENDOR_CACHE_PATH):
+        try:
+            _cache = json.load(open(VENDOR_CACHE_PATH))
+            _existing_cache = _cache.get("items", [])
+            vendor_cache_date = _cache.get("date")
+        except Exception:
+            _existing_cache = []
+
     if vendor_items:
+        # Merge: new items first, then cached, deduplicate by headline
+        _seen = set()
+        _merged = []
+        for item in vendor_items + _existing_cache:
+            key = item.get("headline", item.get("url", ""))
+            if key and key not in _seen:
+                _seen.add(key)
+                _merged.append(item)
+        # Keep newest 10, sorted by date desc
+        _merged.sort(key=lambda x: x.get("date", ""), reverse=True)
+        _merged = _merged[:10]
         with open(VENDOR_CACHE_PATH, "w") as _vf:
-            json.dump({"items": vendor_items, "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")}, _vf, indent=2)
-    elif os.path.exists(VENDOR_CACHE_PATH):
-        _cache = json.load(open(VENDOR_CACHE_PATH))
-        _cached = _cache.get("items", [])
-        vendor_cache_date = _cache.get("date")
-        if _cached:
-            sections["ai_news"]["items"] = ai_news_items + _cached
+            json.dump({"items": _merged, "date": datetime.now(timezone.utc).strftime("%Y-%m-%d")}, _vf, indent=2)
+        # Inject full merged vendor list back so strip has up to 5 to show
+        non_vendor = [i for i in ai_news_items if i.get("category") != "vendor"]
+        sections["ai_news"]["items"] = non_vendor + _merged
+    elif _existing_cache:
+        vendor_cache_date = vendor_cache_date  # already set above
+        sections["ai_news"]["items"] = ai_news_items + _existing_cache
 
     html = env.get_template("index.html").render(
         sections=sections, refresh_hours=REFRESH_HOURS, config=SITE_CONFIG,
