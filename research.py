@@ -98,10 +98,12 @@ QUERIES = {
     "ai_assistants": [
         "most popular AI chatbot assistant monthly active users 2026 ChatGPT Claude Gemini Copilot",
         "AI assistant adoption statistics consumer usage 2026 Grok Perplexity Meta AI Character AI",
+        f"new AI assistant app launched released {_THIS_MONTH} 2026 Claude Duet Grok Bot consumer",
     ],
     "workspace": [
         "most popular AI productivity workspace tools 2026 adoption",
         "NotebookLM Gemini Notebook Microsoft Copilot M365 Notion AI usage 2026",
+        f"new AI agent productivity app launched {_THIS_MONTH} 2026 Claude Duet Grok Bot autonomous",
     ],
     "ai_news": [
         f"AI news today {_THIS_WEEK} breaking announcements",

@@ -233,12 +233,19 @@ SECTIONS = {
             "(or best public estimate with source), key capabilities, available platforms "
             "(web/iOS/Android/desktop), best use case, and official URL. "
             f"{_RANK_RULE} {_URL_RULE} "
-            "Return a JSON object with two keys: "
-            "'summary' (2-3 sentence overview of the consumer AI assistant landscape and key trends) and "
+            "ALSO include a 'recent_launches' array for products launched in the last 3 months that are "
+            "NOT yet ranked due to insufficient MAU data. For example: Claude Duet (Anthropic, Oct 2026 — "
+            "proactive agent app with memory, skills and connected apps), Grok Bot (xAI, Nov 2026 — "
+            "autonomous always-on AI agent that runs on its own cloud computer). Include any others confirmed "
+            "in the research data. Each recent_launch item: name, vendor, launched (string), "
+            "description (1 sentence), url (string). "
+            "Return a JSON object with three keys: "
+            "'summary' (2-3 sentence overview of the consumer AI assistant landscape and key trends), "
             "'tools' (array SORTED by adoption rank, where each item has: "
             "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
             "monthly_active_users (string — e.g. '500M+'), platforms (list of strings), "
-            "strengths (list of strings), best_for (string), url (string))."
+            "strengths (list of strings), best_for (string), url (string)), and "
+            "'recent_launches' (array as described above, empty list [] if none found in research)."
         ),
     },
     "workspace": {
@@ -255,11 +262,15 @@ SECTIONS = {
             "For each tool cover: vendor, pricing (free tier + paid), key capabilities, "
             "which apps/platforms it integrates with, best use case, and url. "
             f"{_RANK_RULE} {_URL_RULE} "
-            "Return a JSON object with two keys: "
-            "'summary' (2-3 sentence overview of AI in productivity and workspace tools) and "
+            "ALSO include a 'recent_launches' array for workspace/agent products launched in the last "
+            "3 months that are NOT yet ranked due to insufficient adoption data. "
+            "Each recent_launch item: name, vendor, launched (string), description (1 sentence), url (string). "
+            "Return a JSON object with three keys: "
+            "'summary' (2-3 sentence overview of AI in productivity and workspace tools), "
             "'tools' (array SORTED by adoption rank, where each item has: "
             "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
-            "capabilities (list of strings), integrations (list of strings), best_for (string), url (string))."
+            "capabilities (list of strings), integrations (list of strings), best_for (string), url (string)), and "
+            "'recent_launches' (array as described above, empty list [] if none found in research)."
         ),
     },
     "llm_optimization": {
