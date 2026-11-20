@@ -32,6 +32,12 @@
     /* node pulse on hover */
     .flow-node { transition: transform 0.15s ease, box-shadow 0.15s ease; }
     .flow-node:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+    /* always-visible scrollbar on overflow containers */
+    .overflow-x-auto { scrollbar-width: thin; scrollbar-color: #94a3b8 #e2e8f0; }
+    .overflow-x-auto::-webkit-scrollbar { height: 6px; display: block; }
+    .overflow-x-auto::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 3px; }
+    .overflow-x-auto::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+    .overflow-x-auto::-webkit-scrollbar-thumb:hover { background: #64748b; }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -95,10 +101,10 @@
 
       <!-- End-to-end data flow visual -->
       <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">End-to-End Data Flow</p>
-      <div class="overflow-x-auto pb-2">
+      <div class="overflow-x-auto pb-4">
         <div class="flex items-stretch gap-1 min-w-max">
 
-          <div class="flow-node bg-slate-700 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+          <div class="flow-node bg-slate-700 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">🌐</div>
             <p class="text-xs font-bold">Web Sources</p>
             <p class="text-xs text-slate-400 mt-1">News, docs, surveys</p>
@@ -106,7 +112,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-teal-700 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+          <div class="flow-node bg-teal-700 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">🔍</div>
             <p class="text-xs font-bold">Retrieval Agents</p>
             <p class="text-xs text-teal-200 mt-1">research.py ×18</p>
@@ -114,7 +120,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-amber-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+          <div class="flow-node bg-amber-600 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">📄</div>
             <p class="text-xs font-bold">Context Blocks</p>
             <p class="text-xs text-amber-200 mt-1">RAG grounding</p>
@@ -122,7 +128,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-orange-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+          <div class="flow-node bg-orange-600 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">🤖</div>
             <p class="text-xs font-bold">Generation Agents</p>
             <p class="text-xs text-orange-200 mt-1">Opus + GPT-4o</p>
@@ -130,7 +136,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-pink-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+          <div class="flow-node bg-pink-600 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">✅</div>
             <p class="text-xs font-bold">Validation Agent</p>
             <p class="text-xs text-pink-200 mt-1">Haiku judge</p>
@@ -138,7 +144,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-indigo-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+          <div class="flow-node bg-indigo-600 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">🏗️</div>
             <p class="text-xs font-bold">Build Agent</p>
             <p class="text-xs text-indigo-200 mt-1">Jinja2 → HTML</p>
@@ -146,7 +152,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-green-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+          <div class="flow-node bg-green-600 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">🚀</div>
             <p class="text-xs font-bold">GitHub Pages</p>
             <p class="text-xs text-green-200 mt-1">Live dashboard</p>
@@ -165,7 +171,7 @@
       <p class="text-slate-500 text-sm mb-6">Checkpoint-based state machine with surgical re-run flags</p>
 
       <!-- Visual pipeline stages -->
-      <div class="overflow-x-auto pb-2 mb-6">
+      <div class="overflow-x-auto pb-4 mb-6">
         <div class="flex items-start gap-1 min-w-max">
 
           <!-- Stage 1 -->
@@ -501,17 +507,17 @@
 
       <!-- RAG flow diagram -->
       <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">RAG Flow — Per Section</p>
-      <div class="overflow-x-auto pb-2 mb-6">
+      <div class="overflow-x-auto pb-4 mb-6">
         <div class="flex items-stretch gap-1 min-w-max">
 
-          <div class="flow-node bg-slate-700 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+          <div class="flow-node bg-slate-700 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <p class="text-xs font-bold text-slate-300">Section Key</p>
             <p class="text-xs text-slate-400 mt-1 font-mono">e.g. "models"</p>
           </div>
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-teal-700 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+          <div class="flow-node bg-teal-700 text-white rounded-xl px-2 py-3 text-center w-28 flex flex-col justify-center">
             <p class="text-xs font-bold">research_section(key)</p>
             <p class="text-xs text-teal-200 mt-1">2 queries</p>
             <p class="text-xs text-teal-200">Firecrawl / Tavily</p>
@@ -519,7 +525,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-amber-600 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+          <div class="flow-node bg-amber-600 text-white rounded-xl px-2 py-3 text-center w-28 flex flex-col justify-center">
             <p class="text-xs font-bold">Context Block</p>
             <p class="text-xs text-amber-200 mt-1">Q&A + snippets</p>
             <p class="text-xs text-amber-200">≤600 chars each</p>
@@ -527,7 +533,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-slate-800 text-white rounded-xl px-4 py-4 text-center w-40 flex flex-col justify-center">
+          <div class="flow-node bg-slate-800 text-white rounded-xl px-2 py-3 text-center w-28 flex flex-col justify-center">
             <p class="text-xs font-bold text-indigo-300">Prompt Assembly</p>
             <p class="text-xs text-slate-400 mt-1 font-mono">context +</p>
             <p class="text-xs text-slate-400 font-mono">section.prompt +</p>
@@ -536,14 +542,14 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-orange-600 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+          <div class="flow-node bg-orange-600 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <p class="text-xs font-bold">Claude Opus 4.8</p>
             <p class="text-xs text-orange-200 mt-1">max_tokens=8192</p>
           </div>
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-green-700 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+          <div class="flow-node bg-green-700 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <p class="text-xs font-bold">JSON Output</p>
             <p class="text-xs text-green-200 mt-1">content/</p>
             <p class="text-xs text-green-200 font-mono">{key}.json</p>
@@ -554,7 +560,7 @@
 
       <!-- Retrieval fallback chain -->
       <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider mb-3">Retrieval Provider Fallback Chain</h3>
-      <div class="flex items-stretch gap-1 overflow-x-auto pb-2 mb-6">
+      <div class="flex items-stretch gap-1 overflow-x-auto pb-4 mb-6">
         <div class="flow-node bg-teal-700 text-white rounded-xl px-5 py-3 text-center min-w-28">
           <p class="text-xs font-black uppercase">Firecrawl</p>
           <p class="text-xs text-teal-200 mt-1">Primary</p>
@@ -1045,10 +1051,10 @@
 
       <!-- Deployment flow visual -->
       <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Deployment Flow</p>
-      <div class="overflow-x-auto pb-2 mb-6">
+      <div class="overflow-x-auto pb-4 mb-6">
         <div class="flex items-center gap-1 min-w-max">
 
-          <div class="flow-node bg-slate-700 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+          <div class="flow-node bg-slate-700 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">⏰</div>
             <p class="text-xs font-bold">Cron Trigger</p>
             <p class="text-xs text-slate-400 mt-1">GitHub Actions</p>
@@ -1056,7 +1062,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-indigo-700 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+          <div class="flow-node bg-indigo-700 text-white rounded-xl px-2 py-3 text-center w-28 flex flex-col justify-center">
             <div class="text-2xl mb-1">📦</div>
             <p class="text-xs font-bold">Install deps</p>
             <p class="text-xs text-indigo-200 mt-1">pip install -r requirements.txt</p>
@@ -1064,7 +1070,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-orange-600 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+          <div class="flow-node bg-orange-600 text-white rounded-xl px-2 py-3 text-center w-28 flex flex-col justify-center">
             <div class="text-2xl mb-1">🤖</div>
             <p class="text-xs font-bold">pipeline.py</p>
             <p class="text-xs text-orange-200 mt-1">research → generate → validate → build</p>
@@ -1072,7 +1078,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-teal-700 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+          <div class="flow-node bg-teal-700 text-white rounded-xl px-2 py-3 text-center w-28 flex flex-col justify-center">
             <div class="text-2xl mb-1">🔄</div>
             <p class="text-xs font-bold">git stash + rebase</p>
             <p class="text-xs text-teal-200 mt-1">sync concurrent pushes safely</p>
@@ -1080,7 +1086,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-slate-600 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+          <div class="flow-node bg-slate-600 text-white rounded-xl px-2 py-3 text-center w-28 flex flex-col justify-center">
             <div class="text-2xl mb-1">📝</div>
             <p class="text-xs font-bold">git commit + push</p>
             <p class="text-xs text-slate-300 mt-1">content/ docs/ validation_report.json</p>
@@ -1088,7 +1094,7 @@
 
           <div class="arrow-right flex items-center"></div>
 
-          <div class="flow-node bg-green-600 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+          <div class="flow-node bg-green-600 text-white rounded-xl px-2 py-3 text-center w-24 flex flex-col justify-center">
             <div class="text-2xl mb-1">🌍</div>
             <p class="text-xs font-bold">GitHub Pages</p>
             <p class="text-xs text-green-200 mt-1">auto-deploys docs/</p>
@@ -1133,7 +1139,7 @@
       </p>
 
       <!-- Three-step cycle -->
-      <div class="overflow-x-auto pb-2 mb-6">
+      <div class="overflow-x-auto pb-4 mb-6">
         <div class="flex items-stretch gap-2 min-w-max">
 
           <div class="flow-node bg-fuchsia-700 text-white rounded-xl px-5 py-5 w-44 flex flex-col justify-start">
