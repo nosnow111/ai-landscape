@@ -9,10 +9,29 @@
     body { font-family: 'Segoe UI', system-ui, sans-serif; }
     code, .mono { font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; }
     .card { border-left: 4px solid; }
-    .pipeline-diagram { white-space: pre; overflow-x: auto; }
     table { border-collapse: collapse; width: 100%; }
     th, td { text-align: left; }
-    .flow-arrow { color: #6366f1; font-weight: bold; }
+
+    /* ── flow diagram arrows ── */
+    .arrow-right::after {
+      content: '→';
+      font-size: 1.4rem;
+      color: #6366f1;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+    }
+    .arrow-down::after {
+      content: '↓';
+      font-size: 1.2rem;
+      color: #6366f1;
+      font-weight: 900;
+      text-align: center;
+    }
+    /* node pulse on hover */
+    .flow-node { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .flow-node:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -31,71 +50,201 @@
         Spec-driven generation, RAG-grounded content, dual-model cross-validation, and
         checkpoint-based orchestration — served free on GitHub Pages.
       </p>
+      <!-- TOC pills -->
+      <div class="flex flex-wrap gap-2 mt-6">
+        <a href="#overview"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">1 Overview</a>
+        <a href="#pipeline"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">2 Pipeline</a>
+        <a href="#agents"        class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">3 Agents</a>
+        <a href="#spec"          class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">4 Spec-Driven</a>
+        <a href="#rag"           class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">5 RAG</a>
+        <a href="#crossval"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">6 Cross-Validation</a>
+        <a href="#fallback"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">7 Fallbacks</a>
+        <a href="#parallel"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">8 Parallel</a>
+        <a href="#reliability"   class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">9 Reliability</a>
+        <a href="#schedule"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">10 Schedule</a>
+        <a href="#deployment"    class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">11 Deployment</a>
+      </div>
     </div>
   </header>
 
   <main class="max-w-5xl mx-auto px-6 py-12 space-y-10">
 
     <!-- ── 1. SYSTEM OVERVIEW ───────────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-indigo-500 p-8">
+    <section id="overview" class="bg-white rounded-2xl shadow-sm card border-indigo-500 p-8">
       <h2 class="text-xl font-bold text-indigo-700 mb-1 flex items-center gap-2">
         <span class="bg-indigo-100 text-indigo-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">1</span>
         System Overview
       </h2>
-      <p class="text-slate-500 text-sm mb-5">What this system is and what problem it solves</p>
+      <p class="text-slate-500 text-sm mb-6">What this system is and what problem it solves</p>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
-          <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">Problem</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+          <p class="text-xs font-bold text-red-600 uppercase tracking-wider mb-1">Problem</p>
           <p class="text-sm text-slate-600">The AI ecosystem changes faster than any human can manually track. Tool rankings, model pricing, and emerging trends become stale within days.</p>
         </div>
-        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+        <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-200">
           <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">Solution</p>
           <p class="text-sm text-slate-600">An automated multi-agent pipeline that researches, generates, validates, and publishes structured AI ecosystem intelligence on a recurring schedule.</p>
         </div>
-        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
-          <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">Output</p>
+        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+          <p class="text-xs font-bold text-green-600 uppercase tracking-wider mb-1">Output</p>
           <p class="text-sm text-slate-600">18-section static dashboard (GitHub Pages) with ranked tools, model comparisons, pricing tables, and daily news — zero ops overhead.</p>
         </div>
       </div>
 
-      <div class="bg-slate-900 rounded-xl p-5 text-green-400 mono text-sm leading-relaxed">
-        <p class="text-slate-500 text-xs mb-3"># High-level data flow</p>
-        <p>Web Sources → <span class="text-yellow-300">Retrieval Agents</span> → Context Blocks</p>
-        <p>              → <span class="text-cyan-300">Generation Agents</span> (Opus 4.8 + GPT-4o) → Structured JSON</p>
-        <p>              → <span class="text-pink-300">Validation Agent</span> (Haiku judge) → Verified Artifacts</p>
-        <p>              → <span class="text-green-300">Build Agent</span> (Jinja2) → Static HTML</p>
-        <p>              → <span class="text-indigo-300">GitHub Actions</span> → GitHub Pages (live)</p>
+      <!-- End-to-end data flow visual -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">End-to-End Data Flow</p>
+      <div class="overflow-x-auto pb-2">
+        <div class="flex items-stretch gap-1 min-w-max">
+
+          <div class="flow-node bg-slate-700 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+            <div class="text-2xl mb-1">🌐</div>
+            <p class="text-xs font-bold">Web Sources</p>
+            <p class="text-xs text-slate-400 mt-1">News, docs, surveys</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-teal-700 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+            <div class="text-2xl mb-1">🔍</div>
+            <p class="text-xs font-bold">Retrieval Agents</p>
+            <p class="text-xs text-teal-200 mt-1">research.py ×18</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-amber-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+            <div class="text-2xl mb-1">📄</div>
+            <p class="text-xs font-bold">Context Blocks</p>
+            <p class="text-xs text-amber-200 mt-1">RAG grounding</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-orange-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+            <div class="text-2xl mb-1">🤖</div>
+            <p class="text-xs font-bold">Generation Agents</p>
+            <p class="text-xs text-orange-200 mt-1">Opus + GPT-4o</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-pink-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+            <div class="text-2xl mb-1">✅</div>
+            <p class="text-xs font-bold">Validation Agent</p>
+            <p class="text-xs text-pink-200 mt-1">Haiku judge</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-indigo-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+            <div class="text-2xl mb-1">🏗️</div>
+            <p class="text-xs font-bold">Build Agent</p>
+            <p class="text-xs text-indigo-200 mt-1">Jinja2 → HTML</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-green-600 text-white rounded-xl px-4 py-4 text-center w-28 flex flex-col justify-center">
+            <div class="text-2xl mb-1">🚀</div>
+            <p class="text-xs font-bold">GitHub Pages</p>
+            <p class="text-xs text-green-200 mt-1">Live dashboard</p>
+          </div>
+
+        </div>
       </div>
     </section>
 
     <!-- ── 2. PIPELINE ARCHITECTURE ─────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-violet-500 p-8">
+    <section id="pipeline" class="bg-white rounded-2xl shadow-sm card border-violet-500 p-8">
       <h2 class="text-xl font-bold text-violet-700 mb-1 flex items-center gap-2">
         <span class="bg-violet-100 text-violet-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">2</span>
         Pipeline Architecture — 4-Stage Orchestration
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Checkpoint-based state machine with surgical re-run flags</p>
+      <p class="text-slate-500 text-sm mb-6">Checkpoint-based state machine with surgical re-run flags</p>
 
-      <div class="bg-slate-900 rounded-xl p-5 mono text-sm mb-6 overflow-x-auto">
-        <pre class="text-slate-300 leading-7">
-┌─────────────────────────────────────────────────────────────────┐
-│                    <span class="text-yellow-300">pipeline.py  (Orchestrator)</span>                    │
-├──────────────┬──────────────┬──────────────┬────────────────────┤
-│  <span class="text-cyan-300">STAGE 1</span>     │  <span class="text-green-300">STAGE 2</span>     │  <span class="text-pink-300">STAGE 3</span>     │  <span class="text-indigo-300">STAGE 4</span>         │
-│  RESEARCH    │  GENERATE    │  VALIDATE    │  BUILD             │
-│              │              │              │                    │
-│  18 sections │  18 × 2      │  URL judge   │  Jinja2 render     │
-│  in parallel │  agents      │  via Haiku   │  → docs/*.html     │
-│  (web scrape)│  (parallel)  │              │                    │
-│              │              │              │                    │
-│  checkpoints/research.json  │  checkpoints/validate.json        │
-│              checkpoints/generate.json     checkpoints/build.json│
-└──────────────┴──────────────┴──────────────┴────────────────────┘</pre>
+      <!-- Visual pipeline stages -->
+      <div class="overflow-x-auto pb-2 mb-6">
+        <div class="flex items-start gap-1 min-w-max">
+
+          <!-- Stage 1 -->
+          <div class="flex flex-col items-center">
+            <div class="flow-node bg-teal-600 text-white rounded-xl p-4 w-40 text-center">
+              <p class="text-xs font-black text-teal-200 uppercase tracking-widest mb-1">Stage 1</p>
+              <p class="text-lg font-black">RESEARCH</p>
+              <div class="border-t border-teal-500 my-2"></div>
+              <p class="text-xs text-teal-100">18 sections</p>
+              <p class="text-xs text-teal-100">queried in parallel</p>
+              <p class="text-xs text-teal-100">Firecrawl → Tavily → Serper</p>
+            </div>
+            <div class="mt-2 bg-teal-100 border border-teal-300 rounded-lg px-3 py-1 text-center">
+              <p class="text-xs text-teal-700 font-mono">checkpoints/research.json</p>
+            </div>
+          </div>
+
+          <div class="arrow-right flex items-center pt-6"></div>
+
+          <!-- Stage 2 -->
+          <div class="flex flex-col items-center">
+            <div class="flow-node bg-orange-600 text-white rounded-xl p-4 w-40 text-center">
+              <p class="text-xs font-black text-orange-200 uppercase tracking-widest mb-1">Stage 2</p>
+              <p class="text-lg font-black">GENERATE</p>
+              <div class="border-t border-orange-500 my-2"></div>
+              <p class="text-xs text-orange-100">18 × 2 agents</p>
+              <p class="text-xs text-orange-100">Opus 4.8 + GPT-4o</p>
+              <p class="text-xs text-orange-100">parallel per section</p>
+            </div>
+            <div class="mt-2 bg-orange-100 border border-orange-300 rounded-lg px-3 py-1 text-center">
+              <p class="text-xs text-orange-700 font-mono">checkpoints/generate.json</p>
+            </div>
+          </div>
+
+          <div class="arrow-right flex items-center pt-6"></div>
+
+          <!-- Stage 3 -->
+          <div class="flex flex-col items-center">
+            <div class="flow-node bg-pink-600 text-white rounded-xl p-4 w-40 text-center">
+              <p class="text-xs font-black text-pink-200 uppercase tracking-widest mb-1">Stage 3</p>
+              <p class="text-lg font-black">VALIDATE</p>
+              <div class="border-t border-pink-500 my-2"></div>
+              <p class="text-xs text-pink-100">URL relevance judge</p>
+              <p class="text-xs text-pink-100">Claude Haiku 4.5</p>
+              <p class="text-xs text-pink-100">auto-fix 404s</p>
+            </div>
+            <div class="mt-2 bg-pink-100 border border-pink-300 rounded-lg px-3 py-1 text-center">
+              <p class="text-xs text-pink-700 font-mono">checkpoints/validate.json</p>
+            </div>
+          </div>
+
+          <div class="arrow-right flex items-center pt-6"></div>
+
+          <!-- Stage 4 -->
+          <div class="flex flex-col items-center">
+            <div class="flow-node bg-indigo-600 text-white rounded-xl p-4 w-40 text-center">
+              <p class="text-xs font-black text-indigo-200 uppercase tracking-widest mb-1">Stage 4</p>
+              <p class="text-lg font-black">BUILD</p>
+              <div class="border-t border-indigo-500 my-2"></div>
+              <p class="text-xs text-indigo-100">Jinja2 rendering</p>
+              <p class="text-xs text-indigo-100">content/*.json</p>
+              <p class="text-xs text-indigo-100">→ docs/*.html</p>
+            </div>
+            <div class="mt-2 bg-indigo-100 border border-indigo-300 rounded-lg px-3 py-1 text-center">
+              <p class="text-xs text-indigo-700 font-mono">checkpoints/build.json</p>
+            </div>
+          </div>
+
+        </div>
       </div>
 
+      <!-- Idempotency note -->
+      <div class="bg-violet-50 border border-violet-200 rounded-xl p-4 text-sm mb-6">
+        <span class="font-semibold text-violet-800">Idempotency guarantee:</span>
+        <span class="text-violet-700"> Each stage writes a checkpoint JSON on completion. A subsequent run skips completed stages unless forced — making the pipeline safe to re-invoke after partial failures without duplicating API calls.</span>
+      </div>
+
+      <!-- CLI flags -->
       <h3 class="font-semibold text-slate-700 mb-3 text-sm uppercase tracking-wider">CLI Control Flags</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
           <code class="text-indigo-700 text-sm font-bold">--force</code>
           <p class="text-xs text-slate-500 mt-1">Ignore all checkpoints. Full re-run from scratch.</p>
@@ -110,25 +259,111 @@
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded-lg p-3">
           <code class="text-indigo-700 text-sm font-bold">--sections=ai_news</code>
-          <p class="text-xs text-slate-500 mt-1">Scope research + generate to named sections only. Validate skipped automatically.</p>
+          <p class="text-xs text-slate-500 mt-1">Scope research + generate to named sections. Validate skipped automatically.</p>
         </div>
-      </div>
-
-      <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-sm">
-        <span class="font-semibold text-indigo-800">Idempotency guarantee:</span>
-        <span class="text-indigo-700"> Each stage writes a checkpoint JSON on completion. A subsequent run will skip completed stages unless forced — making the pipeline safe to re-invoke after partial failures.</span>
       </div>
     </section>
 
     <!-- ── 3. AGENT ARCHITECTURE ─────────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-cyan-500 p-8">
+    <section id="agents" class="bg-white rounded-2xl shadow-sm card border-cyan-500 p-8">
       <h2 class="text-xl font-bold text-cyan-700 mb-1 flex items-center gap-2">
         <span class="bg-cyan-100 text-cyan-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">3</span>
         Agent Architecture
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Six specialized agents with distinct roles, models, and scopes</p>
+      <p class="text-slate-500 text-sm mb-6">Six specialized agents with distinct roles, models, and scopes</p>
 
-      <div class="overflow-x-auto rounded-xl border border-slate-200 mb-6">
+      <!-- Agent topology diagram -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Agent Topology</p>
+      <div class="bg-slate-900 rounded-2xl p-6 mb-6">
+        <!-- Orchestrator -->
+        <div class="flex justify-center mb-4">
+          <div class="flow-node bg-indigo-600 text-white rounded-xl px-8 py-3 text-center">
+            <p class="text-xs text-indigo-300 uppercase tracking-widest font-bold">Orchestrator</p>
+            <p class="text-sm font-bold">pipeline.py</p>
+            <p class="text-xs text-indigo-300">Stage routing · Checkpoints · CLI</p>
+          </div>
+        </div>
+
+        <!-- Arrow down from orchestrator -->
+        <div class="flex justify-center mb-4">
+          <div class="text-indigo-400 text-xl font-black">↓ dispatches 18 section keys</div>
+        </div>
+
+        <!-- Outer pool label -->
+        <div class="border border-slate-600 rounded-xl p-4 mb-4">
+          <p class="text-xs text-slate-400 font-mono mb-3">ThreadPoolExecutor(max_workers=18) — Stage 2</p>
+          <!-- 3 representative section workers -->
+          <div class="grid grid-cols-3 gap-3">
+            <div class="bg-slate-800 rounded-xl p-3">
+              <p class="text-xs text-slate-400 text-center mb-2 font-mono">section: code_tools</p>
+              <div class="border border-slate-600 rounded-lg p-2 mb-2">
+                <p class="text-xs text-slate-400 font-mono text-center mb-1">ThreadPoolExecutor(2)</p>
+                <div class="flex gap-1">
+                  <div class="flex-1 bg-orange-700 text-white text-center rounded px-1 py-1.5">
+                    <p class="text-xs font-bold">Opus 4.8</p>
+                    <p class="text-xs text-orange-300">primary</p>
+                  </div>
+                  <div class="flex-1 bg-blue-700 text-white text-center rounded px-1 py-1.5">
+                    <p class="text-xs font-bold">GPT-4o</p>
+                    <p class="text-xs text-blue-300">critic</p>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-yellow-900 rounded px-2 py-1 text-center">
+                <p class="text-xs text-yellow-300 font-mono">annotate_agreement()</p>
+              </div>
+            </div>
+            <div class="bg-slate-800 rounded-xl p-3">
+              <p class="text-xs text-slate-400 text-center mb-2 font-mono">section: models</p>
+              <div class="border border-slate-600 rounded-lg p-2 mb-2">
+                <p class="text-xs text-slate-400 font-mono text-center mb-1">ThreadPoolExecutor(2)</p>
+                <div class="flex gap-1">
+                  <div class="flex-1 bg-orange-700 text-white text-center rounded px-1 py-1.5">
+                    <p class="text-xs font-bold">Opus 4.8</p>
+                    <p class="text-xs text-orange-300">primary</p>
+                  </div>
+                  <div class="flex-1 bg-blue-700 text-white text-center rounded px-1 py-1.5">
+                    <p class="text-xs font-bold">GPT-4o</p>
+                    <p class="text-xs text-blue-300">critic</p>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-yellow-900 rounded px-2 py-1 text-center">
+                <p class="text-xs text-yellow-300 font-mono">annotate_agreement()</p>
+              </div>
+            </div>
+            <div class="bg-slate-800 rounded-xl p-3">
+              <p class="text-xs text-slate-400 text-center mb-2 font-mono">× 16 more sections</p>
+              <div class="border border-dashed border-slate-600 rounded-lg p-2 mb-2 text-center">
+                <p class="text-xs text-slate-500">same pattern</p>
+                <p class="text-xs text-slate-500">per section</p>
+              </div>
+              <div class="bg-slate-700 rounded px-2 py-1 text-center">
+                <p class="text-xs text-slate-400 font-mono">as_completed() save</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validation agent -->
+        <div class="flex items-center gap-4 mt-2">
+          <div class="flex-1 border-t border-slate-600"></div>
+          <div class="text-slate-400 text-xs">Stage 3 →</div>
+          <div class="flow-node bg-pink-700 text-white rounded-xl px-6 py-2 text-center">
+            <p class="text-xs font-bold">Validation Agent</p>
+            <p class="text-xs text-pink-300">Haiku 4.5 · LLM-as-judge</p>
+          </div>
+          <div class="text-slate-400 text-xs">Stage 4 →</div>
+          <div class="flow-node bg-indigo-700 text-white rounded-xl px-6 py-2 text-center">
+            <p class="text-xs font-bold">Build Agent</p>
+            <p class="text-xs text-indigo-300">Jinja2 · no LLM</p>
+          </div>
+          <div class="flex-1 border-t border-slate-600"></div>
+        </div>
+      </div>
+
+      <!-- Agent table -->
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
         <table>
           <thead>
             <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
@@ -152,7 +387,7 @@
               <td class="px-4 py-3 text-slate-600">Web search per section, context assembly, provider fallback chain</td>
             </tr>
             <tr class="hover:bg-slate-50">
-              <td class="px-4 py-3 font-semibold text-green-700">Generation Agent</td>
+              <td class="px-4 py-3 font-semibold text-orange-700">Generation Agent</td>
               <td class="px-4 py-3"><code class="text-xs bg-slate-100 px-2 py-0.5 rounded">generator.py</code></td>
               <td class="px-4 py-3"><span class="text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded font-mono">claude-opus-4-8</span></td>
               <td class="px-4 py-3 text-slate-600">Primary content generation against section spec; outputs structured JSON</td>
@@ -178,57 +413,55 @@
           </tbody>
         </table>
       </div>
-
-      <div class="bg-slate-900 rounded-xl p-5 mono text-xs text-slate-300 leading-6">
-        <p class="text-slate-500 mb-2"># Agent coordination pattern for each ranked section</p>
-        <p><span class="text-yellow-300">Orchestrator</span> dispatches section key to <span class="text-cyan-300">ThreadPoolExecutor</span>(max_workers=18)</p>
-        <p>  └─ per section: <span class="text-cyan-300">ThreadPoolExecutor</span>(max_workers=2)</p>
-        <p>       ├─ <span class="text-green-300">GenerationAgent</span>(opus-4.8)  ← primary</p>
-        <p>       └─ <span class="text-blue-300">CriticAgent</span>(gpt-4o)        ← parallel cross-check</p>
-        <p>  └─ <span class="text-pink-300">annotate_agreement()</span> reconciles ranks → annotated JSON artifact</p>
-        <p>  └─ saved immediately via <span class="text-indigo-300">as_completed()</span> (no batch wait)</p>
-      </div>
     </section>
 
     <!-- ── 4. SPEC-DRIVEN GENERATION ────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-amber-500 p-8">
+    <section id="spec" class="bg-white rounded-2xl shadow-sm card border-amber-500 p-8">
       <h2 class="text-xl font-bold text-amber-700 mb-1 flex items-center gap-2">
         <span class="bg-amber-100 text-amber-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">4</span>
         Spec-Driven Content Generation
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Section prompt specs as typed contracts — the LLM is the implementation</p>
+      <p class="text-slate-500 text-sm mb-6">Section prompt specs as typed contracts — the LLM is the implementation</p>
 
-      <p class="text-sm text-slate-600 mb-4">
-        Each of the 18 content sections has a formal prompt specification defined in <code class="bg-slate-100 px-1.5 py-0.5 rounded text-indigo-700">generator.py:SECTIONS</code>.
-        These specs are structured contracts — analogous to function signatures in typed languages — that fully define expected behavior without prescribing internal reasoning steps.
-      </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2">Every spec defines</p>
-          <ul class="text-sm text-slate-600 space-y-1">
-            <li>• <strong>Ranking criteria</strong> — adoption signals (API volume, surveys, GitHub stars, enterprise deployment)</li>
-            <li>• <strong>Output schema</strong> — strict JSON structure with named, typed fields</li>
-            <li>• <strong>Domain constraints</strong> — what to include, exclude, or weight differently</li>
-            <li>• <strong>Injected components</strong> — reusable rules merged at generation time</li>
-          </ul>
-        </div>
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Reusable spec components</p>
-          <div class="space-y-2">
-            <div class="bg-white rounded p-2 border border-slate-200">
-              <code class="text-xs text-indigo-700 font-bold">_RANK_RULE</code>
-              <p class="text-xs text-slate-500 mt-0.5">10–15 smart cutoff: extend past 10 only when adoption clusters, stop at natural drop-off. Never pad.</p>
-            </div>
-            <div class="bg-white rounded p-2 border border-slate-200">
-              <code class="text-xs text-indigo-700 font-bold">_URL_RULE</code>
-              <p class="text-xs text-slate-500 mt-0.5">Official domain only. No comparison sites (g2.com, capterra.com). Omit item if URL unverifiable.</p>
-            </div>
+      <!-- Spec anatomy visual -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Spec Anatomy</p>
+      <div class="bg-slate-900 rounded-2xl p-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div class="bg-amber-900 border border-amber-700 rounded-xl p-3 text-center">
+            <p class="text-xs text-amber-400 font-bold uppercase mb-1">Ranking Criterion</p>
+            <p class="text-xs text-amber-200">Adoption signals: API volume, surveys, GitHub stars, enterprise deployment</p>
           </div>
+          <div class="bg-green-900 border border-green-700 rounded-xl p-3 text-center">
+            <p class="text-xs text-green-400 font-bold uppercase mb-1">Output Schema</p>
+            <p class="text-xs text-green-200">Strict JSON structure with named, typed fields — enforced via parse failure</p>
+          </div>
+          <div class="bg-blue-900 border border-blue-700 rounded-xl p-3 text-center">
+            <p class="text-xs text-blue-400 font-bold uppercase mb-1">Domain Constraints</p>
+            <p class="text-xs text-blue-200">What to include, exclude, or weight differently per section</p>
+          </div>
+          <div class="bg-purple-900 border border-purple-700 rounded-xl p-3 text-center">
+            <p class="text-xs text-purple-400 font-bold uppercase mb-1">Injected Components</p>
+            <p class="text-xs text-purple-200"><code class="text-purple-300">_RANK_RULE</code> + <code class="text-purple-300">_URL_RULE</code> merged at generation time</p>
+          </div>
+        </div>
+        <div class="flex justify-center mt-3 text-indigo-400 text-sm font-bold">↓ composed into prompt at runtime</div>
+        <div class="mt-3 bg-slate-800 rounded-xl p-3 text-center border border-indigo-700">
+          <p class="text-xs text-indigo-300 font-mono">RAG context block + section.prompt + _RANK_RULE + _URL_RULE → LLM(model) → JSON.parse()</p>
         </div>
       </div>
 
-      <div class="bg-slate-900 rounded-xl p-5 mono text-xs text-slate-300 leading-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <code class="text-xs text-indigo-700 font-bold">_RANK_RULE</code>
+          <p class="text-xs text-slate-500 mt-1">10–15 smart cutoff: extend past 10 only when adoption clusters tightly within ~25%. Stop at the first significant drop-off. Never pad to fill 15.</p>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <code class="text-xs text-indigo-700 font-bold">_URL_RULE</code>
+          <p class="text-xs text-slate-500 mt-1">Official domain only. No comparison sites (g2.com, capterra.com). If the official URL cannot be identified from research data, omit the item entirely.</p>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 rounded-xl p-5 font-mono text-xs text-slate-300 leading-6">
         <p class="text-slate-500 mb-2"># Simplified spec anatomy (generator.py:SECTIONS)</p>
         <p><span class="text-yellow-300">SECTIONS</span> = {</p>
         <p>  <span class="text-green-300">"ai_assistants"</span>: {</p>
@@ -245,46 +478,103 @@
     </section>
 
     <!-- ── 5. RAG ────────────────────────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-teal-500 p-8">
+    <section id="rag" class="bg-white rounded-2xl shadow-sm card border-teal-500 p-8">
       <h2 class="text-xl font-bold text-teal-700 mb-1 flex items-center gap-2">
         <span class="bg-teal-100 text-teal-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">5</span>
         Retrieval-Augmented Generation (RAG)
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Live web grounding overcomes model training cutoffs</p>
+      <p class="text-slate-500 text-sm mb-6">Live web grounding overcomes model training cutoffs (Claude cutoff: Aug 2025)</p>
 
-      <div class="flex flex-col md:flex-row gap-4 mb-6">
+      <!-- Without vs With RAG -->
+      <div class="flex flex-col md:flex-row gap-4 mb-8">
         <div class="flex-1 bg-red-50 border border-red-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-red-600 uppercase tracking-wider mb-1">Without RAG</p>
-          <p class="text-sm text-slate-600">Claude's training cutoff is August 2025. Static knowledge means stale tool rankings, outdated pricing, and no awareness of new entrants.</p>
+          <p class="text-xs font-bold text-red-600 uppercase tracking-wider mb-2">Without RAG</p>
+          <p class="text-sm text-slate-600">Static knowledge means stale tool rankings, outdated pricing, and no awareness of products released after August 2025.</p>
         </div>
-        <div class="flex items-center justify-center text-2xl text-slate-400">→</div>
+        <div class="flex items-center justify-center text-2xl text-indigo-400 font-black">→</div>
         <div class="flex-1 bg-teal-50 border border-teal-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-teal-600 uppercase tracking-wider mb-1">With RAG</p>
-          <p class="text-sm text-slate-600">Stage 1 runs before every generation. Live web context is injected into every prompt as <code class="bg-white px-1 rounded text-xs">## Live research data (fetched today)</code>.</p>
+          <p class="text-xs font-bold text-teal-600 uppercase tracking-wider mb-2">With RAG</p>
+          <p class="text-sm text-slate-600">Stage 1 runs before every generation. Live web context is injected as <code class="bg-white px-1 rounded text-xs">## Live research data (fetched today)</code> into every prompt.</p>
         </div>
       </div>
 
+      <!-- RAG flow diagram -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">RAG Flow — Per Section</p>
+      <div class="overflow-x-auto pb-2 mb-6">
+        <div class="flex items-stretch gap-1 min-w-max">
+
+          <div class="flow-node bg-slate-700 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+            <p class="text-xs font-bold text-slate-300">Section Key</p>
+            <p class="text-xs text-slate-400 mt-1 font-mono">e.g. "models"</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-teal-700 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+            <p class="text-xs font-bold">research_section(key)</p>
+            <p class="text-xs text-teal-200 mt-1">2 queries</p>
+            <p class="text-xs text-teal-200">Firecrawl / Tavily</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-amber-600 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+            <p class="text-xs font-bold">Context Block</p>
+            <p class="text-xs text-amber-200 mt-1">Q&A + snippets</p>
+            <p class="text-xs text-amber-200">≤600 chars each</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-slate-800 text-white rounded-xl px-4 py-4 text-center w-40 flex flex-col justify-center">
+            <p class="text-xs font-bold text-indigo-300">Prompt Assembly</p>
+            <p class="text-xs text-slate-400 mt-1 font-mono">context +</p>
+            <p class="text-xs text-slate-400 font-mono">section.prompt +</p>
+            <p class="text-xs text-slate-400 font-mono">_RANK_RULE</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-orange-600 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+            <p class="text-xs font-bold">Claude Opus 4.8</p>
+            <p class="text-xs text-orange-200 mt-1">max_tokens=8192</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-green-700 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+            <p class="text-xs font-bold">JSON Output</p>
+            <p class="text-xs text-green-200 mt-1">content/</p>
+            <p class="text-xs text-green-200 font-mono">{key}.json</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Retrieval fallback chain -->
       <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider mb-3">Retrieval Provider Fallback Chain</h3>
-      <div class="flex items-stretch gap-2 mb-6 overflow-x-auto pb-2">
-        <div class="bg-teal-700 text-white rounded-xl px-4 py-3 text-center min-w-28">
+      <div class="flex items-stretch gap-1 overflow-x-auto pb-2 mb-6">
+        <div class="flow-node bg-teal-700 text-white rounded-xl px-5 py-3 text-center min-w-28">
           <p class="text-xs font-black uppercase">Firecrawl</p>
           <p class="text-xs text-teal-200 mt-1">Primary</p>
           <p class="text-xs text-teal-300">AI-optimized</p>
+          <p class="text-xs text-teal-300">1,000/mo free</p>
         </div>
         <div class="flex items-center text-slate-400 font-bold text-lg">→</div>
-        <div class="bg-teal-600 text-white rounded-xl px-4 py-3 text-center min-w-28">
+        <div class="flow-node bg-teal-600 text-white rounded-xl px-5 py-3 text-center min-w-28">
           <p class="text-xs font-black uppercase">Tavily</p>
           <p class="text-xs text-teal-200 mt-1">Fallback 1</p>
-          <p class="text-xs text-teal-300">News mode</p>
+          <p class="text-xs text-teal-300">News mode ✓</p>
+          <p class="text-xs text-teal-300">1,000/mo free</p>
         </div>
         <div class="flex items-center text-slate-400 font-bold text-lg">→</div>
-        <div class="bg-teal-500 text-white rounded-xl px-4 py-3 text-center min-w-28">
+        <div class="flow-node bg-teal-500 text-white rounded-xl px-5 py-3 text-center min-w-28">
           <p class="text-xs font-black uppercase">Serper</p>
           <p class="text-xs text-teal-100 mt-1">Fallback 2</p>
           <p class="text-xs text-teal-100">Google results</p>
         </div>
         <div class="flex items-center text-slate-400 font-bold text-lg">→</div>
-        <div class="bg-slate-200 text-slate-600 rounded-xl px-4 py-3 text-center min-w-28">
+        <div class="flow-node bg-slate-300 text-slate-600 rounded-xl px-5 py-3 text-center min-w-28">
           <p class="text-xs font-black uppercase">Training Data</p>
           <p class="text-xs text-slate-500 mt-1">Last resort</p>
           <p class="text-xs text-slate-400">Aug 2025 cutoff</p>
@@ -296,109 +586,176 @@
         <ul class="text-slate-600 space-y-1 text-xs">
           <li>• Skips Firecrawl and Serper (no recency filter) — Tavily-only with <code class="bg-white px-1 rounded">topic="news"</code></li>
           <li>• <code class="bg-white px-1 rounded">days=14</code>, <code class="bg-white px-1 rounded">max_results=10</code>, <code class="bg-white px-1 rounded">include_domains</code> restricted to ~25 Tier-1 publications (Reuters, Bloomberg, WSJ, etc.)</li>
-          <li>• 6 queries: 4 standard news, 1 vendor+outlet 30-day window, 1 direct vendor blogs — prevents vendor announcements being crowded out by market news</li>
+          <li>• 6 queries: 4 standard news + 1 vendor+outlet 30-day window + 1 direct vendor blogs — prevents vendor announcements being crowded out by market news</li>
         </ul>
       </div>
     </section>
 
     <!-- ── 6. MULTI-AGENT CROSS-VALIDATION ───────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-blue-500 p-8">
+    <section id="crossval" class="bg-white rounded-2xl shadow-sm card border-blue-500 p-8">
       <h2 class="text-xl font-bold text-blue-700 mb-1 flex items-center gap-2">
         <span class="bg-blue-100 text-blue-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">6</span>
         Multi-Agent Cross-Validation Pattern
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Primary + Critic with agreement annotation — disagreements are meaningful signals</p>
+      <p class="text-slate-500 text-sm mb-6">Primary + Critic with agreement annotation — disagreements are meaningful signals</p>
 
-      <div class="bg-slate-900 rounded-xl p-5 mono text-xs text-slate-300 leading-7 mb-6">
-        <p class="text-slate-500 mb-2"># Cross-validation flow for ranked sections</p>
-        <p><span class="text-green-300">GenerationAgent</span>(opus-4.8)  ──────────────────────┐</p>
-        <p>  receives: spec + RAG context                        │</p>
-        <p>  outputs: ranked JSON {tools: [{rank:1, name:...}]}  │</p>
-        <p>                                                       ▼</p>
-        <p><span class="text-blue-300">CriticAgent</span>(gpt-4o)  ──────────────────► <span class="text-yellow-300">annotate_agreement()</span></p>
-        <p>  receives: same spec + same RAG context              │</p>
-        <p>  outputs: independent ranked JSON                    │</p>
-        <p>                                                       ▼</p>
-        <p>                                          per-item annotation:</p>
-        <p>                                          <span class="text-green-400">strong</span>   = exact rank match</p>
-        <p>                                          <span class="text-yellow-400">minor</span>    = ≤2 positions apart</p>
-        <p>                                          <span class="text-red-400">disagree</span> = 3+ positions apart</p>
-        <p>                                          <span class="text-slate-400">excluded</span> = critic omitted item</p>
+      <!-- Cross-validation visual diagram -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Cross-Validation Flow</p>
+      <div class="bg-slate-900 rounded-2xl p-6 mb-6">
+
+        <!-- Input -->
+        <div class="flex justify-center mb-4">
+          <div class="bg-amber-700 text-white rounded-xl px-8 py-3 text-center">
+            <p class="text-xs text-amber-300 font-bold uppercase">Shared Input</p>
+            <p class="text-sm font-bold">Section Spec + RAG Context</p>
+          </div>
+        </div>
+
+        <!-- Fork arrow -->
+        <div class="flex justify-center mb-3">
+          <div class="text-slate-400 text-sm">↙ parallel dispatch ↘</div>
+        </div>
+
+        <!-- Two parallel agents -->
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div class="bg-orange-900 border border-orange-700 rounded-xl p-4 text-center">
+            <p class="text-xs text-orange-400 font-bold uppercase tracking-wider mb-2">Generation Agent (Primary)</p>
+            <div class="bg-orange-700 rounded-lg px-3 py-2 mb-3">
+              <p class="text-sm font-bold text-white font-mono">claude-opus-4-8</p>
+            </div>
+            <p class="text-xs text-orange-200">outputs: ranked JSON</p>
+            <p class="text-xs text-orange-300 font-mono mt-1">{tools: [{rank:1, name:...}]}</p>
+          </div>
+          <div class="bg-blue-900 border border-blue-700 rounded-xl p-4 text-center">
+            <p class="text-xs text-blue-400 font-bold uppercase tracking-wider mb-2">Critic Agent (Independent)</p>
+            <div class="bg-blue-700 rounded-lg px-3 py-2 mb-3">
+              <p class="text-sm font-bold text-white font-mono">gpt-4o</p>
+            </div>
+            <p class="text-xs text-blue-200">outputs: independent ranked JSON</p>
+            <p class="text-xs text-blue-300 font-mono mt-1">{tools: [{rank:1, name:...}]}</p>
+          </div>
+        </div>
+
+        <!-- Merge arrow -->
+        <div class="flex justify-center mb-3">
+          <div class="text-slate-400 text-sm">↘ reconcile ↙</div>
+        </div>
+
+        <!-- Reconciliation -->
+        <div class="bg-yellow-900 border border-yellow-700 rounded-xl p-4 mb-4">
+          <p class="text-xs text-yellow-400 font-bold uppercase tracking-wider text-center mb-3">annotate_agreement(primary, critic)</p>
+          <div class="grid grid-cols-4 gap-2">
+            <div class="bg-green-800 rounded-lg p-2 text-center">
+              <p class="text-green-300 text-lg font-black">✅</p>
+              <p class="text-xs text-green-300 font-bold">strong</p>
+              <p class="text-xs text-green-400">exact rank match</p>
+            </div>
+            <div class="bg-yellow-800 rounded-lg p-2 text-center">
+              <p class="text-yellow-300 text-lg font-black">🟡</p>
+              <p class="text-xs text-yellow-300 font-bold">minor</p>
+              <p class="text-xs text-yellow-400">≤2 positions apart</p>
+            </div>
+            <div class="bg-red-900 rounded-lg p-2 text-center">
+              <p class="text-red-300 text-lg font-black">🔴</p>
+              <p class="text-xs text-red-300 font-bold">disagree</p>
+              <p class="text-xs text-red-400">3+ positions apart</p>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-2 text-center">
+              <p class="text-slate-300 text-lg font-black">⚪</p>
+              <p class="text-xs text-slate-300 font-bold">excluded</p>
+              <p class="text-xs text-slate-400">critic omitted item</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output -->
+        <div class="flex justify-center">
+          <div class="bg-green-800 border border-green-600 rounded-xl px-8 py-3 text-center">
+            <p class="text-xs text-green-400 font-bold uppercase">Output</p>
+            <p class="text-sm font-bold text-white">Annotated JSON artifact → content/{key}.json</p>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm">
           <p class="font-semibold text-blue-800 mb-2">Why different companies?</p>
-          <p class="text-slate-600 text-xs">Claude and GPT-4o have different training data, different pretraining corpora, and different RLHF fine-tuning signals. Using two Anthropic models would produce correlated outputs. Cross-company disagreements represent genuinely conflicting signals — more useful to the end user.</p>
+          <p class="text-slate-600 text-xs">Claude and GPT-4o have different training corpora and RLHF signals. Using two Anthropic models produces correlated outputs. Cross-company disagreements represent genuinely conflicting evidence — more useful signal to the end user.</p>
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm">
           <p class="font-semibold text-slate-700 mb-2">Fallback promotion</p>
-          <p class="text-slate-600 text-xs">If Opus 4.8 fails (timeout, empty response, parse error), the Critic's output is automatically promoted to primary. For <code class="bg-white px-1 rounded">ai_news</code>, Sonnet 4.6 is the secondary fallback if Opus fails. All fallback events are logged.</p>
+          <p class="text-slate-600 text-xs">If Opus 4.8 fails (timeout, empty response, parse error), the Critic's output is automatically promoted to primary. For <code class="bg-white px-1 rounded">ai_news</code>, Sonnet 4.6 is the secondary fallback. All events are logged.</p>
         </div>
       </div>
     </section>
 
     <!-- ── 7. FALLBACK CHAINS ──────────────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-rose-500 p-8">
+    <section id="fallback" class="bg-white rounded-2xl shadow-sm card border-rose-500 p-8">
       <h2 class="text-xl font-bold text-rose-700 mb-1 flex items-center gap-2">
         <span class="bg-rose-100 text-rose-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">7</span>
         Fallback Chain Architecture
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Two independent degradation chains ensure the pipeline always produces output</p>
+      <p class="text-slate-500 text-sm mb-6">Two independent degradation chains ensure the pipeline always produces output</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Research chain</p>
           <div class="space-y-2">
             <div class="flex items-center gap-3 bg-teal-50 border border-teal-200 rounded-lg p-3">
-              <span class="w-6 h-6 bg-teal-600 text-white text-xs font-bold rounded-full flex items-center justify-center">1</span>
+              <span class="w-7 h-7 bg-teal-600 text-white text-xs font-bold rounded-full flex items-center justify-center shrink-0">1</span>
               <div>
                 <p class="text-sm font-semibold text-teal-800">Firecrawl</p>
-                <p class="text-xs text-slate-500">AI-optimized extraction, 1,000/mo free</p>
+                <p class="text-xs text-slate-500">AI-optimized extraction · 1,000/mo free</p>
               </div>
             </div>
+            <div class="flex justify-center text-slate-300 text-lg">↓ if unavailable / rate-limited</div>
             <div class="flex items-center gap-3 bg-teal-50 border border-teal-200 rounded-lg p-3">
-              <span class="w-6 h-6 bg-teal-500 text-white text-xs font-bold rounded-full flex items-center justify-center">2</span>
+              <span class="w-7 h-7 bg-teal-500 text-white text-xs font-bold rounded-full flex items-center justify-center shrink-0">2</span>
               <div>
                 <p class="text-sm font-semibold text-teal-700">Tavily</p>
-                <p class="text-xs text-slate-500">Best answer synthesis, news mode support</p>
+                <p class="text-xs text-slate-500">Best answer synthesis · news mode support</p>
               </div>
             </div>
+            <div class="flex justify-center text-slate-300 text-lg">↓</div>
             <div class="flex items-center gap-3 bg-teal-50 border border-teal-200 rounded-lg p-3">
-              <span class="w-6 h-6 bg-teal-400 text-white text-xs font-bold rounded-full flex items-center justify-center">3</span>
+              <span class="w-7 h-7 bg-teal-400 text-white text-xs font-bold rounded-full flex items-center justify-center shrink-0">3</span>
               <div>
                 <p class="text-sm font-semibold text-teal-700">Serper</p>
                 <p class="text-xs text-slate-500">Google results proxy</p>
               </div>
             </div>
-            <div class="flex items-center gap-3 bg-slate-100 border border-slate-200 rounded-lg p-3">
-              <span class="w-6 h-6 bg-slate-400 text-white text-xs font-bold rounded-full flex items-center justify-center">4</span>
+            <div class="flex justify-center text-slate-300 text-lg">↓</div>
+            <div class="flex items-center gap-3 bg-slate-100 border border-slate-300 rounded-lg p-3">
+              <span class="w-7 h-7 bg-slate-400 text-white text-xs font-bold rounded-full flex items-center justify-center shrink-0">4</span>
               <div>
                 <p class="text-sm font-semibold text-slate-600">Training data only</p>
-                <p class="text-xs text-slate-500">No live context — Aug 2025 cutoff</p>
+                <p class="text-xs text-slate-500">No live context · Aug 2025 cutoff</p>
               </div>
             </div>
           </div>
         </div>
+
         <div>
           <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Generation chain</p>
           <div class="space-y-2">
             <div class="flex items-center gap-3 bg-orange-50 border border-orange-200 rounded-lg p-3">
-              <span class="w-6 h-6 bg-orange-600 text-white text-xs font-bold rounded-full flex items-center justify-center">1</span>
+              <span class="w-7 h-7 bg-orange-600 text-white text-xs font-bold rounded-full flex items-center justify-center shrink-0">1</span>
               <div>
                 <p class="text-sm font-semibold text-orange-800">Claude Opus 4.8</p>
-                <p class="text-xs text-slate-500">Primary — all sections</p>
+                <p class="text-xs text-slate-500">Primary · all sections</p>
               </div>
             </div>
+            <div class="flex justify-center text-slate-300 text-lg">↓ if Opus fails (timeout / empty / parse error)</div>
             <div class="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <span class="w-6 h-6 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center">2</span>
+              <span class="w-7 h-7 bg-blue-600 text-white text-xs font-bold rounded-full flex items-center justify-center shrink-0">2</span>
               <div>
                 <p class="text-sm font-semibold text-blue-800">GPT-4o (promoted)</p>
-                <p class="text-xs text-slate-500">Critic promoted to primary if Opus fails</p>
+                <p class="text-xs text-slate-500">Critic promoted to primary for ranked sections</p>
               </div>
             </div>
+            <div class="flex justify-center text-slate-300 text-lg">↓ ai_news only</div>
             <div class="flex items-center gap-3 bg-purple-50 border border-purple-200 rounded-lg p-3">
-              <span class="w-6 h-6 bg-purple-500 text-white text-xs font-bold rounded-full flex items-center justify-center">3</span>
+              <span class="w-7 h-7 bg-purple-500 text-white text-xs font-bold rounded-full flex items-center justify-center shrink-0">3</span>
               <div>
                 <p class="text-sm font-semibold text-purple-800">Claude Sonnet 4.6</p>
                 <p class="text-xs text-slate-500">ai_news-only fallback if Opus fails</p>
@@ -410,25 +767,65 @@
     </section>
 
     <!-- ── 8. PARALLEL EXECUTION ─────────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-green-500 p-8">
+    <section id="parallel" class="bg-white rounded-2xl shadow-sm card border-green-500 p-8">
       <h2 class="text-xl font-bold text-green-700 mb-1 flex items-center gap-2">
         <span class="bg-green-100 text-green-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">8</span>
         Parallel Execution &amp; Coordination
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Nested concurrency — ~5× faster than sequential execution</p>
+      <p class="text-slate-500 text-sm mb-6">Nested concurrency — ~5× faster than sequential execution</p>
 
-      <div class="bg-slate-900 rounded-xl p-5 mono text-xs text-slate-300 leading-7 mb-6">
-        <p class="text-slate-500 mb-2"># Concurrency model</p>
-        <p><span class="text-green-300">Stage 1 — Research</span>: ThreadPoolExecutor(max_workers=6)</p>
-        <p>  18 sections × 2 queries each = ~36 search calls, all concurrent</p>
-        <p>  stagger=0.5s between sections to avoid rate limit bursts</p>
-        <p></p>
-        <p><span class="text-cyan-300">Stage 2 — Generate</span>: ThreadPoolExecutor(max_workers=18)  <span class="text-slate-500"># outer</span></p>
-        <p>  per section: ThreadPoolExecutor(max_workers=2)             <span class="text-slate-500"># inner</span></p>
-        <p>    ├─ Opus 4.8 call (primary)</p>
-        <p>    └─ GPT-4o call  (critic)   ← runs simultaneously</p>
-        <p>  results saved via as_completed() — no batch synchronization barrier</p>
-        <p>  _MAX_RETRIES=3 with exponential backoff per agent</p>
+      <!-- Concurrency diagram -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Concurrency Model</p>
+      <div class="bg-slate-900 rounded-2xl p-6 mb-6">
+
+        <!-- Stage 1 Research -->
+        <div class="mb-5">
+          <p class="text-xs text-teal-400 font-bold uppercase mb-2">Stage 1 — Research · ThreadPoolExecutor(max_workers=6)</p>
+          <div class="grid grid-cols-6 gap-1">
+            <div class="bg-teal-800 rounded px-2 py-2 text-center"><p class="text-xs text-teal-300 font-mono">code_tools</p></div>
+            <div class="bg-teal-800 rounded px-2 py-2 text-center"><p class="text-xs text-teal-300 font-mono">models</p></div>
+            <div class="bg-teal-800 rounded px-2 py-2 text-center"><p class="text-xs text-teal-300 font-mono">ai_assistants</p></div>
+            <div class="bg-teal-800 rounded px-2 py-2 text-center"><p class="text-xs text-teal-300 font-mono">image_gen</p></div>
+            <div class="bg-teal-800 rounded px-2 py-2 text-center"><p class="text-xs text-teal-300 font-mono">ai_news</p></div>
+            <div class="bg-teal-700 rounded px-2 py-2 text-center"><p class="text-xs text-teal-400 font-mono">+13 more</p></div>
+          </div>
+          <p class="text-xs text-slate-500 mt-2">18 sections × 2 queries = ~36 parallel search calls · 0.5s stagger to avoid rate limit bursts</p>
+        </div>
+
+        <!-- Stage 2 Generate -->
+        <div>
+          <p class="text-xs text-orange-400 font-bold uppercase mb-2">Stage 2 — Generate · ThreadPoolExecutor(max_workers=18) outer</p>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="bg-slate-800 border border-slate-600 rounded-xl p-3">
+              <p class="text-xs text-slate-400 font-mono text-center mb-2">section: code_tools</p>
+              <div class="bg-slate-700 rounded-lg p-2">
+                <p class="text-xs text-slate-400 font-mono text-center mb-1">inner pool (2 workers)</p>
+                <div class="flex gap-1 justify-center">
+                  <span class="bg-orange-600 text-white text-xs rounded px-2 py-1">Opus</span>
+                  <span class="bg-blue-600 text-white text-xs rounded px-2 py-1">GPT-4o</span>
+                </div>
+              </div>
+              <p class="text-xs text-green-400 font-mono text-center mt-2">→ as_completed() save</p>
+            </div>
+            <div class="bg-slate-800 border border-slate-600 rounded-xl p-3">
+              <p class="text-xs text-slate-400 font-mono text-center mb-2">section: models</p>
+              <div class="bg-slate-700 rounded-lg p-2">
+                <p class="text-xs text-slate-400 font-mono text-center mb-1">inner pool (2 workers)</p>
+                <div class="flex gap-1 justify-center">
+                  <span class="bg-orange-600 text-white text-xs rounded px-2 py-1">Opus</span>
+                  <span class="bg-blue-600 text-white text-xs rounded px-2 py-1">GPT-4o</span>
+                </div>
+              </div>
+              <p class="text-xs text-green-400 font-mono text-center mt-2">→ as_completed() save</p>
+            </div>
+            <div class="bg-slate-800 border border-dashed border-slate-600 rounded-xl p-3 flex flex-col items-center justify-center">
+              <p class="text-xs text-slate-500 text-center">× 16 more sections</p>
+              <p class="text-xs text-slate-600 text-center">all running simultaneously</p>
+              <p class="text-xs text-slate-600 text-center">_MAX_RETRIES=3</p>
+              <p class="text-xs text-slate-600 text-center">exponential backoff</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-3 gap-4">
@@ -436,8 +833,8 @@
           <p class="text-3xl font-black text-green-700">36</p>
           <p class="text-xs text-slate-500 mt-1">concurrent search calls (Stage 1)</p>
         </div>
-        <div class="text-center bg-cyan-50 border border-cyan-200 rounded-xl p-4">
-          <p class="text-3xl font-black text-cyan-700">36</p>
+        <div class="text-center bg-orange-50 border border-orange-200 rounded-xl p-4">
+          <p class="text-3xl font-black text-orange-700">36</p>
           <p class="text-xs text-slate-500 mt-1">concurrent LLM calls (Stage 2)</p>
         </div>
         <div class="text-center bg-indigo-50 border border-indigo-200 rounded-xl p-4">
@@ -448,48 +845,132 @@
     </section>
 
     <!-- ── 9. RELIABILITY ─────────────────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-slate-500 p-8">
+    <section id="reliability" class="bg-white rounded-2xl shadow-sm card border-slate-500 p-8">
       <h2 class="text-xl font-bold text-slate-700 mb-1 flex items-center gap-2">
         <span class="bg-slate-200 text-slate-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">9</span>
         Reliability Patterns
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Defense-in-depth: pipeline never hard-fails, content is always available</p>
+      <p class="text-slate-500 text-sm mb-6">Defense-in-depth: pipeline never hard-fails, content is always available</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Idempotent Pipeline</p>
-          <p class="text-xs text-slate-500">Checkpoint files prevent re-running completed stages on failure recovery. Safe to re-invoke at any point without duplicating work or corrupting state.</p>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">🔁</span>
+            <p class="text-xs font-bold text-slate-600 uppercase tracking-wider">Idempotent Pipeline</p>
+          </div>
+          <p class="text-xs text-slate-500">Checkpoint files prevent re-running completed stages on failure recovery. Safe to re-invoke at any point without duplicating API calls or corrupting state.</p>
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Partial Refresh</p>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">🎯</span>
+            <p class="text-xs font-bold text-slate-600 uppercase tracking-wider">Partial Refresh</p>
+          </div>
           <p class="text-xs text-slate-500"><code class="bg-white px-1 rounded">--sections=ai_news</code> scopes research + generate to named sections. Validate stage is automatically skipped — reduces daily news run to ~1 LLM call + 6 search queries.</p>
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">URL Override Registry</p>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">🗂️</span>
+            <p class="text-xs font-bold text-slate-600 uppercase tracking-wider">URL Override Registry</p>
+          </div>
           <p class="text-xs text-slate-500"><code class="bg-white px-1 rounded">url_overrides.json</code>: permanent fixes and false-positive skips applied every run. Auto-fixer only replaces truly broken (404) URLs — wrong-page judgments are reported, not auto-fixed.</p>
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Domain Whitelist</p>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">🔒</span>
+            <p class="text-xs font-bold text-slate-600 uppercase tracking-wider">Domain Whitelist</p>
+          </div>
           <p class="text-xs text-slate-500"><code class="bg-white px-1 rounded">include.json</code>: auto-fixer replacement candidates must come from trusted domains. Any unlisted domain is rejected — no blocklist maintenance required.</p>
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Zero-Overwrite Guard</p>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">🛡️</span>
+            <p class="text-xs font-bold text-slate-600 uppercase tracking-wider">Zero-Overwrite Guard</p>
+          </div>
           <p class="text-xs text-slate-500"><code class="bg-white px-1 rounded">ai_news.json</code> is never overwritten if generation returns 0 items. Existing content survives bad runs. Site remains usable even if news research fails.</p>
         </div>
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-          <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Content Persistence</p>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">💾</span>
+            <p class="text-xs font-bold text-slate-600 uppercase tracking-wider">Content Persistence</p>
+          </div>
           <p class="text-xs text-slate-500">All generated JSON is committed to the repo. GitHub Pages serves committed files — the site stays live even if Anthropic or OpenAI APIs go down indefinitely.</p>
         </div>
       </div>
     </section>
 
     <!-- ── 10. REFRESH SCHEDULE & COST ─────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-purple-500 p-8">
+    <section id="schedule" class="bg-white rounded-2xl shadow-sm card border-purple-500 p-8">
       <h2 class="text-xl font-bold text-purple-700 mb-1 flex items-center gap-2">
         <span class="bg-purple-100 text-purple-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">10</span>
         Refresh Schedule &amp; Cost Model
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Split-cadence strategy: daily news + monthly full refresh</p>
+      <p class="text-slate-500 text-sm mb-6">Split-cadence strategy: daily news + monthly full refresh</p>
+
+      <!-- Schedule visual timeline -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Monthly Schedule Visualization</p>
+      <div class="bg-slate-900 rounded-2xl p-5 mb-6">
+        <div class="flex items-center gap-1 mb-3">
+          <!-- Day labels -->
+          <div class="w-16 text-xs text-slate-500">Day</div>
+          <div class="flex-1 flex gap-0.5">
+            <div class="text-center text-xs text-slate-500 flex-1">1</div>
+            <div class="text-center text-xs text-slate-500 flex-1">5</div>
+            <div class="text-center text-xs text-slate-500 flex-1">10</div>
+            <div class="text-center text-xs text-slate-500 flex-1">15</div>
+            <div class="text-center text-xs text-slate-500 flex-1">20</div>
+            <div class="text-center text-xs text-slate-500 flex-1">25</div>
+            <div class="text-center text-xs text-slate-500 flex-1">30</div>
+          </div>
+        </div>
+        <!-- Full refresh row -->
+        <div class="flex items-center gap-1 mb-2">
+          <div class="w-16 text-xs text-orange-400 font-bold">Full</div>
+          <div class="flex-1 flex gap-0.5">
+            <div class="bg-orange-600 rounded h-6 flex-none w-4 flex items-center justify-center" title="Monthly full refresh"></div>
+            <div class="flex-1"></div>
+          </div>
+        </div>
+        <!-- News row -->
+        <div class="flex items-center gap-1">
+          <div class="w-16 text-xs text-blue-400 font-bold">News</div>
+          <div class="flex-1 flex gap-0.5">
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+            <div class="bg-blue-600 rounded h-4 w-2"></div>
+          </div>
+        </div>
+        <div class="flex gap-4 mt-3">
+          <div class="flex items-center gap-2"><div class="w-3 h-3 bg-orange-600 rounded"></div><p class="text-xs text-slate-400">Full refresh (all 18 sections · ~35 LLM calls)</p></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 bg-blue-600 rounded"></div><p class="text-xs text-slate-400">News refresh (ai_news only · 1 LLM call)</p></div>
+        </div>
+      </div>
 
       <div class="overflow-x-auto rounded-xl border border-slate-200 mb-6">
         <table>
@@ -517,7 +998,7 @@
               <td class="px-4 py-3 text-orange-700 font-semibold">~35 Opus + ~17 GPT-4o</td>
               <td class="px-4 py-3 text-slate-500 text-xs">~10–15 min</td>
             </tr>
-            <tr class="hover:bg-slate-50 bg-indigo-50">
+            <tr class="bg-indigo-50 hover:bg-indigo-100">
               <td class="px-4 py-3 font-mono text-xs">workflow_dispatch</td>
               <td class="px-4 py-3">Manual</td>
               <td class="px-4 py-3">Configurable via <code class="text-xs bg-white px-1 rounded">sections</code> input</td>
@@ -529,53 +1010,90 @@
       </div>
 
       <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider mb-3">Monthly Cost Comparison</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-        <div class="text-center bg-slate-100 rounded-xl p-3 border border-slate-200">
-          <p class="text-xs text-slate-500 mb-1">Weekly full (old)</p>
-          <p class="text-2xl font-black text-slate-600">~143</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="text-center bg-slate-100 rounded-xl p-4 border border-slate-200">
+          <p class="text-xs text-slate-500 mb-1">Weekly full (prior)</p>
+          <p class="text-3xl font-black text-slate-500">~143</p>
           <p class="text-xs text-slate-400">LLM calls/mo</p>
         </div>
-        <div class="text-center bg-green-50 rounded-xl p-3 border border-green-300">
-          <p class="text-xs text-green-600 mb-1 font-semibold">Monthly + daily (now)</p>
-          <p class="text-2xl font-black text-green-700">~63</p>
+        <div class="text-center bg-green-50 rounded-xl p-4 border border-green-300">
+          <p class="text-xs text-green-600 font-semibold mb-1">Monthly + daily (now)</p>
+          <p class="text-3xl font-black text-green-700">~63</p>
           <p class="text-xs text-green-500">LLM calls/mo</p>
         </div>
-        <div class="text-center bg-green-50 rounded-xl p-3 border border-green-200">
+        <div class="text-center bg-green-50 rounded-xl p-4 border border-green-200">
           <p class="text-xs text-slate-500 mb-1">Reduction</p>
-          <p class="text-2xl font-black text-green-700">−56%</p>
+          <p class="text-3xl font-black text-green-700">−56%</p>
           <p class="text-xs text-slate-400">LLM calls/mo</p>
         </div>
-        <div class="text-center bg-blue-50 rounded-xl p-3 border border-blue-200">
+        <div class="text-center bg-blue-50 rounded-xl p-4 border border-blue-200">
           <p class="text-xs text-slate-500 mb-1">Search queries</p>
-          <p class="text-2xl font-black text-blue-700">~214</p>
+          <p class="text-3xl font-black text-blue-700">~214</p>
           <p class="text-xs text-slate-400">within free tier (1,000)</p>
         </div>
       </div>
     </section>
 
     <!-- ── 11. DEPLOYMENT ─────────────────────────────────────────── -->
-    <section class="bg-white rounded-2xl shadow-sm card border-indigo-400 p-8">
+    <section id="deployment" class="bg-white rounded-2xl shadow-sm card border-indigo-400 p-8">
       <h2 class="text-xl font-bold text-indigo-700 mb-1 flex items-center gap-2">
         <span class="bg-indigo-100 text-indigo-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">11</span>
         Deployment Architecture
       </h2>
-      <p class="text-slate-500 text-sm mb-5">Zero-ops static hosting with automated CI/CD via GitHub Actions</p>
+      <p class="text-slate-500 text-sm mb-6">Zero-ops static hosting with automated CI/CD via GitHub Actions</p>
 
-      <div class="bg-slate-900 rounded-xl p-5 mono text-xs text-slate-300 leading-7 mb-6">
-        <p class="text-slate-500 mb-2"># GitHub Actions workflow (refresh.yml)</p>
-        <p><span class="text-yellow-300">on:</span> schedule (cron) | workflow_dispatch</p>
-        <p></p>
-        <p><span class="text-green-300">steps:</span></p>
-        <p>  1. checkout@v4 + setup-python@v5 + pip install</p>
-        <p>  2. <span class="text-cyan-300">python pipeline.py</span> [--force | --sections=ai_news --force]</p>
-        <p>  3. git stash                 <span class="text-slate-500"># protect generated files</span></p>
-        <p>  4. git pull --rebase         <span class="text-slate-500"># sync with any concurrent pushes</span></p>
-        <p>  5. git stash pop</p>
-        <p>  6. python build.py           <span class="text-slate-500"># rebuild with latest template</span></p>
-        <p>  7. git add content/ docs/ validation_report.json</p>
-        <p>  8. git commit + git push     <span class="text-slate-500"># content committed to main</span></p>
-        <p></p>
-        <p><span class="text-indigo-300">GitHub Pages</span> serves docs/ from main → live site auto-updated</p>
+      <!-- Deployment flow visual -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Deployment Flow</p>
+      <div class="overflow-x-auto pb-2 mb-6">
+        <div class="flex items-center gap-1 min-w-max">
+
+          <div class="flow-node bg-slate-700 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+            <div class="text-2xl mb-1">⏰</div>
+            <p class="text-xs font-bold">Cron Trigger</p>
+            <p class="text-xs text-slate-400 mt-1">GitHub Actions</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-indigo-700 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+            <div class="text-2xl mb-1">📦</div>
+            <p class="text-xs font-bold">Install deps</p>
+            <p class="text-xs text-indigo-200 mt-1">pip install -r requirements.txt</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-orange-600 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+            <div class="text-2xl mb-1">🤖</div>
+            <p class="text-xs font-bold">pipeline.py</p>
+            <p class="text-xs text-orange-200 mt-1">research → generate → validate → build</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-teal-700 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+            <div class="text-2xl mb-1">🔄</div>
+            <p class="text-xs font-bold">git stash + rebase</p>
+            <p class="text-xs text-teal-200 mt-1">sync concurrent pushes safely</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-slate-600 text-white rounded-xl px-4 py-4 text-center w-36 flex flex-col justify-center">
+            <div class="text-2xl mb-1">📝</div>
+            <p class="text-xs font-bold">git commit + push</p>
+            <p class="text-xs text-slate-300 mt-1">content/ docs/ validation_report.json</p>
+          </div>
+
+          <div class="arrow-right flex items-center"></div>
+
+          <div class="flow-node bg-green-600 text-white rounded-xl px-4 py-4 text-center w-32 flex flex-col justify-center">
+            <div class="text-2xl mb-1">🌍</div>
+            <p class="text-xs font-bold">GitHub Pages</p>
+            <p class="text-xs text-green-200 mt-1">auto-deploys docs/</p>
+          </div>
+
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -602,105 +1120,45 @@
       </h2>
       <p class="text-slate-500 text-sm mb-5">Each maps to a prompt spec, a JSON file, and a UI tab</p>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ranked by adoption</p>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ranked by adoption (dual-model cross-check)</p>
           <div class="space-y-1">
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-              <code class="text-indigo-700">code_tools</code>
-              <span class="text-slate-400">— AI code generation tools</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-              <code class="text-indigo-700">models</code>
-              <span class="text-slate-400">— Major LLMs by usage</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-              <code class="text-indigo-700">ai_assistants</code>
-              <span class="text-slate-400">— Consumer chatbots by MAU</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
-              <code class="text-indigo-700">image_gen</code>
-              <span class="text-slate-400">— AI image generation tools</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-violet-500"></span>
-              <code class="text-indigo-700">video_gen</code>
-              <span class="text-slate-400">— AI video generation tools</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-gray-600"></span>
-              <code class="text-indigo-700">web_scrapers</code>
-              <span class="text-slate-400">— AI web scraping tools</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-violet-600"></span>
-              <code class="text-indigo-700">mcp_tools</code>
-              <span class="text-slate-400">— MCP servers &amp; aggregators</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-sky-600"></span>
-              <code class="text-indigo-700">workspace</code>
-              <span class="text-slate-400">— AI productivity tools</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-amber-600"></span>
-              <code class="text-indigo-700">fine_tuning</code>
-              <span class="text-slate-400">— LLM fine-tuning platforms</span>
-            </div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-indigo-500 shrink-0"></span><code class="text-indigo-700">code_tools</code><span class="text-slate-400">— AI code generation tools</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-purple-500 shrink-0"></span><code class="text-indigo-700">models</code><span class="text-slate-400">— Major LLMs by usage</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-rose-500 shrink-0"></span><code class="text-indigo-700">ai_assistants</code><span class="text-slate-400">— Consumer chatbots by MAU</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-cyan-500 shrink-0"></span><code class="text-indigo-700">image_gen</code><span class="text-slate-400">— AI image generation tools</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-violet-500 shrink-0"></span><code class="text-indigo-700">video_gen</code><span class="text-slate-400">— AI video generation tools</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-gray-600 shrink-0"></span><code class="text-indigo-700">web_scrapers</code><span class="text-slate-400">— AI web scraping tools</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-violet-600 shrink-0"></span><code class="text-indigo-700">mcp_tools</code><span class="text-slate-400">— MCP servers &amp; aggregators</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-sky-600 shrink-0"></span><code class="text-indigo-700">workspace</code><span class="text-slate-400">— AI productivity tools</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-amber-600 shrink-0"></span><code class="text-indigo-700">fine_tuning</code><span class="text-slate-400">— LLM fine-tuning platforms</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-blue-600 shrink-0"></span><code class="text-indigo-700">enterprise_apis</code><span class="text-slate-400">— AWS Bedrock, Azure, Vertex AI</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-violet-700 shrink-0"></span><code class="text-indigo-700">ml_platforms</code><span class="text-slate-400">— SageMaker, Databricks, etc.</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-green-600 shrink-0"></span><code class="text-indigo-700">emerging_trends</code><span class="text-slate-400">— AI trends by momentum</span></div>
           </div>
         </div>
         <div>
-          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ranked + reference</p>
-          <div class="space-y-1">
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-              <code class="text-indigo-700">enterprise_apis</code>
-              <span class="text-slate-400">— AWS Bedrock, Azure, Vertex</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-violet-700"></span>
-              <code class="text-indigo-700">ml_platforms</code>
-              <span class="text-slate-400">— SageMaker, Databricks, etc.</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-green-600"></span>
-              <code class="text-indigo-700">emerging_trends</code>
-              <span class="text-slate-400">— AI trends by momentum</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-green-700"></span>
-              <code class="text-indigo-700">repositories</code>
-              <span class="text-slate-400">— HuggingFace, Ollama, etc.</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-              <code class="text-indigo-700">databases</code>
-              <span class="text-slate-400">— AI in Snowflake, PG, BigQuery</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              <code class="text-indigo-700">observability</code>
-              <span class="text-slate-400">— LangSmith, Helicone, W&amp;B</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <code class="text-indigo-700">llm_optimization</code>
-              <span class="text-slate-400">— Caching, RAG, right-sizing</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-green-500"></span>
-              <code class="text-indigo-700">model_pricing</code>
-              <span class="text-slate-400">— Token pricing per 1M tokens</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2">
-              <span class="w-2 h-2 rounded-full bg-blue-800"></span>
-              <code class="text-indigo-700">ai_news</code>
-              <span class="text-slate-400">— Daily headlines, daily refresh</span>
-            </div>
+          <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Reference sections (Opus only)</p>
+          <div class="space-y-1 mb-4">
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-green-700 shrink-0"></span><code class="text-indigo-700">repositories</code><span class="text-slate-400">— HuggingFace, Ollama, etc.</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span><code class="text-indigo-700">databases</code><span class="text-slate-400">— AI in Snowflake, PG, BigQuery</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span><code class="text-indigo-700">observability</code><span class="text-slate-400">— LangSmith, Helicone, W&amp;B</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span><code class="text-indigo-700">llm_optimization</code><span class="text-slate-400">— Caching, RAG, right-sizing</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-green-500 shrink-0"></span><code class="text-indigo-700">model_pricing</code><span class="text-slate-400">— Token pricing per 1M tokens</span></div>
+            <div class="flex items-center gap-2 text-xs bg-slate-50 rounded px-3 py-2 hover:bg-indigo-50 transition-colors"><span class="w-2 h-2 rounded-full bg-blue-800 shrink-0"></span><code class="text-indigo-700">ai_news</code><span class="text-slate-400">— Daily headlines, daily refresh</span></div>
+          </div>
+
+          <!-- Adding a new section quick-ref -->
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <p class="text-xs font-bold text-amber-700 uppercase tracking-wider mb-2">Adding a New Section</p>
+            <ol class="text-xs text-slate-600 space-y-1 list-decimal list-inside">
+              <li>Add spec to <code class="bg-white px-1 rounded">generator.py:SECTIONS</code></li>
+              <li>Add queries to <code class="bg-white px-1 rounded">research.py:QUERIES</code></li>
+              <li>Add tab + panel to <code class="bg-white px-1 rounded">templates/index.html</code></li>
+              <li>Add key to <code class="bg-white px-1 rounded">build.py</code> and <code class="bg-white px-1 rounded">build_standalone.py</code></li>
+              <li>Add to <code class="bg-white px-1 rounded">RANKED_SECTIONS</code> if dual-model</li>
+            </ol>
           </div>
         </div>
       </div>
@@ -709,8 +1167,9 @@
   </main>
 
   <!-- ── FOOTER ──────────────────────────────────────────────────── -->
-  <footer class="bg-slate-900 text-slate-500 text-xs text-center py-6 mt-10">
-    <p>AI Landscape Dashboard · Technical Reference · <a href="index.html" class="text-indigo-400 hover:underline">← Dashboard</a></p>
+  <footer class="bg-slate-900 text-slate-500 text-xs text-center py-8 mt-10">
+    <p class="mb-1">AI Landscape Dashboard · Technical Reference v1.2.0</p>
+    <p><a href="index.html" class="text-indigo-400 hover:underline">← Dashboard</a> · <a href="https://github.com/nosnow111/ai-landscape" class="text-indigo-400 hover:underline" target="_blank" rel="noopener">GitHub</a></p>
   </footer>
 
 </body>
