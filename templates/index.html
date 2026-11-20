@@ -113,6 +113,7 @@
       <span class="text-xs font-bold text-indigo-300 uppercase tracking-wider select-none cursor-default px-1">🏆 Ranked by Adoption</span>
       <button class="tab-btn" onclick="showTab('code-tools')">⌨️ Code</button>
       <button class="tab-btn" onclick="showTab('models')">🧠 Models</button>
+      <button class="tab-btn" onclick="showTab('ai-assistants')">🤖 Assistants</button>
       <button class="tab-btn" onclick="showTab('image-gen')">🖼️ Images</button>
       <button class="tab-btn" onclick="showTab('video-gen')">🎬 Video</button>
       <button class="tab-btn" onclick="showTab('web-scrapers')">🕷️ Scrapers</button>
@@ -229,6 +230,24 @@
           {% endfor %}
         {% else %}<div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>{% endif %}
         <div onclick="showTab('models')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
+      </div>
+
+      <!-- AI Assistants column -->
+      <div>
+        <div onclick="showTab('ai-assistants')" class="cursor-pointer text-white font-bold text-sm px-3 py-3 rounded-t-xl flex items-center gap-2 hover:opacity-90" style="background:#e11d48;">🤖 Assistants</div>
+        {% if sections.ai_assistants.get('tools') %}
+          {% for t in sections.ai_assistants.tools[:4] %}
+          <div onclick="showTab('ai-assistants')" class="cursor-pointer bg-white border border-gray-100 border-t-0 p-3 hover:bg-rose-50 transition-colors {% if loop.last %}rounded-b-xl{% endif %}">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-xs font-bold text-gray-800">{{ t.name }}</p>
+              {% if t.get('rank') %}<span style="background:#ffe4e6;color:#9f1239;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:9999px;">#{{ t.rank }}</span>{% endif %}
+            </div>
+            <p class="text-xs text-gray-500">{{ t.vendor }}</p>
+            {% if t.pricing_free %}<span style="background:#dcfce7;color:#166534;font-size:0.6rem;padding:1px 5px;border-radius:4px;font-weight:600;">Free tier</span>{% endif %}
+          </div>
+          {% endfor %}
+        {% else %}<div class="bg-white border border-gray-100 border-t-0 rounded-b-xl p-3 text-xs text-gray-400 italic">Generating...</div>{% endif %}
+        <div onclick="showTab('ai-assistants')" class="cursor-pointer text-center text-xs text-indigo-500 font-semibold mt-2 hover:underline">View all →</div>
       </div>
 
       <!-- Image Gen column -->
@@ -1111,6 +1130,50 @@
     <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
       <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
       <ul class="space-y-1">{% for s in sections.workspace.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- AI ASSISTANTS TAB -->
+  <div id="tab-ai-assistants" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold" style="color:#e11d48;">🤖 AI Assistants & Chatbots</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.ai_assistants.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.ai_assistants.summary }}</p>
+    {% endif %}
+    {% if sections.ai_assistants.get('tools') %}
+    {{ adoption_chart(sections.ai_assistants.tools, '#e11d48') }}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for t in sections.ai_assistants.tools %}
+      <div class="card">
+        <div class="flex justify-between items-start mb-2">
+          <div class="flex items-center gap-2">
+            {% if t.get('rank') %}<span style="background:#e11d48;color:white;font-size:0.7rem;font-weight:700;border-radius:9999px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">#{{ t.rank }}</span>{% endif %}
+            <h3 class="font-bold text-lg">{{ t.name }}</h3>
+          </div>
+          {% if t.pricing_free %}<span class="tag tag-green">Free tier</span>{% endif %}
+        </div>
+        <div class="mb-1">{{ agreement_badge(t) }}</div>
+        <p class="text-xs text-gray-400 mb-1">{{ t.vendor }}</p>
+        {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline mb-2 block">🔗 {{ t.url }}</a>{% endif %}
+        {% if t.get('monthly_active_users') %}<p class="text-sm text-gray-600 mb-1"><span class="font-medium">Monthly users:</span> {{ t.monthly_active_users }}</p>{% endif %}
+        <p class="text-sm text-gray-600 mb-2"><span class="font-medium">Paid:</span> {{ t.pricing_paid }}</p>
+        {% if t.get('platforms') %}<p class="text-xs text-gray-500 mb-2"><span class="font-medium">Platforms:</span> {{ t.platforms | join(', ') }}</p>{% endif %}
+        {% if t.get('strengths') %}<div class="mb-3">{% for s in t.strengths %}<span class="tag" style="background:#ffe4e6;color:#9f1239;">{{ s }}</span>{% endfor %}</div>{% endif %}
+        <p class="text-sm text-gray-700"><span class="font-medium">Best for:</span> {{ t.best_for }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {{ opus_additions(sections.ai_assistants) }}
+    {% if sections.ai_assistants.get('sources') %}
+    <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 mb-2">📚 Sources used for rankings</p>
+      <ul class="space-y-1">{% for s in sections.ai_assistants.sources %}<li class="text-xs text-gray-400"><a href="{{ s }}" target="_blank" rel="noopener" class="hover:text-indigo-500 hover:underline">{{ s }}</a></li>{% endfor %}</ul>
     </div>
     {% endif %}
     {% else %}

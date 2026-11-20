@@ -56,6 +56,7 @@ Each section maps to a JSON file in content/ and a tab in the UI:
 - `video_gen` — Top 10 AI video generation tools ranked by adoption
 - `mcp_tools` — Top 10 MCP tools ranked by adoption (aggregators, gateways, and individual servers)
 - `web_scrapers` — Top 10 AI web scraping and browser automation tools
+- `ai_assistants` — Top 10 consumer AI assistants/chatbots ranked by monthly active users (ChatGPT, Claude.ai, Gemini, Copilot, Grok, Perplexity, etc.)
 - `workspace` — Top 10 AI productivity and workspace tools ranked by adoption
 - `fine_tuning` — Top 10 LLM fine-tuning platforms ranked by adoption; includes when-to-fine-tune guidance
 - `llm_optimization` — LLM cost & performance optimization techniques, quick wins, and tooling
@@ -127,6 +128,28 @@ Each section fires 2 queries per run (~34 total with ai_news at 6). Provider pri
 - **Generation fallbacks**: GPT-4o promoted to primary for ranked sections if Opus returns empty. Sonnet 4.6 fallback for `ai_news` if Opus fails.
 - **`--only` flag**: always force-runs the named stage regardless of checkpoint state.
 - **`model_pricing` section**: requires research queries — without live pricing data Opus returns non-JSON. Validator skips shared pricing pages (anthropic.com/pricing, openai.com/api/pricing, etc.) via url_overrides.json skip list.
+
+## Refresh strategy and API cost design
+
+The pipeline has two cost components: **LLM calls** (Opus 4.8 + GPT-4o — the expensive part) and **search queries** (Tavily/Firecrawl/Serper — mostly free-tier).
+
+### Per-run breakdown
+- **Full run** (all 17 sections): ~33 LLM calls + ~34 search queries (~10–15 min)
+- **News-only run** (`ai_news`): 1 LLM call + 6 Tavily queries (~1–2 min)
+
+### Refresh frequency trade-offs (monthly estimates)
+
+| Strategy | LLM calls/mo | Search queries/mo | Notes |
+|---|---|---|---|
+| Weekly full (current) | ~143 | ~147 | Simple, one workflow |
+| Weekly full + daily news | ~173 | ~327 | Freshest news, highest cost |
+| Biweekly main + daily news | ~94 | ~236 | −34% LLM calls vs current |
+| **Monthly main + daily news** | **~63** | **~214** | **−56% LLM calls — preferred** |
+
+Monthly main + daily news is the preferred strategy. The main ranked sections (models, tools, platforms) change slowly — monthly refresh is sufficient. News is the only content that ages daily, so it gets its own cycle. LLM cost drops ~56% vs current weekly full refresh. Search queries stay well within free tiers (Tavily: 1,000/month free).
+
+### Implementation notes (not yet built)
+To split news from the main refresh, `pipeline.py` would need a `--sections=ai_news` flag so the daily cron can scope research + generate to news only. The weekly/biweekly run would continue as a full pipeline (`--force`). Two separate cron entries in `refresh.yml`.
 
 ## Hosting platforms evaluated (and why rejected)
 | Platform | Reason rejected |

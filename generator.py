@@ -219,6 +219,28 @@ SECTIONS = {
             "strengths (list of strings), best_for (string), url (string))."
         ),
     },
+    "ai_assistants": {
+        "title": "AI Assistants & Chatbots",
+        "prompt": (
+            "List the TOP 10 consumer AI assistant and chatbot products ranked by monthly active users. "
+            "These are end-user products people interact with directly — NOT the underlying models or APIs. "
+            "Include: ChatGPT (OpenAI), Claude.ai (Anthropic), Gemini (Google), Microsoft Copilot, "
+            "Grok (xAI), Perplexity AI, Meta AI, Character.AI, Pi (Inflection AI), Poe (Quora), "
+            "and any new entrants with significant traction confirmed in the research data. "
+            "CRITICAL: only include products that are currently available. Do NOT include discontinued products. "
+            "Be completely objective — rank strictly by monthly active users and real-world adoption data. "
+            "For each assistant cover: vendor, pricing (free tier + paid plans), monthly active users "
+            "(or best public estimate with source), key capabilities, available platforms "
+            "(web/iOS/Android/desktop), best use case, and official URL. "
+            f"{_RANK_RULE} {_URL_RULE} "
+            "Return a JSON object with two keys: "
+            "'summary' (2-3 sentence overview of the consumer AI assistant landscape and key trends) and "
+            "'tools' (array SORTED by adoption rank, where each item has: "
+            "name, vendor, rank (int), pricing_free (bool), pricing_paid (string), "
+            "monthly_active_users (string — e.g. '500M+'), platforms (list of strings), "
+            "strengths (list of strings), best_for (string), url (string))."
+        ),
+    },
     "workspace": {
         "title": "AI Productivity & Workspace Tools",
         "prompt": (
@@ -421,7 +443,7 @@ CONTENT_DIR = os.path.join(os.path.dirname(__file__), "content")
 # Sections that have ranked items — eligible for dual-model cross-check
 RANKED_SECTIONS = {
     "code_tools", "models", "image_gen", "video_gen",
-    "web_scrapers", "workspace", "fine_tuning", "ml_platforms", "enterprise_apis",
+    "web_scrapers", "workspace", "ai_assistants", "fine_tuning", "ml_platforms", "enterprise_apis",
     "mcp_tools", "emerging_trends",
 }
 

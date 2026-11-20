@@ -95,6 +95,10 @@ QUERIES = {
         "top AI web scraping browser automation tools developers 2026",
         "Firecrawl Apify AgentQL Browserbase adoption 2026",
     ],
+    "ai_assistants": [
+        "most popular AI chatbot assistant monthly active users 2026 ChatGPT Claude Gemini Copilot",
+        "AI assistant adoption statistics consumer usage 2026 Grok Perplexity Meta AI Character AI",
+    ],
     "workspace": [
         "most popular AI productivity workspace tools 2026 adoption",
         "NotebookLM Gemini Notebook Microsoft Copilot M365 Notion AI usage 2026",
@@ -305,7 +309,7 @@ def research_section(key: str) -> tuple[str, list[str]]:
     return "\n\n".join(results), sources
 
 
-def research_all() -> dict:
+def research_all(sections: list = None) -> dict:
     """Returns dict of key -> {'context': str, 'sources': list}"""
     provider = _active_provider()
     if provider == "none":
@@ -313,7 +317,7 @@ def research_all() -> dict:
         return {}
 
     print(f"  Search provider: {provider}")
-    keys = list(QUERIES.keys())
+    keys = [k for k in (sections or list(QUERIES.keys())) if k in QUERIES]
 
     def _research(args):
         key, stagger = args

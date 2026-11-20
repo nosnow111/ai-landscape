@@ -84,6 +84,7 @@ def build_standalone():
         "video_gen":        load_content("video_gen"),
         "mcp_tools":        load_content("mcp_tools"),
         "web_scrapers":     load_content("web_scrapers"),
+        "ai_assistants":    load_content("ai_assistants"),
         "workspace":        load_content("workspace"),
         "fine_tuning":      load_content("fine_tuning"),
         "llm_optimization": load_content("llm_optimization"),

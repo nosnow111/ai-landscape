@@ -2,7 +2,8 @@ name: Refresh AI Landscape
 
 on:
   schedule:
-    - cron: "0 0 * * 0"   # weekly on Sunday at midnight UTC
+    - cron: "0 0 1 * *"    # monthly full refresh — 1st of each month at midnight UTC
+    - cron: "0 5 * * *"    # daily news refresh — every day at 05:00 UTC
   workflow_dispatch:        # allow manual trigger from GitHub UI or CLI
     inputs:
       from:
@@ -27,6 +28,11 @@ on:
           - generate
           - validate
           - build
+      sections:
+        description: "Comma-separated sections to refresh only (e.g. ai_news). Leave blank for full run."
+        required: false
+        default: ""
+        type: string
 
 jobs:
   refresh:
@@ -52,10 +58,18 @@ jobs:
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
           SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
         run: |
-          if [ -n "${{ inputs.only }}" ]; then
+          # Daily news cron — scope to ai_news only
+          if [ "${{ github.event.schedule }}" = "0 5 * * *" ]; then
+            python pipeline.py --sections=ai_news --force
+          # Manual dispatch with sections specified
+          elif [ -n "${{ inputs.sections }}" ]; then
+            python pipeline.py --sections=${{ inputs.sections }} --force
+          # Manual dispatch with stage flags
+          elif [ -n "${{ inputs.only }}" ]; then
             python pipeline.py --only=${{ inputs.only }}
           elif [ -n "${{ inputs.from }}" ]; then
             python pipeline.py --from=${{ inputs.from }}
+          # Monthly full refresh (or manual dispatch with no flags)
           else
             python pipeline.py --force
           fi

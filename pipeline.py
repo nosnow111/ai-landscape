@@ -12,11 +12,12 @@ On the next run, completed stages are skipped automatically.
 
 Usage
 -----
-  python pipeline.py                     # run all stages; skip any already checkpointed
-  python pipeline.py --from=generate    # re-run from generate stage onward
-  python pipeline.py --from=validate    # re-run only validate + build
-  python pipeline.py --only=build       # run exactly one stage
-  python pipeline.py --force            # ignore all checkpoints, run everything
+  python pipeline.py                        # run all stages; skip any already checkpointed
+  python pipeline.py --from=generate       # re-run from generate stage onward
+  python pipeline.py --from=validate       # re-run only validate + build
+  python pipeline.py --only=build          # run exactly one stage
+  python pipeline.py --force               # ignore all checkpoints, run everything
+  python pipeline.py --sections=ai_news --force   # refresh one section only (skips validate)
 """
 
 import argparse
@@ -88,13 +89,14 @@ def checkpoint_complete(stage: str) -> bool:
 
 # ── stage runners ──────────────────────────────────────────────────────────
 
-def stage_research() -> dict:
+def stage_research(sections: list = None) -> dict:
     stage_banner("research", "Tavily web search — all sections queried in parallel")
     from research import research_all, QUERIES
 
-    print(f"  Sections:  {len(QUERIES)}")
+    targets = [k for k in (sections or list(QUERIES.keys())) if k in QUERIES]
+    print(f"  Sections:  {len(targets)}")
     t0 = time.time()
-    data = research_all()
+    data = research_all(sections=targets)
     elapsed = time.time() - t0
 
     CHECKPOINT_DIR.mkdir(exist_ok=True)
@@ -104,7 +106,7 @@ def stage_research() -> dict:
     return data
 
 
-def stage_generate(research_data: dict = None, force: bool = False):
+def stage_generate(research_data: dict = None, force: bool = False, sections: list = None):
     stage_banner("generate", "Opus 4.8 primary · GPT-4o cross-check — sections run in parallel")
     from generator import run_generation, SECTIONS, RANKED_SECTIONS
 
@@ -113,8 +115,9 @@ def stage_generate(research_data: dict = None, force: bool = False):
         research_data = json.loads(RESEARCH_CACHE.read_text())
 
     # Determine which sections still need work
+    section_keys = sections if sections else list(SECTIONS.keys())
     done, todo = [], []
-    for key in SECTIONS:
+    for key in section_keys:
         cf = CONTENT_DIR / f"{key}.json"
         if not force and cf.exists():
             d = json.loads(cf.read_text())
@@ -203,7 +206,12 @@ def main():
         "--force", action="store_true",
         help="Ignore all checkpoints and run every stage",
     )
+    parser.add_argument(
+        "--sections", metavar="SECTION[,SECTION...]",
+        help="Comma-separated section keys to refresh (e.g. ai_news). Skips validate stage.",
+    )
     args = parser.parse_args()
+    sections_filter = [s.strip() for s in args.sections.split(",")] if args.sections else None
 
     # Print header
     print()
@@ -213,6 +221,8 @@ def main():
     print(f"  Stages: {' → '.join(s.upper() for s in STAGES)}")
     if args.only:
         print(f"  Mode:   single stage ({args.only.upper()})")
+    elif sections_filter:
+        print(f"  Mode:   sections-only — {', '.join(sections_filter)} (validate skipped)")
     elif args.force:
         print(f"  Mode:   force — all checkpoints ignored")
     elif args.from_stage:
@@ -228,10 +238,15 @@ def main():
         if args.only and stage != args.only:
             continue
 
+        # --sections: skip validate (expensive; not needed for partial refreshes)
+        if sections_filter and stage == "validate":
+            print(f"\n  ⏭  VALIDATE — skipped (sections-only mode)")
+            continue
+
         # Determine whether to skip this stage
         force_from_here = args.force or (
             args.from_stage and STAGES.index(stage) >= STAGES.index(args.from_stage)
-        ) or bool(args.only)
+        ) or bool(args.only) or bool(sections_filter)
         if not force_from_here and checkpoint_complete(stage):
             cp = load_checkpoint(stage)
             print(f"\n  ⏭  {stage.upper()} — completed at {cp.get('completed_at','?')}, skipping")
@@ -239,9 +254,9 @@ def main():
 
         # Run the stage
         if stage == "research":
-            research_data = stage_research()
+            research_data = stage_research(sections=sections_filter)
         elif stage == "generate":
-            stage_generate(research_data, force=force_from_here)
+            stage_generate(research_data, force=force_from_here, sections=sections_filter)
         elif stage == "validate":
             stage_validate()
         elif stage == "build":
