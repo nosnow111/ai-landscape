@@ -1,12 +1,13 @@
 # AI Landscape Dashboard
 
-A static site that auto-generates daily comparisons of the AI ecosystem using Claude and GPT-4o. Content refreshes nightly via GitHub Actions and is served free on GitHub Pages.
+A static site that auto-generates comparisons of the AI ecosystem using a multi-agent pipeline. Claude Opus and GPT-4o generate structured content; GitHub Actions refreshes it on a schedule; GitHub Pages serves it free.
 
 **Live site:** https://nosnow111.github.io/ai-landscape
 
-## What It Covers (17 sections)
+## What It Covers (18 sections)
 
 **Ranked by adoption:**
+- **AI Assistants & Chatbots** — ChatGPT, Claude.ai, Gemini, Copilot, Grok, Perplexity, Meta AI, etc. (ranked by monthly active users)
 - **Code Generation Tools** — Claude Code, GitHub Copilot, Cursor, Devin Desktop, etc.
 - **Major AI Models** — GPT-4o, Claude, Gemini, Llama, Grok, DeepSeek, etc.
 - **Image Generation** — Midjourney, DALL-E, Stable Diffusion, Flux, Adobe Firefly, etc.
@@ -18,7 +19,7 @@ A static site that auto-generates daily comparisons of the AI ecosystem using Cl
 - **Enterprise AI APIs** — AWS Bedrock, Azure OpenAI, Google Vertex AI, Snowflake Cortex, etc.
 - **ML Training & Deployment** — SageMaker, Vertex AI, Databricks, Azure ML, Modal, etc.
 - **Emerging AI Trends** — reasoning models, agents, inference scaling, multimodal, etc.
-- **Token Prices** — current input/output pricing per 1M tokens across major commercial LLMs, sorted by adoption
+- **Token Prices** — current input/output pricing per 1M tokens across major commercial LLMs
 
 **Reference sections:**
 - **Model Repositories** — HuggingFace, Ollama, Replicate, Together AI, Groq, etc.
@@ -58,7 +59,7 @@ templates/           # Tailwind CSS dashboard + news templates
 checkpoints/         # Pipeline stage checkpoints (skip completed stages on re-run)
 content/             # Auto-generated JSON (committed by Actions)
 docs/                # Static site served by GitHub Pages
-.github/workflows/refresh.yml  # Daily cron at midnight UTC
+.github/workflows/refresh.yml  # Monthly full + daily news cron
 ```
 
 ## Running Locally
@@ -87,10 +88,11 @@ python pipeline.py              # full pipeline: research → generate → valid
 open docs/index.html
 
 # Partial runs (saves API quota):
-python pipeline.py --only=build      # rebuild HTML only — zero API calls
-python pipeline.py --from=generate   # skip research, re-generate from cached data
-python pipeline.py --from=validate   # re-validate + rebuild only
-python pipeline.py --force           # ignore checkpoints, run everything fresh
+python pipeline.py --only=build                    # rebuild HTML only — zero API calls
+python pipeline.py --from=generate                 # skip research, re-generate from cached data
+python pipeline.py --from=validate                 # re-validate + rebuild only
+python pipeline.py --force                         # ignore checkpoints, run everything fresh
+python pipeline.py --sections=ai_news --force      # refresh news only (~1 min, skips validate)
 
 # Link validation only:
 python validate_links.py             # check all URLs, print report
@@ -121,15 +123,14 @@ Go to your fork → **Settings** → **Secrets and variables** → **Actions** �
 | `SERPER_API_KEY` | serper.dev | Optional |
 
 ### 4. Trigger the first run
-Go to **Actions** → **Refresh AI Landscape** → **Run workflow**. It takes 2-3 minutes. After that it runs automatically every night at midnight UTC.
+Go to **Actions** → **Refresh AI Landscape** → **Run workflow**. It takes ~10 minutes. After that it runs automatically — monthly full refresh on the 1st of each month, daily news refresh every morning at 05:00 UTC.
 
 ### What it costs to run
 | Item | Cost |
 |---|---|
 | GitHub Actions + Pages | Free |
-| Tavily (research) | Free tier — 1,000 req/month; nightly run uses ~35 |
-| Firecrawl (research) | Free tier — 1,000 req/month |
-| Anthropic (Claude Opus) | ~$1–3/night depending on section count |
-| OpenAI (GPT-4o cross-check) | ~$0.50–1/night; skip by omitting `OPENAI_API_KEY` |
+| Tavily / Firecrawl (research) | Free tier — 1,000 req/month each; monthly full uses ~36, daily news uses ~6 |
+| Anthropic (Claude Opus) | ~$3–5/month (monthly full run + 30 daily news runs) |
+| OpenAI (GPT-4o cross-check) | ~$1–2/month; skip by omitting `OPENAI_API_KEY` |
 
 To run more cheaply: omit `OPENAI_API_KEY` (drops cross-check badges) and use `--only=build` locally to rebuild HTML without any API calls.

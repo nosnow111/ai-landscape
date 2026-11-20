@@ -1,9 +1,9 @@
 # AI Landscape Dashboard
 
 ## What this project does
-A static website that auto-generates daily comparisons of the AI ecosystem.
-Claude API generates structured JSON content; a build script renders it to HTML;
-GitHub Actions runs everything on a schedule and commits the result to GitHub Pages.
+A static website that auto-generates AI ecosystem intelligence using a multi-agent pipeline.
+Claude Opus + GPT-4o generate structured JSON content; a build script renders it to HTML;
+GitHub Actions runs on a monthly + daily schedule and commits the result to GitHub Pages.
 
 ## Project structure
 ```
@@ -21,7 +21,7 @@ content/             # Auto-generated JSON files (committed by GitHub Actions)
 docs/                # Auto-generated static site (served by GitHub Pages)
 checkpoints/         # Pipeline stage checkpoints (research, generate, validate, build)
 validation_report.json  # Latest link validation results
-.github/workflows/refresh.yml  # Daily cron + manual trigger
+.github/workflows/refresh.yml  # Monthly full + daily news cron + manual trigger
 ```
 
 ## How to run locally
@@ -34,11 +34,12 @@ open docs/index.html
 
 ### Pipeline options
 ```bash
-python pipeline.py                    # resume from last checkpoint
-python pipeline.py --force            # re-run all stages
-python pipeline.py --from=generate    # restart from generate onward
-python pipeline.py --from=validate    # re-validate + rebuild only
-python pipeline.py --only=build       # rebuild HTML only
+python pipeline.py                         # resume from last checkpoint
+python pipeline.py --force                 # re-run all stages
+python pipeline.py --from=generate         # restart from generate onward
+python pipeline.py --from=validate         # re-validate + rebuild only
+python pipeline.py --only=build            # rebuild HTML only
+python pipeline.py --sections=ai_news --force  # refresh one section only (skips validate)
 
 python validate_links.py              # validate links only, print report
 python validate_links.py --fix        # validate + auto-fix broken (404) links
@@ -74,8 +75,9 @@ Each section maps to a JSON file in content/ and a tab in the UI:
 
 ## Deployment
 - **Hosting:** GitHub Pages — serves from `docs/` on the `main` branch
-- **Refresh:** GitHub Actions workflow (`refresh.yml`) runs daily at midnight UTC
-  and can be triggered manually from the Actions tab
+- **Refresh:** GitHub Actions workflow (`refresh.yml`) runs on two schedules:
+  monthly full refresh (1st of month, 00:00 UTC) and daily news-only refresh (05:00 UTC, `--sections=ai_news`)
+  — both can also be triggered manually from the Actions tab
 - **Secrets required** in repo Settings → Secrets → Actions:
   - `ANTHROPIC_API_KEY` — Claude Opus (primary generation)
   - `OPENAI_API_KEY` — GPT-4o cross-check (falls back to Sonnet if missing)
@@ -99,7 +101,7 @@ Rankings use a 10–15 smart cutoff defined in `_RANK_RULE` in `generator.py`:
 Claude's training data cuts off at August 2025. The pipeline addresses this: web search (Stage 1) runs before every generation, pulling current stats and recent announcements. That research context is passed directly into the Opus and GPT-4o prompts.
 
 ## Research strategy (research.py)
-Each section fires 2 queries per run (~34 total with ai_news at 6). Provider priority: Firecrawl (primary, 1,000 free/month) → Tavily (fallback) → Serper (tertiary). Queries support `(query, days, domains)` tuple syntax for variable Tavily parameters.
+Each section fires 2 queries per run (~36 total with ai_news at 6). Provider priority: Firecrawl (primary, 1,000 free/month) → Tavily (fallback) → Serper (tertiary). Queries support `(query, days, domains)` tuple syntax for variable Tavily parameters. `research_all()` accepts an optional `sections` list to scope a partial run.
 
 ## Key decisions
 - Static site (no server) keeps hosting free forever on GitHub Pages
@@ -134,7 +136,7 @@ Each section fires 2 queries per run (~34 total with ai_news at 6). Provider pri
 The pipeline has two cost components: **LLM calls** (Opus 4.8 + GPT-4o — the expensive part) and **search queries** (Tavily/Firecrawl/Serper — mostly free-tier).
 
 ### Per-run breakdown
-- **Full run** (all 17 sections): ~33 LLM calls + ~34 search queries (~10–15 min)
+- **Full run** (all 18 sections): ~35 LLM calls + ~36 search queries (~10–15 min)
 - **News-only run** (`ai_news`): 1 LLM call + 6 Tavily queries (~1–2 min)
 
 ### Refresh frequency trade-offs (monthly estimates)
@@ -148,8 +150,8 @@ The pipeline has two cost components: **LLM calls** (Opus 4.8 + GPT-4o — the e
 
 Monthly main + daily news is the preferred strategy. The main ranked sections (models, tools, platforms) change slowly — monthly refresh is sufficient. News is the only content that ages daily, so it gets its own cycle. LLM cost drops ~56% vs current weekly full refresh. Search queries stay well within free tiers (Tavily: 1,000/month free).
 
-### Implementation notes (not yet built)
-To split news from the main refresh, `pipeline.py` would need a `--sections=ai_news` flag so the daily cron can scope research + generate to news only. The weekly/biweekly run would continue as a full pipeline (`--force`). Two separate cron entries in `refresh.yml`.
+### Implementation
+`pipeline.py --sections=<keys>` scopes research + generate to named sections and skips validate. `refresh.yml` has two cron entries: monthly full (`--force`) and daily news-only (`--sections=ai_news --force`). `research_all(sections=)` and `stage_generate(sections=)` both accept the filter.
 
 ## Hosting platforms evaluated (and why rejected)
 | Platform | Reason rejected |
