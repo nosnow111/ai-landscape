@@ -63,6 +63,7 @@
         <a href="#reliability"   class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">9 Reliability</a>
         <a href="#schedule"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">10 Schedule</a>
         <a href="#deployment"    class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">11 Deployment</a>
+        <a href="#methodology"   class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">12 Methodology</a>
       </div>
     </div>
   </header>
@@ -1109,6 +1110,379 @@
           <p class="text-xs font-bold text-indigo-700 uppercase tracking-wider mb-2">Standalone build</p>
           <p class="text-xs text-slate-600"><code class="bg-white px-1 rounded">build_standalone.py</code> generates a single self-contained HTML file — Tailwind inlined, all content embedded. Safe to email or share behind firewalls.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- ── 12. METHODOLOGY ──────────────────────────────────────────── -->
+    <section id="methodology" class="bg-white rounded-2xl shadow-sm card border-fuchsia-500 p-8">
+      <h2 class="text-xl font-bold text-fuchsia-700 mb-1 flex items-center gap-2">
+        <span class="bg-fuchsia-100 text-fuchsia-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">12</span>
+        Design Methodology &amp; Lessons Learned
+      </h2>
+      <p class="text-slate-500 text-sm mb-6">Spec-driven design, research-first vs iterative, and what we'd do differently</p>
+
+      <!-- ── Spec-Driven Design ── -->
+      <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2">
+        <span class="w-2 h-5 bg-fuchsia-500 rounded-full inline-block"></span>
+        Spec-Driven Design for AI Systems
+      </h3>
+      <p class="text-sm text-slate-600 mb-5">
+        In traditional software, you write a function signature first — the contract — then implement it, then test against the contract.
+        Spec-driven design applies the same discipline to LLM-based systems: define the <strong>output contract</strong> before writing any prompt.
+        The spec becomes both the prompt instruction <em>and</em> the test oracle.
+      </p>
+
+      <!-- Three-step cycle -->
+      <div class="overflow-x-auto pb-2 mb-6">
+        <div class="flex items-stretch gap-2 min-w-max">
+
+          <div class="flow-node bg-fuchsia-700 text-white rounded-xl px-5 py-5 w-44 flex flex-col justify-start">
+            <p class="text-xs font-black text-fuchsia-300 uppercase tracking-widest mb-2">Step 1 · Define</p>
+            <p class="text-sm font-bold mb-2">Output Contract</p>
+            <ul class="text-xs text-fuchsia-100 space-y-1">
+              <li>• Field names &amp; types</li>
+              <li>• Required vs optional</li>
+              <li>• Value constraints</li>
+              <li>• Ranking criterion</li>
+              <li>• Domain exclusions</li>
+            </ul>
+            <div class="mt-3 bg-fuchsia-900 rounded px-2 py-1 text-center">
+              <p class="text-xs text-fuchsia-300 font-mono">SECTIONS[key].prompt</p>
+            </div>
+          </div>
+
+          <div class="flex items-center text-fuchsia-400 font-black text-xl">→</div>
+
+          <div class="flow-node bg-indigo-700 text-white rounded-xl px-5 py-5 w-44 flex flex-col justify-start">
+            <p class="text-xs font-black text-indigo-300 uppercase tracking-widest mb-2">Step 2 · Generate</p>
+            <p class="text-sm font-bold mb-2">LLM as Implementation</p>
+            <ul class="text-xs text-indigo-100 space-y-1">
+              <li>• Prompt = spec + RAG context</li>
+              <li>• Model produces JSON</li>
+              <li>• No hand-coded logic</li>
+              <li>• Two independent models</li>
+              <li>• max_tokens=8192 to avoid truncation</li>
+            </ul>
+            <div class="mt-3 bg-indigo-900 rounded px-2 py-1 text-center">
+              <p class="text-xs text-indigo-300 font-mono">generate_section()</p>
+            </div>
+          </div>
+
+          <div class="flex items-center text-fuchsia-400 font-black text-xl">→</div>
+
+          <div class="flow-node bg-teal-700 text-white rounded-xl px-5 py-5 w-44 flex flex-col justify-start">
+            <p class="text-xs font-black text-teal-300 uppercase tracking-widest mb-2">Step 3 · Validate</p>
+            <p class="text-sm font-bold mb-2">Test Against Contract</p>
+            <ul class="text-xs text-teal-100 space-y-1">
+              <li>• JSON.parse() — structure</li>
+              <li>• Required field presence</li>
+              <li>• URL reachability check</li>
+              <li>• LLM-as-judge relevance</li>
+              <li>• Cross-model agreement badge</li>
+            </ul>
+            <div class="mt-3 bg-teal-900 rounded px-2 py-1 text-center">
+              <p class="text-xs text-teal-300 font-mono">validate_links.py</p>
+            </div>
+          </div>
+
+          <div class="flex items-center text-fuchsia-400 font-black text-xl">→</div>
+
+          <div class="flow-node bg-slate-700 text-white rounded-xl px-5 py-5 w-44 flex flex-col justify-start">
+            <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Step 4 · Render</p>
+            <p class="text-sm font-bold mb-2">Deterministic Build</p>
+            <ul class="text-xs text-slate-300 space-y-1">
+              <li>• Template knows exact shape</li>
+              <li>• No runtime surprises</li>
+              <li>• Jinja2 reads typed fields</li>
+              <li>• Badges, counts, URLs</li>
+              <li>• Reproducible output</li>
+            </ul>
+            <div class="mt-3 bg-slate-800 rounded px-2 py-1 text-center">
+              <p class="text-xs text-slate-400 font-mono">build.py + Jinja2</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Key principle callout -->
+      <div class="bg-fuchsia-50 border border-fuchsia-200 rounded-xl p-5 mb-8">
+        <p class="text-sm font-bold text-fuchsia-800 mb-2">The core discipline</p>
+        <p class="text-sm text-slate-600">
+          The spec must be <em>complete enough to be wrong.</em> A vague spec ("list some tools") produces unverifiable output.
+          A precise spec (<code class="bg-white px-1 rounded text-xs">rank: integer 1–15, url: official domain only, monthly_active_users: string with source</code>)
+          creates a machine-checkable contract. The LLM is the implementation; the spec is the interface.
+          If generation fails parse or validation, the spec reveals the gap — not the model.
+        </p>
+      </div>
+
+      <!-- ── Research-First vs Iterative ── -->
+      <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2">
+        <span class="w-2 h-5 bg-blue-500 rounded-full inline-block"></span>
+        Research-First vs Iterative Generation
+      </h3>
+      <p class="text-sm text-slate-600 mb-5">
+        There are two fundamentally different approaches to grounding AI-generated content. This project uses research-first.
+        Understanding the tradeoff is important when designing similar pipelines.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+        <!-- Research-First -->
+        <div class="bg-teal-50 border border-teal-200 rounded-xl p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded-full">THIS PROJECT</span>
+            <p class="font-bold text-teal-800">Research-First (RAG)</p>
+          </div>
+          <div class="space-y-2 mb-4">
+            <div class="flex items-start gap-2 text-xs text-slate-600">
+              <span class="text-teal-500 font-bold mt-0.5">1.</span>
+              <span>Retrieve live context <em>before</em> any generation call</span>
+            </div>
+            <div class="flex items-start gap-2 text-xs text-slate-600">
+              <span class="text-teal-500 font-bold mt-0.5">2.</span>
+              <span>Inject context into prompt as a grounding block</span>
+            </div>
+            <div class="flex items-start gap-2 text-xs text-slate-600">
+              <span class="text-teal-500 font-bold mt-0.5">3.</span>
+              <span>Generate once against full context</span>
+            </div>
+            <div class="flex items-start gap-2 text-xs text-slate-600">
+              <span class="text-teal-500 font-bold mt-0.5">4.</span>
+              <span>Validate output — no re-generation loop</span>
+            </div>
+          </div>
+          <div class="border-t border-teal-200 pt-3 space-y-1">
+            <p class="text-xs text-green-700">✅ Predictable cost — 1 LLM call per section</p>
+            <p class="text-xs text-green-700">✅ Deterministic — same context → same output</p>
+            <p class="text-xs text-green-700">✅ Fast — all sections run in parallel</p>
+            <p class="text-xs text-orange-600">⚠️ Research quality sets the ceiling</p>
+            <p class="text-xs text-orange-600">⚠️ One shot — no self-correction</p>
+          </div>
+        </div>
+
+        <!-- Iterative -->
+        <div class="bg-purple-50 border border-purple-200 rounded-xl p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="bg-purple-200 text-purple-800 text-xs font-bold px-2 py-1 rounded-full">ALTERNATIVE</span>
+            <p class="font-bold text-purple-800">Iterative (Agentic Loop)</p>
+          </div>
+          <div class="space-y-2 mb-4">
+            <div class="flex items-start gap-2 text-xs text-slate-600">
+              <span class="text-purple-500 font-bold mt-0.5">1.</span>
+              <span>Generate a draft from base knowledge</span>
+            </div>
+            <div class="flex items-start gap-2 text-xs text-slate-600">
+              <span class="text-purple-500 font-bold mt-0.5">2.</span>
+              <span>Evaluate draft — identify gaps, check facts</span>
+            </div>
+            <div class="flex items-start gap-2 text-xs text-slate-600">
+              <span class="text-purple-500 font-bold mt-0.5">3.</span>
+              <span>Search to fill specific gaps found in step 2</span>
+            </div>
+            <div class="flex items-start gap-2 text-xs text-slate-600">
+              <span class="text-purple-500 font-bold mt-0.5">4.</span>
+              <span>Refine draft with new evidence → loop until pass</span>
+            </div>
+          </div>
+          <div class="border-t border-purple-200 pt-3 space-y-1">
+            <p class="text-xs text-green-700">✅ Self-correcting — catches its own gaps</p>
+            <p class="text-xs text-green-700">✅ Higher ceiling for complex reasoning</p>
+            <p class="text-xs text-orange-600">⚠️ Variable cost — loop count unpredictable</p>
+            <p class="text-xs text-orange-600">⚠️ Harder to parallelize across sections</p>
+            <p class="text-xs text-orange-600">⚠️ Requires exit condition to avoid runaway loops</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- When to use which -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8">
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">When to use each</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-600">
+          <div>
+            <p class="font-semibold text-teal-700 mb-1">Research-first works best when:</p>
+            <ul class="space-y-1">
+              <li>• Output schema is fixed and machine-verifiable</li>
+              <li>• You run many parallel sections (cost compounds fast in loops)</li>
+              <li>• Content ages quickly — freshness comes from retrieval, not reasoning</li>
+              <li>• Deterministic per-run cost matters (scheduled jobs, CI/CD)</li>
+            </ul>
+          </div>
+          <div>
+            <p class="font-semibold text-purple-700 mb-1">Iterative works best when:</p>
+            <ul class="space-y-1">
+              <li>• The question is open-ended or exploratory</li>
+              <li>• Output quality depends on chasing down specific evidence</li>
+              <li>• A single retrieval pass may surface the wrong context</li>
+              <li>• Cost per run is bounded by a hard max-steps limit</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── What We'd Do Differently ── -->
+      <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2">
+        <span class="w-2 h-5 bg-amber-500 rounded-full inline-block"></span>
+        What We'd Do Differently
+      </h3>
+      <p class="text-sm text-slate-600 mb-5">
+        Honest retrospective — things that emerged organically but should have been designed upfront.
+      </p>
+
+      <div class="space-y-3 mb-6">
+
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 text-lg mt-0.5">📋</span>
+            <div>
+              <p class="text-sm font-bold text-amber-800">Formal JSON Schema from day one</p>
+              <p class="text-xs text-slate-600 mt-1">
+                Each section's prompt defines the output shape in prose. We should have written a
+                <code class="bg-white px-1 rounded">schemas/{key}.json</code> JSON Schema file first and auto-generated the prompt from it.
+                That way validation is mechanical (jsonschema library) rather than "try to parse it and see."
+                Schema-first also makes adding new sections faster — the template, validator, and prompt all derive from one source of truth.
+              </p>
+              <p class="text-xs text-indigo-600 mt-1 font-medium">Better: schema → prompt (generated) → output → validate(schema)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 text-lg mt-0.5">🔗</span>
+            <div>
+              <p class="text-sm font-bold text-amber-800">URL validation built into the generation spec, not a separate stage</p>
+              <p class="text-xs text-slate-600 mt-1">
+                URL validation grew into its own pipeline stage with an override registry, whitelist file, and manual triage workflow.
+                The cleaner design: include <em>domain constraints</em> in the spec itself
+                (<code class="bg-white px-1 rounded">url must resolve to official vendor page</code>),
+                run a lightweight HTTP check immediately after each section generates, and reject+retry rather than accumulating a fix registry.
+                The <code class="bg-white px-1 rounded">url_overrides.json</code> file exists because generation wasn't strict enough upfront.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 text-lg mt-0.5">🧪</span>
+            <div>
+              <p class="text-sm font-bold text-amber-800">Automated regression tests for content quality</p>
+              <p class="text-xs text-slate-600 mt-1">
+                Right now there's no automated check that says "did this run produce worse output than last run?"
+                We catch structural failures (parse errors, broken URLs) but not semantic regressions
+                (a section dropping from 10 items to 3, a tool appearing that doesn't match the section's domain,
+                a ranking that looks implausible). A simple diff-based alert on item count ± key fields
+                after each generation run would catch silent degradation early.
+              </p>
+              <p class="text-xs text-indigo-600 mt-1 font-medium">Add: compare content/{key}.json to previous version — alert on item count drop &gt; 30%</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 text-lg mt-0.5">🔍</span>
+            <div>
+              <p class="text-sm font-bold text-amber-800">Research queries should have been evaluated independently</p>
+              <p class="text-xs text-slate-600 mt-1">
+                Research queries were written alongside section specs without measuring their actual retrieval quality.
+                A better approach: before writing the generation prompt, run the queries and <em>read the results</em> — check whether
+                they return relevant, current content. Poor research context is the most common cause of stale or hallucinated output,
+                and it's invisible once generation runs. Query quality should be a first-class design concern.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 text-lg mt-0.5">💰</span>
+            <div>
+              <p class="text-sm font-bold text-amber-800">Cost model should have driven the schedule from day one</p>
+              <p class="text-xs text-slate-600 mt-1">
+                The project launched with weekly full refresh. We only analyzed the cost tradeoff later and switched to
+                monthly full + daily news — a 56% cost reduction. The right question to ask first:
+                <em>"How often does each section's content actually change?"</em>
+                Tool rankings change slowly (monthly). News changes daily. These have different optimal cadences and should
+                have been in separate workflows from the start.
+              </p>
+              <p class="text-xs text-indigo-600 mt-1 font-medium">Rule: define refresh cadence per content type before writing the cron schedule</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 text-lg mt-0.5">📐</span>
+            <div>
+              <p class="text-sm font-bold text-amber-800">config.json should have been the starting point, not a retrofit</p>
+              <p class="text-xs text-slate-600 mt-1">
+                Site identity (title, author, branding) was initially hardcoded in multiple templates and scripts.
+                <code class="bg-white px-1 rounded">config.json</code> was added later as a centralisation fix.
+                Any project with more than one output artifact (dashboard, news page, standalone, about page)
+                should start with a single config file that all build scripts read.
+                The pattern is free — the cost is only paid when you don't do it and have to touch six files to change a name.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Summary table -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Design Principles Summary</p>
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
+        <table>
+          <thead>
+            <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider">
+              <th class="px-4 py-3">Principle</th>
+              <th class="px-4 py-3">What it means in practice</th>
+              <th class="px-4 py-3">Applied here?</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm divide-y divide-slate-100">
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-fuchsia-700">Contract-first</td>
+              <td class="px-4 py-3 text-xs text-slate-600">Define output schema before writing any prompt or template</td>
+              <td class="px-4 py-3"><span class="text-yellow-600 text-xs font-semibold">Partial — prose spec, not machine schema</span></td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-teal-700">Research-first RAG</td>
+              <td class="px-4 py-3 text-xs text-slate-600">Retrieve live grounding before every generation call</td>
+              <td class="px-4 py-3"><span class="text-green-600 text-xs font-semibold">✅ Yes</span></td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-orange-700">Dual-model validation</td>
+              <td class="px-4 py-3 text-xs text-slate-600">Use a second model from a different company as an independent critic</td>
+              <td class="px-4 py-3"><span class="text-green-600 text-xs font-semibold">✅ Yes</span></td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-indigo-700">Idempotent pipeline</td>
+              <td class="px-4 py-3 text-xs text-slate-600">Safe to re-invoke at any stage without side effects</td>
+              <td class="px-4 py-3"><span class="text-green-600 text-xs font-semibold">✅ Yes — checkpoints</span></td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-slate-700">Cadence-matched refresh</td>
+              <td class="px-4 py-3 text-xs text-slate-600">Each content type refreshed at the rate it actually changes</td>
+              <td class="px-4 py-3"><span class="text-green-600 text-xs font-semibold">✅ Yes — monthly + daily split</span></td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-amber-700">Single config source</td>
+              <td class="px-4 py-3 text-xs text-slate-600">All build artifacts derive identity from one file</td>
+              <td class="px-4 py-3"><span class="text-green-600 text-xs font-semibold">✅ Yes — config.json</span></td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-red-600">Semantic regression tests</td>
+              <td class="px-4 py-3 text-xs text-slate-600">Alert on content quality drop between runs</td>
+              <td class="px-4 py-3"><span class="text-red-500 text-xs font-semibold">❌ Not yet built</span></td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold text-red-600">Machine-verifiable schema</td>
+              <td class="px-4 py-3 text-xs text-slate-600">JSON Schema file per section, not prose in a prompt</td>
+              <td class="px-4 py-3"><span class="text-red-500 text-xs font-semibold">❌ Not yet built</span></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
