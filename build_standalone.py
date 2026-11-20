@@ -88,6 +88,7 @@ def build_standalone():
         "workspace":        load_content("workspace"),
         "fine_tuning":      load_content("fine_tuning"),
         "llm_optimization": load_content("llm_optimization"),
+        "coding_context":   load_content("coding_context"),
         "emerging_trends":  load_content("emerging_trends"),
         "model_pricing":    load_content("model_pricing"),
         "ai_news":          dict(load_content("ai_news"), items=sorted(load_content("ai_news").get("items", []), key=lambda x: x.get("date", ""), reverse=True)),

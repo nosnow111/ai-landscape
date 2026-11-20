@@ -123,6 +123,7 @@
       <button class="tab-btn" onclick="showTab('enterprise-apis')">🏢 Enterprise APIs</button>
       <button class="tab-btn" onclick="showTab('ml-platforms')">🔧 ML Platforms</button>
       <button class="tab-btn" onclick="showTab('emerging-trends')">🌱 Trends</button>
+      <button class="tab-btn" onclick="showTab('coding-context')">📋 Context Files</button>
     </div>
     <!-- Row 2: Reference group -->
     <div class="flex flex-wrap items-center gap-1 pb-1">
@@ -1430,6 +1431,74 @@
     </div>
     {% endif %}
     {% else %}
+    <p class="text-gray-400 italic">Content not yet generated.</p>
+    {% endif %}
+  </div>
+
+  <!-- ── Coding Context Files ─────────────────────────────────────────── -->
+  <div id="tab-coding-context" class="tab-panel">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-2xl font-bold text-violet-700">📋 AI Coding Context Files</h2>
+      <button onclick="showTab('overview')" class="text-sm text-indigo-500 hover:underline">← Overview</button>
+    </div>
+    {% if sections.coding_context.get('summary') %}
+    <p class="text-gray-600 mb-6">{{ sections.coding_context.summary }}</p>
+    {% endif %}
+
+    {% if sections.coding_context.get('tools') %}
+    <h3 class="text-lg font-bold text-gray-700 mb-3">Context file per tool</h3>
+    <div class="space-y-3 mb-8">
+      {% for t in sections.coding_context.tools %}
+      <div class="bg-white border border-gray-200 rounded-xl p-4 hover:border-violet-300 transition-colors">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-bold text-gray-800 text-sm">{{ t.name }}</span>
+              <span class="text-xs text-gray-400">·</span>
+              <code class="text-xs bg-violet-50 text-violet-700 px-2 py-0.5 rounded font-mono">{{ t.file_path }}</code>
+              {% if t.limits %}<span class="text-xs text-gray-400">· {{ t.limits }}</span>{% endif %}
+            </div>
+            <p class="text-xs text-gray-600 mb-2">{{ t.purpose }}</p>
+            {% if t.tips %}
+            <div class="flex flex-wrap gap-1">
+              {% for tip in t.tips %}
+              <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{{ tip }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          {% if t.url %}<a href="{{ t.url }}" target="_blank" rel="noopener" class="text-xs text-indigo-500 hover:underline shrink-0">docs →</a>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if sections.coding_context.get('best_practices') %}
+    <h3 class="text-lg font-bold text-gray-700 mb-3">Best practices</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+      {% for bp in sections.coding_context.best_practices %}
+      <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+        <p class="text-sm font-semibold text-green-800 mb-1">✅ {{ bp.title }}</p>
+        <p class="text-xs text-gray-600">{{ bp.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if sections.coding_context.get('common_mistakes') %}
+    <h3 class="text-lg font-bold text-gray-700 mb-3">Common mistakes</h3>
+    <div class="space-y-2 mb-8">
+      {% for m in sections.coding_context.common_mistakes %}
+      <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+        <p class="text-sm font-semibold text-red-700 mb-1">❌ {{ m.mistake }}</p>
+        <p class="text-xs text-gray-600">{{ m.fix }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not sections.coding_context.get('tools') %}
     <p class="text-gray-400 italic">Content not yet generated.</p>
     {% endif %}
   </div>

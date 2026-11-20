@@ -1,0 +1,174 @@
+{
+  "summary": "AI coding context files are project-level instruction files that coding assistants automatically load before helping, giving them persistent knowledge of your tech stack, conventions, architecture, and constraints without repeating it in every prompt. Each major tool reads a different file in a different location and format, so teams using multiple assistants often maintain several files (or symlink them). The highest-impact content is non-obvious project knowledge\u2014build commands, architectural decisions, and rejected alternatives\u2014rather than anything already evident from the code itself.",
+  "tools": [
+    {
+      "name": "CLAUDE.md",
+      "tool": "Claude Code",
+      "file_path": "./CLAUDE.md (project root), subdirectory CLAUDE.md files, and ~/.claude/CLAUDE.md (global)",
+      "purpose": "Automatically loaded at the start of every session as persistent context: tech stack, build/test commands, coding standards, architectural decisions, and a map of the codebase structure. Supports progressive disclosure, referencing deeper docs by path so Claude loads them only when needed.",
+      "limits": "No hard documented character cap, but it counts against the context window on every session\u2014keep it concise. Use the # key to append repeated instructions and /init to generate a starter file.",
+      "tips": [
+        "Give Claude a 'map' of the codebase structure so it maintains context without manual reinforcement",
+        "Use progressive disclosure: keep the root file short and link to path/to/docs.md for complex topics",
+        "Use the # key during sessions to add instructions you find yourself repeating; they accumulate into CLAUDE.md",
+        "Run /init to bootstrap a CLAUDE.md that reflects your project",
+        "Place subdirectory CLAUDE.md files in monorepos for package-specific rules",
+        "Keep context fresh\u2014prune stale instructions over time"
+      ],
+      "url": "https://docs.anthropic.com/en/docs/claude-code/memory"
+    },
+    {
+      "name": "Cursor Rules",
+      "tool": "Cursor",
+      "file_path": ".cursor/rules/*.mdc (project rules, preferred) and .cursorrules (legacy, project root)",
+      "purpose": "Provides system-level instructions to Cursor's AI for code generation and chat. Modern .cursor/rules supports multiple scoped MDC files with metadata (always-apply, auto-attach by glob, agent-requested, or manual) so rules apply only to relevant files or contexts.",
+      "limits": "No official hard limit; rules should be focused and modular. The older single .cursorrules file is deprecated in favor of the .cursor/rules directory.",
+      "tips": [
+        "Prefer the .cursor/rules directory with scoped MDC files over the legacy .cursorrules",
+        "Use glob patterns to auto-attach rules only to relevant files (e.g. *.tsx)",
+        "Keep each rule file focused on a single concern",
+        "Set 'always apply' only for truly global conventions to avoid bloating context"
+      ],
+      "url": "https://docs.cursor.com/context/rules"
+    },
+    {
+      "name": "Copilot Instructions",
+      "tool": "GitHub Copilot",
+      "file_path": ".github/copilot-instructions.md (repo root under .github), plus path-scoped .github/instructions/*.instructions.md",
+      "purpose": "Repository-wide custom instructions automatically added to Copilot Chat and agent requests, describing coding standards, frameworks, and project conventions so generated code matches the team's style.",
+      "limits": "No published character limit; GitHub recommends short, self-contained statements. Path-specific instruction files can be scoped with applyTo glob frontmatter.",
+      "tips": [
+        "Keep instructions short, concrete, and in natural language",
+        "Avoid references to external resources Copilot can't access",
+        "Use .github/instructions/*.instructions.md with applyTo globs for path-specific rules",
+        "Don't include conflicting or vague directives like 'write good code'"
+      ],
+      "url": "https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot"
+    },
+    {
+      "name": "Windsurf Rules",
+      "tool": "Windsurf (Cascade)",
+      "file_path": ".windsurf/rules/*.md (directory, current) and .windsurfrules (legacy, project root); plus global rules",
+      "purpose": "Guides the Cascade agent with project conventions and constraints. Supports activation modes (always-on, manual, model-decision, glob-based) so rules apply contextually.",
+      "limits": "Windsurf documents a character budget: roughly 6,000 characters per rules file and a combined global+workspace cap (around 12,000 characters total); content beyond the limit is truncated.",
+      "tips": [
+        "Stay within the per-file character budget or rules get truncated",
+        "Use activation modes to apply rules only when relevant",
+        "Split rules into multiple files under .windsurf/rules for organization",
+        "Write simple, specific bullet points rather than long prose"
+      ],
+      "url": "https://docs.windsurf.com/windsurf/cascade/memories"
+    },
+    {
+      "name": "Aider Conventions",
+      "tool": "Aider",
+      "file_path": "CONVENTIONS.md (added via --read or config) and .aider.conf.yml (project root or home dir)",
+      "purpose": "CONVENTIONS.md holds coding guidelines that Aider loads as read-only context so it follows your style; .aider.conf.yml configures model, auto-commits, read files, and other defaults so the conventions file is always included.",
+      "limits": "No hard limit, but since it's sent with requests, keep it concise to conserve tokens. Add it as read-only to avoid it being edited.",
+      "tips": [
+        "Reference CONVENTIONS.md via the 'read' key in .aider.conf.yml so it loads automatically",
+        "Mark the conventions file read-only so Aider doesn't modify it",
+        "Keep conventions short\u2014they're sent with every request and cost tokens",
+        "Use .aider.conf.yml to pin model and workflow defaults alongside conventions"
+      ],
+      "url": "https://aider.chat/docs/usage/conventions.html"
+    },
+    {
+      "name": "AGENTS.md",
+      "tool": "OpenAI Codex, and other agents (cross-tool standard)",
+      "file_path": "./AGENTS.md (project root), nested AGENTS.md in subdirectories",
+      "purpose": "An open, tool-agnostic standard for agent instructions\u2014setup commands, test instructions, conventions, and PR guidelines\u2014adopted by multiple agents as a shared alternative to tool-specific files. Nearest AGENTS.md to an edited file takes precedence.",
+      "limits": "No defined limit; it's plain Markdown read into context, so keep it focused.",
+      "tips": [
+        "Use AGENTS.md as a single cross-tool file when supporting multiple agents",
+        "Place nested AGENTS.md files for monorepo subprojects\u2014closest one wins",
+        "Include concrete setup, build, and test commands",
+        "Some teams symlink CLAUDE.md to AGENTS.md to avoid duplication"
+      ],
+      "url": "https://agents.md/"
+    }
+  ],
+  "best_practices": [
+    {
+      "title": "Plan before implementation",
+      "description": "The highest-impact practice is encouraging planning before coding\u2014via plan mode or annotation cycles. Context files that establish a 'research and plan first' expectation shape better implementation approaches across every task."
+    },
+    {
+      "title": "Give the assistant a map of the codebase",
+      "description": "Describe the project's directory structure, key modules, and where things live so the tool maintains consistent context about your codebase without you re-explaining it each session."
+    },
+    {
+      "title": "Document non-obvious constraints and decisions",
+      "description": "Capture architectural decisions, why certain patterns are required, and rejected alternatives with reasons (e.g. 'Never use raw SQL, prefer the ORM'). This is knowledge the model cannot infer from the code alone."
+    },
+    {
+      "title": "Include concrete build, test, and run commands",
+      "description": "Spell out exact commands (e.g. 'Test with: pytest -x --tb=short') so the assistant runs the right tooling instead of guessing, reducing failed or inconsistent runs."
+    },
+    {
+      "title": "Use progressive disclosure",
+      "description": "Keep the root file short and link to deeper documentation by path, so detailed references load only when the task needs them rather than bloating every session's context window."
+    },
+    {
+      "title": "Specify conventions the tool should follow",
+      "description": "State formatting, naming, type-hint, and testing conventions explicitly (e.g. 'Always use type hints for function signatures') so generated code matches your team's style on the first pass."
+    },
+    {
+      "title": "Grow the file organically and keep it fresh",
+      "description": "Add instructions you catch yourself repeating (Claude's # key) and prune stale guidance over time, so the file genuinely reflects how the team currently works."
+    },
+    {
+      "title": "Scope rules in monorepos",
+      "description": "Use subdirectory/nested files or glob-based activation so package-specific rules only apply where relevant, avoiding one giant file with conflicting instructions."
+    }
+  ],
+  "common_mistakes": [
+    {
+      "mistake": "Putting task tracking, TODOs, or project management notes in the context file",
+      "fix": "Keep the file about durable conventions and architecture; track tasks in an issue tracker or separate planning docs, not in the context file loaded every session."
+    },
+    {
+      "mistake": "Documenting things that are already obvious from the code",
+      "fix": "Omit descriptions the model can read directly from source; reserve the file for non-obvious constraints, decisions, and commands it can't infer."
+    },
+    {
+      "mistake": "Dumping debugging notes or git history into the file",
+      "fix": "Leave transient debugging context and history in commits, PRs, and comments; the context file should hold stable guidance only."
+    },
+    {
+      "mistake": "Letting the file grow huge and unfocused",
+      "fix": "Use progressive disclosure and scoped files, stay within documented character budgets (e.g. Windsurf's ~6k/file), and prune regularly so it doesn't consume the context window."
+    },
+    {
+      "mistake": "Writing vague directives like 'write clean code'",
+      "fix": "Replace them with specific, testable rules (exact commands, concrete naming/formatting conventions, explicit do/don't patterns)."
+    },
+    {
+      "mistake": "Including conflicting or contradictory instructions",
+      "fix": "Consolidate and scope rules with glob/activation modes so only relevant, non-conflicting guidance applies to a given file or task."
+    },
+    {
+      "mistake": "Referencing external resources the tool can't access",
+      "fix": "Inline the necessary information or link to in-repo docs by path rather than pointing to external URLs the assistant cannot fetch."
+    },
+    {
+      "mistake": "Using the deprecated single-file format when a directory format exists",
+      "fix": "Migrate from legacy .cursorrules/.windsurfrules to the modern .cursor/rules and .windsurf/rules directories for scoped, maintainable rules."
+    }
+  ],
+  "_meta": {
+    "title": "AI Coding Context Files",
+    "generated_at": "2026-11-20T17:29:00.517249+00:00"
+  },
+  "sources": [
+    "https://www.datacamp.com/tutorial/claude-code-best-practices",
+    "https://www.reddit.com/r/ClaudeCode/comments/1rohbj0/what_to_include_in_claudemd_and_what_not/",
+    "https://www.turbodocx.com/blog/how-to-write-claude-md-best-practices",
+    "https://agentrulegen.com/guides/cursorrules-vs-claude-md",
+    "https://skillwright.app/blog/skill-md-vs-cursorrules-vs-windsurf-rules",
+    "https://www.builder.io/blog/cursor-vs-windsurf-vs-github-copilot",
+    "https://www.buildcamp.io/guides/the-ultimate-guide-to-claudemd",
+    "https://claude.com/resources/articles/using-claude-md-files",
+    "https://ikh4ever.medium.com/claude-md-best-practices-the-complete-guide-for-2026-e35e1408cef2"
+  ]
+}

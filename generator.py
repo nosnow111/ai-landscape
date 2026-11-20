@@ -423,6 +423,35 @@ SECTIONS = {
             "cached_input_per_1m (string or null), free_tier (bool), notes (string), url (string))."
         ),
     },
+    "coding_context": {
+        "title": "AI Coding Context Files",
+        "prompt": (
+            "Produce a practical guide to AI coding context files — project-level instruction files "
+            "that major AI coding tools read to understand a codebase before assisting. "
+            "Cover every tool that supports such a file, including: "
+            "CLAUDE.md (Claude Code — read from project root and ~/.claude/CLAUDE.md), "
+            ".cursor/rules or .cursorrules (Cursor), "
+            ".github/copilot-instructions.md (GitHub Copilot), "
+            ".windsurf/rules or .windsurfrules (Windsurf/Cascade), "
+            ".aider.conf.yml / CONVENTIONS.md (Aider), "
+            "and any others confirmed in research. "
+            "For each tool cover: file name and location, what the tool uses it for, "
+            "character/token limits if documented, what content works best. "
+            "Also produce a 'best_practices' section with community-validated advice on: "
+            "what belongs in context files (architecture decisions, non-obvious constraints, "
+            "rejected alternatives with reasons, output artifacts, conventions the tool should follow); "
+            "what does NOT belong (task tracking, things obvious from code, debugging notes, git history); "
+            "and common mistakes. "
+            "Also produce a 'common_mistakes' list. "
+            f"{_URL_RULE} "
+            "Return a JSON object with four keys: "
+            "'summary' (2-3 sentences on why context files matter and how they differ across tools), "
+            "'tools' (array where each item has: name, tool (the AI coding tool), file_path (string), "
+            "purpose (string), limits (string or null), tips (list of strings), url (string)), "
+            "'best_practices' (array of {title, description} objects), "
+            "'common_mistakes' (array of {mistake, fix} objects)."
+        ),
+    },
     "emerging_trends": {
         "title": "Emerging AI Trends",
         "prompt": (

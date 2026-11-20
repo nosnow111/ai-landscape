@@ -70,6 +70,7 @@
         <a href="#schedule"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">10 Schedule</a>
         <a href="#deployment"    class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">11 Deployment</a>
         <a href="#methodology"   class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">12 Methodology</a>
+        <a href="#claudemd"      class="bg-slate-800 hover:bg-indigo-800 text-slate-300 text-xs px-3 py-1 rounded-full transition-colors">13 CLAUDE.md</a>
       </div>
     </div>
   </header>
@@ -1489,6 +1490,230 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </section>
+
+    <!-- ── 13. CLAUDE.md ────────────────────────────────────────────── -->
+    <section id="claudemd" class="bg-white rounded-2xl shadow-sm card border-orange-400 p-8">
+      <h2 class="text-xl font-bold text-orange-700 mb-1 flex items-center gap-2">
+        <span class="bg-orange-100 text-orange-700 text-sm font-black w-7 h-7 rounded-full flex items-center justify-center">13</span>
+        CLAUDE.md — Project Context File
+      </h2>
+      <p class="text-slate-500 text-sm mb-6">The project-level instruction file read by Claude Code at the start of every session</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
+          <p class="text-xs font-bold text-orange-700 uppercase tracking-wider mb-2">What it is</p>
+          <p class="text-xs text-slate-600">A markdown file committed to the repo root that Claude Code reads before anything else. It gives Claude persistent context about the project so you don't re-explain architecture every session.</p>
+        </div>
+        <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
+          <p class="text-xs font-bold text-orange-700 uppercase tracking-wider mb-2">What goes in it</p>
+          <p class="text-xs text-slate-600">Architecture decisions, project conventions, non-obvious constraints, what tools are in use, and what NOT to do. Things a smart new engineer needs to know that aren't obvious from reading the code.</p>
+        </div>
+        <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
+          <p class="text-xs font-bold text-orange-700 uppercase tracking-wider mb-2">What doesn't go in it</p>
+          <p class="text-xs text-slate-600">Things already obvious from the code, git history, or README. No task tracking, no debugging notes, no "added for issue #123". Those rot and confuse more than they help.</p>
+        </div>
+      </div>
+
+      <!-- Section skeleton -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">This Project's CLAUDE.md — Section Skeleton</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+
+        <div class="bg-slate-900 rounded-xl p-4">
+          <p class="text-xs text-orange-400 font-bold uppercase tracking-wider mb-3">Identity &amp; Structure</p>
+          <div class="space-y-2">
+            <div class="flex items-start gap-2">
+              <span class="text-orange-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">What this project does</p>
+                <p class="text-xs text-slate-400">One-paragraph system description — the "elevator pitch" for Claude</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-orange-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Project structure</p>
+                <p class="text-xs text-slate-400">File tree with one-line descriptions of each key file</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-orange-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">How to run locally</p>
+                <p class="text-xs text-slate-400">Setup steps, env vars, main commands — avoids repeated questions</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-slate-600 font-mono text-xs mt-0.5">###</span>
+              <div>
+                <p class="text-xs text-slate-300">Pipeline options</p>
+                <p class="text-xs text-slate-500">CLI flags, partial run patterns</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 rounded-xl p-4">
+          <p class="text-xs text-teal-400 font-bold uppercase tracking-wider mb-3">Content &amp; Domain</p>
+          <div class="space-y-2">
+            <div class="flex items-start gap-2">
+              <span class="text-teal-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Content sections</p>
+                <p class="text-xs text-slate-400">What each section covers — avoids Claude generating the wrong thing</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-teal-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Adding a new section</p>
+                <p class="text-xs text-slate-400">Step-by-step checklist so Claude doesn't miss a file</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-teal-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Ranking rule (all sections)</p>
+                <p class="text-xs text-slate-400">The 10–15 smart cutoff rule — applied consistently by Claude</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-slate-600 font-mono text-xs mt-0.5">###</span>
+              <div>
+                <p class="text-xs text-slate-300">Section design rationale</p>
+                <p class="text-xs text-slate-500">Why sections are split the way they are (e.g. fine-tuning vs optimization)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 rounded-xl p-4">
+          <p class="text-xs text-indigo-400 font-bold uppercase tracking-wider mb-3">Infrastructure &amp; Cost</p>
+          <div class="space-y-2">
+            <div class="flex items-start gap-2">
+              <span class="text-indigo-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Deployment</p>
+                <p class="text-xs text-slate-400">Hosting, cron schedule, required secrets — reference before touching CI</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-indigo-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Research strategy</p>
+                <p class="text-xs text-slate-400">Provider priority, query patterns, ai_news special handling</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-indigo-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Refresh strategy &amp; API cost</p>
+                <p class="text-xs text-slate-400">Per-run breakdown, monthly cost table, cadence rationale</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-slate-600 font-mono text-xs mt-0.5">###</span>
+              <div>
+                <p class="text-xs text-slate-300">Refresh frequency trade-offs</p>
+                <p class="text-xs text-slate-500">Comparison table: weekly vs biweekly vs monthly+daily</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 rounded-xl p-4">
+          <p class="text-xs text-amber-400 font-bold uppercase tracking-wider mb-3">Decisions &amp; History</p>
+          <div class="space-y-2">
+            <div class="flex items-start gap-2">
+              <span class="text-amber-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Key decisions</p>
+                <p class="text-xs text-slate-400">Non-obvious architectural choices with <em>why</em> — static site, max_tokens=8192, parallel execution rationale, url_overrides design</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-amber-500 font-mono text-xs mt-0.5">##</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Hosting platforms evaluated</p>
+                <p class="text-xs text-slate-400">What was tried and rejected (Railway, Render, Fly.io) with reason — prevents Claude from suggesting them again</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Output section callout -->
+      <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-5 mb-8">
+        <p class="text-sm font-bold text-amber-800 mb-2">The missing section: Output</p>
+        <p class="text-sm text-slate-600 mb-3">
+          Most CLAUDE.md files describe <em>inputs</em> (what the project does, how to run it) but skip <em>outputs</em> —
+          what files Claude is expected to produce, in what format, committed where.
+          Without this, Claude has to infer the output contract from context, which causes drift across sessions.
+        </p>
+        <div class="bg-slate-900 rounded-lg p-4 font-mono text-xs text-slate-300 leading-6">
+          <p class="text-amber-400 mb-2"># Example: Output section for this project</p>
+          <p><span class="text-amber-300">## Output artifacts</span></p>
+          <p class="text-slate-400">Generated by the pipeline — do not edit manually:</p>
+          <p></p>
+          <p>- <span class="text-green-300">content/*.json</span>  — one file per section, committed by GitHub Actions</p>
+          <p>- <span class="text-green-300">docs/index.html</span>  — rendered dashboard, served by GitHub Pages</p>
+          <p>- <span class="text-green-300">docs/news.html</span>   — full news page</p>
+          <p>- <span class="text-green-300">validation_report.json</span>  — latest link check results</p>
+          <p></p>
+          <p class="text-slate-400">Human-authored (edit these):</p>
+          <p>- <span class="text-cyan-300">templates/index.html</span>  — Jinja2 source, tabs &amp; layout</p>
+          <p>- <span class="text-cyan-300">generator.py:SECTIONS</span>  — section specs (prompts + schema)</p>
+          <p>- <span class="text-cyan-300">research.py:QUERIES</span>    — search queries per section</p>
+        </div>
+      </div>
+
+      <!-- General best practices -->
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">General CLAUDE.md Best Practices</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="flex items-start gap-3 bg-green-50 border border-green-200 rounded-xl p-4">
+          <span class="text-green-600 text-lg mt-0.5">✅</span>
+          <div>
+            <p class="text-xs font-bold text-green-800">Write for a smart engineer on day one</p>
+            <p class="text-xs text-slate-600 mt-1">Not for Claude specifically — if a new engineer could follow it to make a good decision, so can Claude.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 bg-green-50 border border-green-200 rounded-xl p-4">
+          <span class="text-green-600 text-lg mt-0.5">✅</span>
+          <div>
+            <p class="text-xs font-bold text-green-800">Include the WHY, not just the WHAT</p>
+            <p class="text-xs text-slate-600 mt-1">"Use max_tokens=8192" is weaker than "max_tokens=8192 — prevents JSON truncation on longer sections." The why prevents Claude from "fixing" it.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 bg-green-50 border border-green-200 rounded-xl p-4">
+          <span class="text-green-600 text-lg mt-0.5">✅</span>
+          <div>
+            <p class="text-xs font-bold text-green-800">Document rejected alternatives</p>
+            <p class="text-xs text-slate-600 mt-1">List platforms, libraries, or approaches you evaluated and rejected with the reason. Prevents re-litigating decisions every session.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 bg-green-50 border border-green-200 rounded-xl p-4">
+          <span class="text-green-600 text-lg mt-0.5">✅</span>
+          <div>
+            <p class="text-xs font-bold text-green-800">Keep it evergreen</p>
+            <p class="text-xs text-slate-600 mt-1">Update CLAUDE.md when architecture changes. Stale context is worse than no context — Claude will confidently follow outdated instructions.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
+          <span class="text-red-500 text-lg mt-0.5">❌</span>
+          <div>
+            <p class="text-xs font-bold text-red-700">Don't put task tracking in CLAUDE.md</p>
+            <p class="text-xs text-slate-600 mt-1">In-progress work, TODO lists, current sprint — these change daily. Use tasks or issues instead. CLAUDE.md is a reference, not a scratchpad.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
+          <span class="text-red-500 text-lg mt-0.5">❌</span>
+          <div>
+            <p class="text-xs font-bold text-red-700">Don't duplicate what's in the code</p>
+            <p class="text-xs text-slate-600 mt-1">If a function name explains itself, don't describe it in CLAUDE.md. The file should contain only what isn't derivable by reading the codebase.</p>
+          </div>
+        </div>
       </div>
     </section>
 

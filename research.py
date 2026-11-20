@@ -115,6 +115,11 @@ QUERIES = {
         # direct pull from vendor blogs only — bypasses news outlet coverage gaps
         (f"new model release product update announcement {_THIS_MONTH}", 30, _VENDOR_BLOGS_ONLY),
     ],
+    "coding_context": [
+        "CLAUDE.md best practices AI coding context file 2026 what to include",
+        "cursorrules copilot-instructions windsurf rules AI coding assistant context file comparison 2026",
+        "CLAUDE.md examples community tips writing project instructions Claude Code 2026",
+    ],
     "emerging_trends": [
         "emerging AI trends 2026 gaining momentum",
         "AI reasoning models agents inference compute multimodal trends 2026",
